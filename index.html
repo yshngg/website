@@ -30,10 +30,16 @@
             href="./favicon-16x16.png"
         />
         <link rel="manifest" href="./site.webmanifest" />
-        <link
-            rel="stylesheet"
-            href="https://unpkg.com/@knadh/oat/oat.min.css"
-        />
+        <link rel="stylesheet" href="https://unpkg.com/@knadh/oat/oat.min.css" />
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Set the current year in the footer
+                const currentYearElement = document.getElementById('current-year');
+                if (currentYearElement) {
+                    currentYearElement.textContent = new Date().getFullYear();
+                }
+            });
+        </script>
         <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
         <script src="./script.js" defer></script>
     </head>
@@ -57,21 +63,22 @@
                         style="font-size: var(--text-7)"
                     >
                         <li>
-                            <a href="#breadcrumbs" class="unstyled">Home</a>
+                            <a href="#home" class="unstyled" aria-label="Home">Home</a>
                         </li>
                         <li aria-hidden="true">/</li>
                         <li>
-                            <a href="#breadcrumbs" class="unstyled">Blog</a>
+                            <a href="#blog" class="unstyled" aria-label="Blog">Blog</a>
                         </li>
                         <li aria-hidden="true">/</li>
                         <li>
-                            <a href="#breadcrumbs" class="unstyled">Project</a>
+                            <a href="#projects" class="unstyled" aria-label="Projects">Projects</a>
                         </li>
                         <li aria-hidden="true">/</li>
                         <li>
                             <a
-                                href="#breadcrumbs"
+                                href="#cheatsheet"
                                 class="unstyled"
+                                aria-label="Cheatsheet"
                                 aria-current="page"
                                 >Cheatsheet</a
                             >
@@ -79,8 +86,9 @@
                         <li aria-hidden="true">/</li>
                         <li>
                             <a
-                                href="#breadcrumbs"
+                                href="#about"
                                 class="unstyled"
+                                aria-label="About"
                                 aria-current="page"
                                 >About
                             </a>
@@ -100,12 +108,12 @@
                 </ul>
             </nav>
 
-            <!--Social media links-->
+            <!-- Social media links -->
             <footer>
                 <div class="hstack justify-between p-4">
                     <a
                         href="https://x.com/yshnggdev"
-                        aria-label="X (opens in new tab)"
+                        aria-label="X/Twitter (opens in new tab)"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -204,7 +212,7 @@
                             <div class="hstack justify-between mb-2">
                                 <h3 class="mb-2">
                                     Senior Software Engineer
-                                    <span class="badge success">Current</span>
+                                    <span class="badge success">Present</span>
                                 </h3>
                                 <time>2023 - Present</time>
                             </div>
