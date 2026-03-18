@@ -1,3 +1,4 @@
+// Initialize non-layout-dependent functionality immediately
 document.addEventListener("DOMContentLoaded", () => {
   // Set current year
   document.querySelectorAll("#current-year").forEach((el) => {
@@ -23,8 +24,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Sidebar resize (desktop only)
+  // Initialize sidebar resize after CSS is loaded
+  initSidebarResize();
+});
+
+// Initialize sidebar resize functionality after CSS loads
+function initSidebarResize() {
   const sidebar = document.querySelector("[data-sidebar]");
+  const body = document.querySelector("[data-sidebar-layout]");
+
   if (!sidebar || !body) return;
 
   const defaultWidth = 224;
@@ -37,24 +45,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // Check if mobile
   const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
 
-  // Create drag handle
-  if (!isMobile()) {
+  // Create drag handle (delayed to ensure CSS is loaded)
+  function setupDragHandle() {
+    if (isMobile()) return;
+
     const handle = document.createElement("div");
     handle.className = "sidebar-drag-handle";
 
     handle.addEventListener("mousedown", (e) => {
       isDragging = true;
       startX = e.clientX;
-      startWidth =
-        parseInt(getComputedStyle(body).gridTemplateColumns.split(" ")[0]) ||
-        defaultWidth;
 
-      document.addEventListener("mousemove", drag);
-      document.addEventListener("mouseup", stopDrag);
+      // Use requestAnimationFrame to avoid layout thrashing
+      requestAnimationFrame(() => {
+        startWidth =
+          parseInt(getComputedStyle(body).gridTemplateColumns.split(" ")[0]) ||
+          defaultWidth;
 
-      handle.classList.add("dragging");
-      document.body.style.cursor = "col-resize";
-      document.body.style.userSelect = "none";
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+
+        handle.classList.add("dragging");
+        document.body.style.cursor = "col-resize";
+        document.body.style.userSelect = "none";
+      });
     });
 
     handle.addEventListener("dblclick", () => {
@@ -88,4 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.cursor = "";
     document.body.style.userSelect = "";
   }
-});
+
+  // Wait for CSS to load before setting up drag handle
+  if (document.readyState === "complete") {
+    setupDragHandle();
+  } else {
+    window.addEventListener("load", setupDragHandle);
+  }
+}
