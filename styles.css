@@ -1,0 +1,42 @@
+/* Smooth scrolling */
+main {
+    scroll-behavior: smooth;
+}
+
+/* Truncate utility class */
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Mobile sidebar styles */
+@media (max-width: 768px) {
+    [data-sidebar-layout] > [data-sidebar] {
+        display: none;
+    }
+
+    [data-sidebar-layout][data-sidebar-open] > [data-sidebar] {
+        display: block;
+    }
+}
+
+/* Sidebar drag handle styles */
+.sidebar-drag-handle {
+    position: absolute;
+    right: -1px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    cursor: col-resize;
+    z-index: 10;
+    background: transparent;
+    transition: background-color 0.2s;
+}
+
+.sidebar-drag-handle:hover {
+    background-color: var(--primary);
+}
+
+.sidebar-drag-handle.dragging {
+    background-color: var(--accent);
+}
