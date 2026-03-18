@@ -41,33 +41,23 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
-
-            /* Disable oat tooltip styles by resetting them */
-            [data-tooltip] {
-                position: static;
-            }
-
-            [data-tooltip]::before,
-            [data-tooltip]::after {
-                display: none !important;
-            }
         </style>
         <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
         <script>
             // Override oat's tooltip initialization to preserve native title tooltips
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 // Stop oat's tooltip mutation observer
                 if (window.MutationObserver) {
                     // This prevents oat from converting title attributes to data-tooltip
                     const originalObserver = window.MutationObserver;
                     // Temporarily disable the tooltip conversion functionality
-                    const titleElements = document.querySelectorAll('[title]');
-                    titleElements.forEach(el => {
+                    const titleElements = document.querySelectorAll("[title]");
+                    titleElements.forEach((el) => {
                         // Make sure title attributes remain on elements
-                        const title = el.getAttribute('title');
-                        if (title && !el.hasAttribute('data-tooltip')) {
+                        const title = el.getAttribute("title");
+                        if (title && !el.hasAttribute("data-tooltip")) {
                             // Re-add title if oat's script removed it
-                            el.setAttribute('title', title);
+                            el.setAttribute("title", title);
                         }
                     });
                 }
@@ -86,7 +76,7 @@
                     >
                         ☰
                     </button>
-                    <span>Yusheng</span>
+                    <a href="/">Yusheng</a>
                 </div>
 
                 <div class="col-8 justify-end hstack">
