@@ -30,7 +30,6 @@
             href="./favicon-16x16.png"
         />
         <link rel="manifest" href="./site.webmanifest" />
-        <link rel="stylesheet" href="./style.css" />
         <link
             rel="stylesheet"
             href="https://unpkg.com/@knadh/oat/oat.min.css"
@@ -38,43 +37,35 @@
         <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
         <script src="./script.js" defer></script>
     </head>
-    <body>
-        <header class="container mt-8 mb-8">
-            <nav class="hstack justify-between align-center">
-                <div class="hstack gap-6 align-center">
-                    <div class="hstack gap-4 nav-links">
-                        <a href="#work" class="nav-link">Work</a>
-                        <span
-                            class="text-muted separator"
-                            aria-hidden="true"
-                            role="separator"
-                            >·</span
-                        >
-                        <a href="#projects" class="nav-link">Projects</a>
-                        <span
-                            class="text-muted separator"
-                            aria-hidden="true"
-                            role="separator"
-                            >·</span
-                        >
-                        <a href="#blog" class="nav-link">Blog</a>
-                        <span
-                            class="text-muted separator"
-                            aria-hidden="true"
-                            role="separator"
-                            >·</span
-                        >
-                        <a href="#contact" class="nav-link">Contact</a>
-                    </div>
-                    <div
-                        class="hstack gap-4"
-                        role="group"
-                        aria-label="Social media links"
-                    >
+    <body data-sidebar-layout>
+        <nav data-topnav>
+            <button
+                data-sidebar-toggle
+                aria-label="Toggle menu"
+                class="outline"
+            >
+                ☰
+            </button>
+            <span>Yusheng</span>
+        </nav>
+
+        <aside data-sidebar>
+            <header class="p-4">
+                <h1 class="mb-2">Yusheng</h1>
+                <p class="text-muted">Software Engineer</p>
+            </header>
+            <nav class="p-4">
+                <ul class="vstack gap-2">
+                    <li><a href="#work" aria-current="page">Work</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#contact">Contact</a></li>
+
+                    <!--Social media links-->
+                    <li>
                         <a
                             href="https://x.com/yshnggdev"
                             aria-label="X (opens in new tab)"
-                            class="social-icon"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -89,14 +80,13 @@
                                     d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
                                 />
                             </svg>
-                            <span class="visually-hidden"
-                                >X (formerly Twitter)</span
-                            >
+                            <span class="visually-hidden">X</span>
                         </a>
+                    </li>
+                    <li>
                         <a
                             href="https://github.com/yshngg"
                             aria-label="GitHub (opens in new tab)"
-                            class="social-icon"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -113,10 +103,11 @@
                             </svg>
                             <span class="visually-hidden">GitHub</span>
                         </a>
+                    </li>
+                    <li>
                         <a
                             href="https://linkedin.com/in/yshngg"
                             aria-label="LinkedIn (opens in new tab)"
-                            class="social-icon"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -133,199 +124,250 @@
                             </svg>
                             <span class="visually-hidden">LinkedIn</span>
                         </a>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </nav>
-        </header>
 
-        <main class="container">
-            <section class="mb-6">
-                <h1>Hi, I'm <span>Yusheng</span></h1>
-                <p class="lead">
-                    I'm an open-source developer specializing in scalable
-                    systems, developer tools, and modern web technologies. I
-                    build robust applications and create tools that help
-                    developers work more efficiently.
+            <footer class="container mt-6 mb-6">
+                <p class="text-muted">
+                    © <span id="current-year"></span> Yusheng. All rights
+                    reserved.
                 </p>
-                <div class="hstack gap-4 mt-4">
-                    <span class="badge outline">Go</span>
-                    <span class="badge outline">TypeScript</span>
-                    <span class="badge outline">Python</span>
-                    <span class="badge outline">Rust</span>
-                </div>
-            </section>
+            </footer>
+        </aside>
 
-            <section id="work" class="mb-6">
-                <h2>Work History</h2>
-                <div class="vstack gap-8">
-                    <article class="card">
-                        <div class="hstack justify-between mb-2">
+        <main>
+            <div class="p-4">
+                <section class="mb-6">
+                    <h1>Hi, I'm <span>Yusheng</span></h1>
+                    <p class="text-2">
+                        I'm an open-source developer specializing in scalable
+                        systems, developer tools, and modern web technologies. I
+                        build robust applications and create tools that help
+                        developers work more efficiently.
+                    </p>
+                    <div class="hstack gap-4 mt-4">
+                        <span class="badge outline">Go</span>
+                        <span class="badge outline">TypeScript</span>
+                        <span class="badge outline">Python</span>
+                        <span class="badge outline">Rust</span>
+                    </div>
+                </section>
+
+                <section id="work" class="mb-6">
+                    <h2>Work History</h2>
+                    <div class="vstack gap-8">
+                        <article class="card">
+                            <div class="hstack justify-between mb-2">
+                                <h3 class="mb-2">
+                                    Senior Software Engineer
+                                    <span class="badge success">Current</span>
+                                </h3>
+                                <time class="text-muted">2023 - Present</time>
+                            </div>
+                            <p class="text-muted mb-2">Tech Company</p>
+                            <p>
+                                Leading development of distributed systems and
+                                developer tools. Building scalable microservices
+                                architecture and improving developer
+                                productivity through automation.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <div class="hstack justify-between mb-2">
+                                <h3 class="mb-2">Software Engineer</h3>
+                                <time class="text-muted">2021 - 2023</time>
+                            </div>
+                            <p class="text-muted mb-2">Startup Inc.</p>
+                            <p>
+                                Developed full-stack applications with modern
+                                web technologies. Contributed to open-source
+                                projects and established CI/CD pipelines for
+                                rapid deployment.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <div class="hstack justify-between mb-2">
+                                <h3 class="mb-2">Frontend Developer</h3>
+                                <time class="text-muted">2019 - 2021</time>
+                            </div>
+                            <p class="text-muted mb-2">Digital Agency</p>
+                            <p>
+                                Built responsive web applications and learned
+                                modern development practices. Contributed to
+                                team projects and participated in code reviews
+                                and mentorship.
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="projects" class="mb-6">
+                    <h2>Open Source Projects</h2>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6">
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <h3 class="mb-0">
+                                            <a
+                                                href="https://github.com/yshngg/prometheus-mcp-server"
+                                                class="unstyled"
+                                            >
+                                                Prometheus MCP Server
+                                            </a>
+                                        </h3>
+                                        <span class="badge">Go</span>
+                                    </div>
+                                    <p>
+                                        Model Context Protocol server for
+                                        Prometheus metrics. Enables AI
+                                        assistants to query and analyze
+                                        Prometheus metrics directly.
+                                    </p>
+                                </article>
+                            </div>
+                            <div class="col-6">
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <h3 class="mb-0">
+                                            <a
+                                                href="https://github.com/yshngg/holdem"
+                                                class="unstyled"
+                                            >
+                                                Holdem
+                                            </a>
+                                        </h3>
+                                        <span class="badge secondary"
+                                            >TypeScript</span
+                                        >
+                                    </div>
+                                    <p>
+                                        Texas Hold'em poker game and AI
+                                        simulation platform. Features real-time
+                                        gameplay, AI opponents, and statistical
+                                        analysis tools.
+                                    </p>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <h3 class="mb-0">
+                                            <a
+                                                href="https://github.com/yshngg/git-skills"
+                                                class="unstyled"
+                                            >
+                                                Git Skills
+                                            </a>
+                                        </h3>
+                                        <span class="badge warning"
+                                            >Educational</span
+                                        >
+                                    </div>
+                                    <p>
+                                        Interactive Git learning platform with
+                                        skill-based challenges. Helps developers
+                                        master Git workflows through practical
+                                        exercises.
+                                    </p>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="blog" class="mb-6">
+                    <h2>Recent Blog Posts</h2>
+                    <div class="vstack gap-4 mt-4">
+                        <article class="card">
+                            <div class="hstack justify-between mb-2">
+                                <time class="text-muted" datetime="2024-03-15"
+                                    >Mar 2024</time
+                                >
+                                <span class="badge success">Community</span>
+                            </div>
                             <h3 class="mb-2">
-                                Senior Software Engineer
-                                <span class="badge success">Current</span>
-                            </h3>
-                            <time class="text-muted">2023 - Present</time>
-                        </div>
-                        <p class="text-muted mb-2">Tech Company</p>
-                        <p>
-                            Leading development of distributed systems and
-                            developer tools. Building scalable microservices
-                            architecture and improving developer productivity
-                            through automation.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <div class="hstack justify-between mb-2">
-                            <h3 class="mb-2">Software Engineer</h3>
-                            <time class="text-muted">2021 - 2023</time>
-                        </div>
-                        <p class="text-muted mb-2">Startup Inc.</p>
-                        <p>
-                            Developed full-stack applications with modern web
-                            technologies. Contributed to open-source projects
-                            and established CI/CD pipelines for rapid
-                            deployment.
-                        </p>
-                    </article>
-                    <article class="card">
-                        <div class="hstack justify-between mb-2">
-                            <h3 class="mb-2">Frontend Developer</h3>
-                            <time class="text-muted">2019 - 2021</time>
-                        </div>
-                        <p class="text-muted mb-2">Digital Agency</p>
-                        <p>
-                            Built responsive web applications and learned modern
-                            development practices. Contributed to team projects
-                            and participated in code reviews and mentorship.
-                        </p>
-                    </article>
-                </div>
-            </section>
-
-            <section id="projects" class="mb-6">
-                <h2>Open Source Projects</h2>
-                <div class="projects-grid">
-                    <article class="card project-card">
-                        <div class="hstack justify-between align-center mb-2">
-                            <h3 class="mb-0">
                                 <a
-                                    href="https://github.com/yshngg/prometheus-mcp-server"
+                                    href="https://blog.yusheng.dev/building-open-source-communities"
                                     class="unstyled"
+                                    hreflang="en"
+                                    rel="author"
                                 >
-                                    Prometheus MCP Server
+                                    Building Open Source Communities
                                 </a>
                             </h3>
-                            <span class="badge">Go</span>
-                        </div>
-                        <p>
-                            Model Context Protocol server for Prometheus
-                            metrics. Enables AI assistants to query and analyze
-                            Prometheus metrics directly.
-                        </p>
-                    </article>
-                    <article class="card project-card">
-                        <div class="hstack justify-between align-center mb-2">
-                            <h3 class="mb-0">
-                                <a
-                                    href="https://github.com/yshngg/holdem"
-                                    class="unstyled"
+                            <p class="text-muted">
+                                Insights on building and maintaining successful
+                                open source projects and communities.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <div class="hstack justify-between mb-2">
+                                <time class="text-muted" datetime="2024-02-28"
+                                    >Feb 2024</time
                                 >
-                                    Holdem
+                                <span class="badge">Technical</span>
+                            </div>
+                            <h3 class="mb-2">
+                                <a
+                                    href="https://blog.yusheng.dev/modern-web-development-patterns"
+                                    class="unstyled"
+                                    hreflang="en"
+                                    rel="author"
+                                >
+                                    Modern Web Development Patterns
                                 </a>
                             </h3>
-                            <span class="badge secondary">TypeScript</span>
-                        </div>
-                        <p>
-                            Texas Hold'em poker game and AI simulation platform.
-                            Features real-time gameplay, AI opponents, and
-                            statistical analysis tools.
-                        </p>
-                    </article>
-                    <article class="card project-card">
-                        <div class="hstack justify-between align-center mb-2">
-                            <h3 class="mb-0">
-                                <a
-                                    href="https://github.com/yshngg/git-skills"
-                                    class="unstyled"
+                            <p class="text-muted">
+                                Exploring contemporary patterns and best
+                                practices in web development.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <div class="hstack justify-between mb-2">
+                                <time class="text-muted" datetime="2024-01-15"
+                                    >Jan 2024</time
                                 >
-                                    Git Skills
+                                <span class="badge warning"
+                                    >Best Practices</span
+                                >
+                            </div>
+                            <h3 class="mb-2">
+                                <a
+                                    href="https://blog.yusheng.dev/the-art-of-maintainable-code"
+                                    class="unstyled"
+                                    hreflang="en"
+                                    rel="author"
+                                >
+                                    The Art of Maintainable Code
                                 </a>
                             </h3>
-                            <span class="badge warning">Educational</span>
-                        </div>
-                        <p>
-                            Interactive Git learning platform with skill-based
-                            challenges. Helps developers master Git workflows
-                            through practical exercises.
-                        </p>
-                    </article>
-                </div>
-            </section>
+                            <p class="text-muted">
+                                Principles and techniques for writing code that
+                                stands the test of time.
+                            </p>
+                        </article>
+                    </div>
+                </section>
 
-            <section id="blog" class="mb-6">
-                <h2>Recent Blog Posts</h2>
-                <div class="vstack gap-3 blog-list">
-                    <article class="hstack gap-4">
-                        <time class="text-muted" datetime="2024-03-15"
-                            >Mar 2024</time
-                        >
-                        <h3 class="mb-0">
-                            <a
-                                href="https://blog.yusheng.dev/building-open-source-communities"
-                                class="unstyled"
-                                hreflang="en"
-                                rel="author"
-                            >
-                                Building Open Source Communities
-                            </a>
-                        </h3>
-                    </article>
-                    <article class="hstack gap-4">
-                        <time class="text-muted" datetime="2024-02-28"
-                            >Feb 2024</time
-                        >
-                        <h3 class="mb-0">
-                            <a
-                                href="https://blog.yusheng.dev/modern-web-development-patterns"
-                                class="unstyled"
-                                hreflang="en"
-                                rel="author"
-                            >
-                                Modern Web Development Patterns
-                            </a>
-                        </h3>
-                    </article>
-                    <article class="hstack gap-4">
-                        <time class="text-muted" datetime="2024-01-15"
-                            >Jan 2024</time
-                        >
-                        <h3 class="mb-0">
-                            <a
-                                href="https://blog.yusheng.dev/the-art-of-maintainable-code"
-                                class="unstyled"
-                                hreflang="en"
-                                rel="author"
-                            >
-                                The Art of Maintainable Code
-                            </a>
-                        </h3>
-                    </article>
-                </div>
-            </section>
-
-            <section id="contact" class="mb-6">
-                <h2>Contact</h2>
-                <p>
-                    The best way to reach me is via email at
-                    <a href="mailto:hello@yusheng.dev">hello@yusheng.dev</a>.
-                </p>
-            </section>
+                <section id="contact" class="mb-6">
+                    <h2>Contact</h2>
+                    <p>
+                        The best way to reach me is via email at
+                        <a href="mailto:hello@yusheng.dev">hello@yusheng.dev</a
+                        >.
+                    </p>
+                </section>
+            </div>
         </main>
-
-        <footer class="container mt-6 mb-6">
-            <p class="text-muted">
-                © <span id="current-year"></span> Yusheng. All rights reserved.
-            </p>
-        </footer>
     </body>
 </html>
