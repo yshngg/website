@@ -36,10 +36,9 @@
             href="https://unpkg.com/@knadh/oat/oat.min.css"
         />
         <style>
-            /* Custom styling for text truncation */
             .truncate {
-                text-overflow: ellipsis;
                 white-space: nowrap;
+                overflow: hidden;
             }
         </style>
         <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
@@ -65,14 +64,14 @@
                         style="font-size: var(--text-7)"
                     >
                         <li>
-                            <a href="#home" class="unstyled" aria-label="Home"
+                            <a href="#top" class="unstyled" aria-label="Home"
                                 >Home</a
                             >
                         </li>
                         <li aria-hidden="true">/</li>
                         <li>
-                            <a href="#blog" class="unstyled" aria-label="Blog"
-                                >Blog</a
+                            <a href="#work" class="unstyled" aria-label="Work"
+                                >Work</a
                             >
                         </li>
                         <li aria-hidden="true">/</li>
@@ -86,22 +85,17 @@
                         </li>
                         <li aria-hidden="true">/</li>
                         <li>
-                            <a
-                                href="#cheatsheet"
-                                class="unstyled"
-                                aria-label="Cheatsheet"
-                                aria-current="page"
-                                >Cheatsheet</a
+                            <a href="#blog" class="unstyled" aria-label="Blog"
+                                >Blog</a
                             >
                         </li>
                         <li aria-hidden="true">/</li>
                         <li>
                             <a
-                                href="#about"
+                                href="#contact"
                                 class="unstyled"
-                                aria-label="About"
-                                aria-current="page"
-                                >About
+                                aria-label="Contact"
+                                >Contact
                             </a>
                         </li>
                     </ol>
@@ -110,110 +104,116 @@
         </nav>
 
         <aside data-sidebar>
+            <header class="align-center">
+                <a href="#top" class="unstyled" aria-label="Top">
+                    <strong> Hi, I'm Yusheng </strong>
+                </a>
+            </header>
+
+            <hr />
+
             <nav>
                 <details open>
-                    <summary class="truncate">
-                        <a
-                            class="truncate"
-                            href="#about-me"
-                            title="Project Overview and Introduction"
-                        >
-                            Project Overview and Introduction
-                        </a>
-                    </summary>
+                    <summary class="truncate">Work History</summary>
                     <ul>
                         <li>
-                            <details>
-                                <summary
-                                    class="truncate"
-                                    title="Introduction and Goals of the Portfolio"
-                                >
-                                    Introduction and Goals of the Portfolio
-                                </summary>
-                                <ul>
-                                    <li>
-                                        <a
-                                            class="truncate"
-                                            href="#about-me"
-                                            title="About Me Section"
-                                            >About Me Section</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a
-                                            class="truncate"
-                                            href="#skills"
-                                            title="Skills and Expertise"
-                                            >Skills and Expertise</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <details>
-                                            <summary
-                                                class="truncate"
-                                                title="Core Competencies and Technologies"
-                                            >
-                                                Core Competencies and
-                                                Technologies
-                                            </summary>
-                                            <ul>
-                                                <li>
-                                                    <a
-                                                        class="truncate"
-                                                        href="#frontend"
-                                                        title="Frontend Development Skills"
-                                                        >Frontend Development
-                                                        Skills</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="truncate"
-                                                        href="#backend"
-                                                        title="Backend Development Skills"
-                                                        >Backend Development
-                                                        Skills</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <details>
-                                                        <summary
-                                                            class="truncate"
-                                                            title="Specialized Areas"
-                                                        >
-                                                            Specialized Areas
-                                                        </summary>
-                                                        <ul>
-                                                            <li>
-                                                                <a
-                                                                    class="truncate"
-                                                                    href="#cloud"
-                                                                    title="Cloud Infrastructure"
-                                                                    >Cloud
-                                                                    Infrastructure</a
-                                                                >
-                                                            </li>
-                                                            <li>
-                                                                <a
-                                                                    class="truncate"
-                                                                    href="#devops"
-                                                                    title="DevOps and Automation"
-                                                                    >DevOps &
-                                                                    Automation</a
-                                                                >
-                                                            </li>
-                                                        </ul>
-                                                    </details>
-                                                </li>
-                                            </ul>
-                                        </details>
-                                    </li>
-                                </ul>
-                            </details>
+                            <a
+                                class="truncate"
+                                href="#work"
+                                title="Senior Software Engineer"
+                            >
+                                Senior Software Engineer
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="truncate"
+                                href="#work"
+                                title="Software Engineer"
+                            >
+                                Software Engineer
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="truncate"
+                                href="#work"
+                                title="Frontend Developer"
+                            >
+                                Frontend Developer
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+                <details open>
+                    <summary class="truncate">Open Source Projects</summary>
+                    <ul>
+                        <li>
+                            <a
+                                class="truncate"
+                                href="#projects"
+                                title="Prometheus MCP Server"
+                            >
+                                Prometheus MCP Server
+                            </a>
+                        </li>
+                        <li>
+                            <a class="truncate" href="#projects" title="Holdem">
+                                Holdem
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="truncate"
+                                href="#projects"
+                                title="Git Skills"
+                            >
+                                Git Skills
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+                <details open>
+                    <summary class="truncate">Recent Blog Posts</summary>
+                    <ul>
+                        <li>
+                            <a class="truncate" href="#blog" title="March 2024">
+                                March 2024
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="truncate"
+                                href="#blog"
+                                title="February 2024"
+                            >
+                                February 2024
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="truncate"
+                                href="#blog"
+                                title="January 2024"
+                            >
+                                January 2024
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+                <details open>
+                    <summary class="truncate">Contact</summary>
+                    <ul>
+                        <li>
+                            <a class="truncate" href="#contact" title="Contact">
+                                Contact
+                            </a>
                         </li>
                     </ul>
                 </details>
             </nav>
+
+            <hr />
 
             <!-- Social media links -->
             <footer>
@@ -297,7 +297,9 @@
         <main>
             <div class="container">
                 <section class="mb-6">
-                    <h1>Hi, I'm <span class="text-light">Yusheng</span></h1>
+                    <h1 id="top">
+                        Hi, I'm <span class="text-light">Yusheng</span>
+                    </h1>
                     <p>
                         I'm an open-source developer specializing in scalable
                         systems, developer tools, and modern web technologies. I
@@ -449,75 +451,209 @@
 
                 <section id="blog" class="mb-6">
                     <h2>Recent Blog Posts</h2>
-                    <div class="vstack gap-4 mt-4">
-                        <article class="card">
-                            <div
-                                class="hstack justify-between align-center mb-2"
-                            >
-                                <time datetime="2024-03-15">Mar 2024</time>
-                                <span class="badge success">Community</span>
+                    <div class="vstack gap-6 mt-4">
+                        <!-- March 2024 Posts -->
+                        <div class="month-group">
+                            <h3 class="mb-3">March 2024</h3>
+                            <div class="vstack gap-4">
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-03-22"
+                                            >Mar 22</time
+                                        >
+                                        <span class="badge success"
+                                            >Community</span
+                                        >
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/building-open-source-communities"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            Building Open Source Communities
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Insights on building and maintaining
+                                        successful open source projects and
+                                        communities.
+                                    </p>
+                                </article>
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-03-15"
+                                            >Mar 15</time
+                                        >
+                                        <span class="badge">Technical</span>
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/rust-performance-patterns"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            Rust Performance Patterns for
+                                            Systems Programming
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Advanced techniques for optimizing Rust
+                                        code in high-performance systems and
+                                        concurrent applications.
+                                    </p>
+                                </article>
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-03-08">Mar 8</time>
+                                        <span class="badge warning"
+                                            >DevOps</span
+                                        >
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/kubernetes-observability"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            Kubernetes Observability at Scale
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Implementing comprehensive monitoring,
+                                        logging, and tracing for large-scale
+                                        Kubernetes deployments.
+                                    </p>
+                                </article>
                             </div>
-                            <h3 class="mb-2">
-                                <a
-                                    href="https://blog.yusheng.dev/building-open-source-communities"
-                                    class="unstyled"
-                                    hreflang="en"
-                                    rel="author"
-                                >
-                                    Building Open Source Communities
-                                </a>
-                            </h3>
-                            <p class="text-light">
-                                Insights on building and maintaining successful
-                                open source projects and communities.
-                            </p>
-                        </article>
-                        <article class="card">
-                            <div
-                                class="hstack justify-between align-center mb-2"
-                            >
-                                <time datetime="2024-02-28">Feb 2024</time>
-                                <span class="badge">Technical</span>
+                        </div>
+
+                        <!-- February 2024 Posts -->
+                        <div class="month-group">
+                            <h3 class="mb-3">February 2024</h3>
+                            <div class="vstack gap-4">
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-02-28"
+                                            >Feb 28</time
+                                        >
+                                        <span class="badge">Technical</span>
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/modern-web-development-patterns"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            Modern Web Development Patterns
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Exploring contemporary patterns and best
+                                        practices in web development.
+                                    </p>
+                                </article>
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-02-14"
+                                            >Feb 14</time
+                                        >
+                                        <span class="badge success"
+                                            >Tutorial</span
+                                        >
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/go-concurrency-patterns"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            Go Concurrency Patterns in
+                                            Production
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Practical examples of goroutines,
+                                        channels, and sync patterns used in
+                                        real-world Go applications.
+                                    </p>
+                                </article>
                             </div>
-                            <h3 class="mb-2">
-                                <a
-                                    href="https://blog.yusheng.dev/modern-web-development-patterns"
-                                    class="unstyled"
-                                    hreflang="en"
-                                    rel="author"
-                                >
-                                    Modern Web Development Patterns
-                                </a>
-                            </h3>
-                            <p class="text-light">
-                                Exploring contemporary patterns and best
-                                practices in web development.
-                            </p>
-                        </article>
-                        <article class="card">
-                            <div
-                                class="hstack justify-between align-center mb-2"
-                            >
-                                <time datetime="2024-01-15">Jan 2024</time>
-                                <span class="badge warning"
-                                    >Best Practices</span
-                                >
+                        </div>
+
+                        <!-- January 2024 Posts -->
+                        <div class="month-group">
+                            <h3 class="mb-3">January 2024</h3>
+                            <div class="vstack gap-4">
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-01-25"
+                                            >Jan 25</time
+                                        >
+                                        <span class="badge warning"
+                                            >Best Practices</span
+                                        >
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/the-art-of-maintainable-code"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            The Art of Maintainable Code
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Principles and techniques for writing
+                                        code that stands the test of time.
+                                    </p>
+                                </article>
+                                <article class="card">
+                                    <div
+                                        class="hstack justify-between align-center mb-2"
+                                    >
+                                        <time datetime="2024-01-10"
+                                            >Jan 10</time
+                                        >
+                                        <span class="badge">Architecture</span>
+                                    </div>
+                                    <h4 class="mb-2">
+                                        <a
+                                            href="https://blog.yusheng.dev/microservices-event-driven"
+                                            class="unstyled"
+                                            hreflang="en"
+                                            rel="author"
+                                        >
+                                            Event-Driven Microservices
+                                            Architecture
+                                        </a>
+                                    </h4>
+                                    <p class="text-light">
+                                        Designing resilient, scalable systems
+                                        using event-driven patterns and message
+                                        brokers.
+                                    </p>
+                                </article>
                             </div>
-                            <h3 class="mb-2">
-                                <a
-                                    href="https://blog.yusheng.dev/the-art-of-maintainable-code"
-                                    class="unstyled"
-                                    hreflang="en"
-                                    rel="author"
-                                >
-                                    The Art of Maintainable Code
-                                </a>
-                            </h3>
-                            <p class="text-light">
-                                Principles and techniques for writing code that
-                                stands the test of time.
-                            </p>
-                        </article>
+                        </div>
                     </div>
                 </section>
 
@@ -530,6 +666,7 @@
                     </p>
                 </section>
             </div>
+            <hr />
             <footer class="container mt-2 mb-2">
                 <p class="align-center">
                     © <span id="current-year"></span> Yusheng. All rights
