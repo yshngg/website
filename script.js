@@ -72,14 +72,14 @@ function initSidebarResize() {
     });
 
     handle.addEventListener("dblclick", () => {
-      body.style.gridTemplateColumns = `${defaultWidth}px 1fr`;
+      // Use requestAnimationFrame to avoid layout warning
+      requestAnimationFrame(() => {
+        body.style.gridTemplateColumns = `${defaultWidth}px 1fr`;
+      });
     });
 
     sidebar.style.position = "relative";
     sidebar.appendChild(handle);
-
-    // Reset to default on load
-    body.style.gridTemplateColumns = `${defaultWidth}px 1fr`;
   }
 
   function drag(e) {
@@ -104,9 +104,32 @@ function initSidebarResize() {
   }
 
   // Wait for CSS to load before setting up drag handle
+  // Use setTimeout to ensure all layout is complete
+  function delayedSetup() {
+    // Double-check that stylesheets are loaded
+    const stylesheets = Array.from(document.styleSheets);
+    const allLoaded = stylesheets.every(sheet => {
+      try {
+        return sheet.cssRules || sheet.rules;
+      } catch (e) {
+        // Cross-origin stylesheet, assume loaded
+        return true;
+      }
+    });
+    
+    if (allLoaded) {
+      setupDragHandle();
+    } else {
+      // If not all loaded, wait a bit more
+      setTimeout(delayedSetup, 50);
+    }
+  }
+  
   if (document.readyState === "complete") {
-    setupDragHandle();
+    setTimeout(delayedSetup, 0);
   } else {
-    window.addEventListener("load", setupDragHandle);
+    window.addEventListener("load", () => {
+      setTimeout(delayedSetup, 0);
+    });
   }
 }
