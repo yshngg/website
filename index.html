@@ -43,26 +43,6 @@
             }
         </style>
         <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
-        <script>
-            // Override oat's tooltip initialization to preserve native title tooltips
-            document.addEventListener("DOMContentLoaded", function () {
-                // Stop oat's tooltip mutation observer
-                if (window.MutationObserver) {
-                    // This prevents oat from converting title attributes to data-tooltip
-                    const originalObserver = window.MutationObserver;
-                    // Temporarily disable the tooltip conversion functionality
-                    const titleElements = document.querySelectorAll("[title]");
-                    titleElements.forEach((el) => {
-                        // Make sure title attributes remain on elements
-                        const title = el.getAttribute("title");
-                        if (title && !el.hasAttribute("data-tooltip")) {
-                            // Re-add title if oat's script removed it
-                            el.setAttribute("title", title);
-                        }
-                    });
-                }
-            });
-        </script>
         <script src="./script.js" defer></script>
     </head>
     <body data-sidebar-layout>
@@ -132,11 +112,14 @@
         <aside data-sidebar>
             <nav>
                 <details open>
-                    <summary
-                        class="truncate"
-                        title="Project Overview and Introduction"
-                    >
-                        Project Overview and Introduction
+                    <summary class="truncate">
+                        <a
+                            class="truncate"
+                            href="#about-me"
+                            title="Project Overview and Introduction"
+                        >
+                            Project Overview and Introduction
+                        </a>
                     </summary>
                     <ul>
                         <li>
@@ -333,11 +316,15 @@
                     <h2>Work History</h2>
                     <div class="vstack gap-8">
                         <article class="card">
-                            <div class="hstack justify-between mb-2">
-                                <h3 class="mb-2">
-                                    Senior Software Engineer
+                            <div
+                                class="hstack justify-between align-center mb-2"
+                            >
+                                <div class="hstack gap-2">
+                                    <h3 class="mb-0">
+                                        Senior Software Engineer
+                                    </h3>
                                     <span class="badge success">Present</span>
-                                </h3>
+                                </div>
                                 <time>2023 - Present</time>
                             </div>
                             <p class="mb-2">Tech Company</p>
@@ -349,8 +336,10 @@
                             </p>
                         </article>
                         <article class="card">
-                            <div class="hstack justify-between mb-2">
-                                <h3 class="mb-2">Software Engineer</h3>
+                            <div
+                                class="hstack justify-between align-center mb-2"
+                            >
+                                <h3 class="mb-0">Software Engineer</h3>
                                 <time>2021 - 2023</time>
                             </div>
                             <p class="mb-2">Startup Inc.</p>
@@ -362,8 +351,10 @@
                             </p>
                         </article>
                         <article class="card">
-                            <div class="hstack justify-between mb-2">
-                                <h3 class="mb-2">Frontend Developer</h3>
+                            <div
+                                class="hstack justify-between align-center mb-2"
+                            >
+                                <h3 class="mb-0">Frontend Developer</h3>
                                 <time>2019 - 2021</time>
                             </div>
                             <p class="mb-2">Digital Agency</p>
@@ -379,7 +370,7 @@
 
                 <section id="projects" class="mb-6">
                     <h2>Open Source Projects</h2>
-                    <div class="row">
+                    <div class="row mb-4">
                         <div class="col-6">
                             <article class="card">
                                 <div
@@ -460,7 +451,9 @@
                     <h2>Recent Blog Posts</h2>
                     <div class="vstack gap-4 mt-4">
                         <article class="card">
-                            <div class="hstack justify-between mb-2">
+                            <div
+                                class="hstack justify-between align-center mb-2"
+                            >
                                 <time datetime="2024-03-15">Mar 2024</time>
                                 <span class="badge success">Community</span>
                             </div>
@@ -480,7 +473,9 @@
                             </p>
                         </article>
                         <article class="card">
-                            <div class="hstack justify-between mb-2">
+                            <div
+                                class="hstack justify-between align-center mb-2"
+                            >
                                 <time datetime="2024-02-28">Feb 2024</time>
                                 <span class="badge">Technical</span>
                             </div>
@@ -500,7 +495,9 @@
                             </p>
                         </article>
                         <article class="card">
-                            <div class="hstack justify-between mb-2">
+                            <div
+                                class="hstack justify-between align-center mb-2"
+                            >
                                 <time datetime="2024-01-15">Jan 2024</time>
                                 <span class="badge warning"
                                     >Best Practices</span
