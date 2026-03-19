@@ -5,15 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     el.textContent = new Date().getFullYear();
   });
 
-  // Mobile sidebar toggle
-  const toggle = document.querySelector("[data-sidebar-toggle]");
   const body = document.querySelector("[data-sidebar-layout]");
-
-  if (toggle && body) {
-    toggle.addEventListener("click", () => {
-      body.toggleAttribute("data-sidebar-open");
-    });
-  }
 
   // Close mobile sidebar when clicking anchor links
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -108,15 +100,15 @@ function initSidebarResize() {
   function delayedSetup() {
     // Double-check that stylesheets are loaded
     const stylesheets = Array.from(document.styleSheets);
-    const allLoaded = stylesheets.every(sheet => {
+    const allLoaded = stylesheets.every((sheet) => {
       try {
-        return sheet.cssRules || sheet.rules;
+        return sheet.cssRules;
       } catch (e) {
         // Cross-origin stylesheet, assume loaded
         return true;
       }
     });
-    
+
     if (allLoaded) {
       setupDragHandle();
     } else {
@@ -124,7 +116,7 @@ function initSidebarResize() {
       setTimeout(delayedSetup, 50);
     }
   }
-  
+
   if (document.readyState === "complete") {
     setTimeout(delayedSetup, 0);
   } else {

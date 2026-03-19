@@ -34,9 +34,9 @@ main {
 }
 
 .sidebar-drag-handle:hover {
-    background-color: var(--primary);
+    background-color: var(--accent);
 }
 
 .sidebar-drag-handle.dragging {
-    background-color: var(--accent);
+    background-color: var(--primary);
 }
