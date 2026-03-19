@@ -9,17 +9,6 @@ main {
     overflow: hidden;
 }
 
-/* Mobile sidebar styles */
-@media (max-width: 768px) {
-    [data-sidebar-layout] > [data-sidebar] {
-        display: none;
-    }
-
-    [data-sidebar-layout][data-sidebar-open] > [data-sidebar] {
-        display: block;
-    }
-}
-
 /* Sidebar drag handle styles */
 .sidebar-drag-handle {
     position: absolute;
