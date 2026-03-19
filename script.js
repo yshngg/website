@@ -1,6 +1,5 @@
-// Initialize non-layout-dependent functionality immediately
+// Set current year and initialize sidebar functionality
 document.addEventListener("DOMContentLoaded", () => {
-  // Set current year
   document.querySelectorAll("#current-year").forEach((el) => {
     el.textContent = new Date().getFullYear();
   });
@@ -16,28 +15,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Initialize sidebar resize after CSS is loaded
   initSidebarResize();
 });
 
-// Initialize sidebar resize functionality after CSS loads
+// Initialize sidebar resize functionality
 function initSidebarResize() {
   const sidebar = document.querySelector("[data-sidebar]");
   const body = document.querySelector("[data-sidebar-layout]");
 
   if (!sidebar || !body) return;
 
-  const defaultWidth = 224;
-  const minWidth = 200;
-  const maxWidth = 500;
+  // Get the default sidebar width from computed styles
+  const getDefaultWidth = () => {
+    const gridTemplate = getComputedStyle(body).gridTemplateColumns;
+    if (gridTemplate) {
+      const widthValue = parseInt(gridTemplate.split(" ")[0]);
+      if (!isNaN(widthValue) && widthValue > 0) {
+        return widthValue;
+      }
+    }
+    return null;
+  };
+
+  const defaultWidth = getDefaultWidth();
+
+  // Skip initialization if default width cannot be determined
+  if (defaultWidth === null) {
+    console.warn(
+      "Could not determine sidebar width, skipping resize functionality",
+    );
+    return;
+  }
+
+  // Calculate min/max width as ratios of default width
+  const minWidth = Math.floor(defaultWidth * 0.8);
+  const maxWidth = Math.ceil(defaultWidth * 1.8);
   let isDragging = false;
   let startX = 0;
   let startWidth = 0;
 
-  // Check if mobile
+  // Check if mobile using screen width
   const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
 
-  // Create drag handle (delayed to ensure CSS is loaded)
+  // Create and setup the drag handle for resizing
   function setupDragHandle() {
     if (isMobile()) return;
 
@@ -48,7 +68,6 @@ function initSidebarResize() {
       isDragging = true;
       startX = e.clientX;
 
-      // Use requestAnimationFrame to avoid layout thrashing
       requestAnimationFrame(() => {
         startWidth =
           parseInt(getComputedStyle(body).gridTemplateColumns.split(" ")[0]) ||
@@ -64,7 +83,6 @@ function initSidebarResize() {
     });
 
     handle.addEventListener("dblclick", () => {
-      // Use requestAnimationFrame to avoid layout warning
       requestAnimationFrame(() => {
         body.style.gridTemplateColumns = `${defaultWidth}px 1fr`;
       });
@@ -74,6 +92,7 @@ function initSidebarResize() {
     sidebar.appendChild(handle);
   }
 
+  // Handle mouse drag movement
   function drag(e) {
     if (!isDragging || isMobile()) return;
 
@@ -83,6 +102,7 @@ function initSidebarResize() {
     body.style.gridTemplateColumns = `${newWidth}px 1fr`;
   }
 
+  // Clean up after dragging ends
   function stopDrag() {
     isDragging = false;
     document.removeEventListener("mousemove", drag);
@@ -95,33 +115,11 @@ function initSidebarResize() {
     document.body.style.userSelect = "";
   }
 
-  // Wait for CSS to load before setting up drag handle
-  // Use setTimeout to ensure all layout is complete
-  function delayedSetup() {
-    // Double-check that stylesheets are loaded
-    const stylesheets = Array.from(document.styleSheets);
-    const allLoaded = stylesheets.every((sheet) => {
-      try {
-        return sheet.cssRules;
-      } catch (e) {
-        // Cross-origin stylesheet, assume loaded
-        return true;
-      }
-    });
-
-    if (allLoaded) {
-      setupDragHandle();
-    } else {
-      // If not all loaded, wait a bit more
-      setTimeout(delayedSetup, 50);
-    }
-  }
-
   if (document.readyState === "complete") {
-    setTimeout(delayedSetup, 0);
+    queueMicrotask(setupDragHandle);
   } else {
     window.addEventListener("load", () => {
-      setTimeout(delayedSetup, 0);
+      queueMicrotask(setupDragHandle);
     });
   }
 }
