@@ -267,20 +267,20 @@ The _Snapshotter_ provides an API for allocating, snapshotting and mounting
 abstract, layer-based filesystems. The model works by building up sets of
 directories with parent-child relationships, known as _Snapshots_.
 
-A _Snapshot_ represents a filesystem state.  Every snapshot has a parent,
-where the empty parent is represented by the empty string.  A diff can be taken
+A _Snapshot_ represents a filesystem state. Every snapshot has a parent,
+where the empty parent is represented by the empty string. A diff can be taken
 between a parent and its snapshot to create a classic layer.
 
-Snapshots are best understood by their lifecycle.  _Active_ snapshots are always
+Snapshots are best understood by their lifecycle. _Active_ snapshots are always
 created with `Prepare` or `View` from a _Committed_ snapshot (including the
-empty snapshot).  _Committed_ snapshots are always created with
-`Commit` from an _Active_ snapshot.  Active snapshots never become committed
+empty snapshot). _Committed_ snapshots are always created with
+`Commit` from an _Active_ snapshot. Active snapshots never become committed
 snapshots and vice versa. All snapshots may be removed.
 
-After mounting an _Active_ snapshot, changes can be made to the snapshot.  The
-act of committing creates a _Committed_ snapshot.  The committed snapshot will
-inherit the parent of the active snapshot.  The committed snapshot can then be
-used as a parent.  Active snapshots can never be used as a parent.
+After mounting an _Active_ snapshot, changes can be made to the snapshot. The
+act of committing creates a _Committed_ snapshot. The committed snapshot will
+inherit the parent of the active snapshot. The committed snapshot can then be
+used as a parent. Active snapshots can never be used as a parent.
 
 The following diagram demonstrates the relationships of snapshots:
 
@@ -288,10 +288,10 @@ The following diagram demonstrates the relationships of snapshots:
 committed snapshots on the right](snapshot_model.png)
 
 In this diagram, you can see that the active snapshot _a_ is created by calling
-`Prepare` with the committed snapshot _P<sub>0</sub>_.  After modification, _a_
+`Prepare` with the committed snapshot _P<sub>0</sub>_. After modification, _a_
 becomes _a'_ and a committed snapshot _P<sub>1</sub>_ is created by calling
-`Commit`.  _a'_ can be further modified as _a''_ and a second committed snapshot
-can be created as _P<sub>2</sub>_ by calling `Commit` again.  Note here that
+`Commit`. _a'_ can be further modified as _a''_ and a second committed snapshot
+can be created as _P<sub>2</sub>_ by calling `Commit` again. Note here that
 _P<sub>2</sub>_'s parent is _P<sub>0</sub>_ and not _P<sub>1</sub>_.
 
 ### Operations
@@ -317,7 +317,7 @@ snapshot that can be used as the parent of new _active_ snapshots when
 referenced by the _name_.
 
 If the user wants to discard the changes in an active snapshot, the _remove_
-operation will release any resources associated with the snapshot.  The mounts
+operation will release any resources associated with the snapshot. The mounts
 provided by _prepare_ or _view_ should be unmounted before calling this method.
 
 If the user wants to discard committed snapshots, the _remove_ operation can
@@ -344,19 +344,19 @@ mounts to be applied such that our destination will capture a changeset. We star
 out by getting a path to the layer tar file and creating a temp location to
 unpack it to:
 
-	layerPath, tmpDir := getLayerPath(), mkTmpDir() // just a path to layer tar file.
+    layerPath, tmpDir := getLayerPath(), mkTmpDir() // just a path to layer tar file.
 
 We start by using a _Snapshotter_ to _Prepare_ a new snapshot transaction, using
 a _key_ and descending from the empty parent "":
 
-	mounts, err := snapshotter.Prepare(key, "")
-	if err != nil { ... }
+    mounts, err := snapshotter.Prepare(key, "")
+    if err != nil { ... }
 
 We get back a list of mounts from `Snapshotter.Prepare`, with the `key`
 identifying the active snapshot. Mount this to the temporary location with the
 following:
 
-	if err := mount.All(mounts, tmpDir); err != nil { ... }
+    if err := mount.All(mounts, tmpDir); err != nil { ... }
 
 Once the mounts are performed, our temporary location is ready to capture
 a diff. In practice, this works similar to a filesystem transaction. The
@@ -365,28 +365,28 @@ that applies the contents of the layer to target location and calculates the
 `DiffID` of the unpacked layer (this is a requirement for docker
 implementation):
 
-	layer, err := os.Open(layerPath)
-	if err != nil { ... }
-	digest, err := unpackLayer(tmpLocation, layer) // unpack into layer location
-	if err != nil { ... }
+    layer, err := os.Open(layerPath)
+    if err != nil { ... }
+    digest, err := unpackLayer(tmpLocation, layer) // unpack into layer location
+    if err != nil { ... }
 
 When the above completes, we should have a filesystem the represents the
 contents of the layer. Careful implementations should verify that digest
 matches the expected `DiffID`. When completed, we unmount the mounts:
 
-	unmount(mounts) // optional, for now
+    unmount(mounts) // optional, for now
 
 Now that we've verified and unpacked our layer, we commit the active
 snapshot to a _name_. For this example, we are just going to use the layer
 digest, but in practice, this will probably be the `ChainID`:
 
-	if err := snapshotter.Commit(digest.String(), key); err != nil { ... }
+    if err := snapshotter.Commit(digest.String(), key); err != nil { ... }
 
 Now, we have a layer in the _Snapshotter_ that can be accessed with the digest
 provided during commit. Once you have committed the snapshot, the active
 snapshot can be removed with the following:
 
-	snapshotter.Remove(key)
+    snapshotter.Remove(key)
 
 #### Importing the Next Layer
 
@@ -394,7 +394,7 @@ Making a layer depend on the above is identical to the process described
 above except that the parent is provided as `parent` when calling
 `Snapshotter.Prepare`, assuming a clean `tmpLocation`:
 
-	mounts, err := snapshotter.Prepare(tmpLocation, parentDigest)
+    mounts, err := snapshotter.Prepare(tmpLocation, parentDigest)
 
 We then mount, apply and commit, as we did above. The new snapshot will be
 based on the content of the previous one.
@@ -405,13 +405,13 @@ To run a container, we simply provide `Snapshotter.Prepare` the committed image
 snapshot as the parent. After mounting, the prepared path can
 be used directly as the container's filesystem:
 
-	mounts, err := snapshotter.Prepare(containerKey, imageRootFSChainID)
+    mounts, err := snapshotter.Prepare(containerKey, imageRootFSChainID)
 
 The returned mounts can then be passed directly to the container runtime. If
 one would like to create a new image from the filesystem, `Snapshotter.Commit`
 is called:
 
-	if err := snapshotter.Commit(newImageSnapshot, containerKey); err != nil { ... }
+    if err := snapshotter.Commit(newImageSnapshot, containerKey); err != nil { ... }
 
 Alternatively, for most container runs, `Snapshotter.Remove` will be called to
 signal the Snapshotter to abandon the changes.

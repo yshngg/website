@@ -2,17 +2,16 @@
 <h1 class="title">{{ page.title }}</h1>
 
 {% if page.extra.author %}
-<p class="subtitle"><strong>By {{ page.extra.author }}</strong>
-  {% if page.extra.original_url %}
-    &middot; <a href="{{ page.extra.original_url }}" target="_blank">Original source ↻</a>
+<p class="subtitle">
+  <strong>By {{ page.extra.author }}</strong> {% if page.extra.original_url %}
+  &middot;
+  <a href="{{ page.extra.original_url }}" target="_blank">Original source ↻</a>
   {% endif %}
 </p>
-{% endif %}
-
-{% if page.translations %}
+{% endif %} {% if page.translations %}
 <p>
   {% for t in page.translations %}
-    <a href="{{ t.permalink | safe }}">{{ t.lang | default(value="English") }}</a>
+  <a href="{{ t.permalink | safe }}">{{ t.lang | default(value="English") }}</a>
   {% endfor %}
 </p>
 {% endif %}
@@ -21,7 +20,15 @@
   <div class="col-8">
     <div class="content">{{ page.content | safe }}</div>
   </div>
-  <div class="col-3" style="grid-column: 10 / span 3; position: sticky; top: 4rem; align-self: start">
+  <div
+    class="col-3"
+    style="
+      grid-column: 10 / span 3;
+      position: sticky;
+      top: 4rem;
+      align-self: start;
+    "
+  >
     {% if page.toc %}
     <ul class="toc">
       {% for h1 in page.toc %}

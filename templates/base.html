@@ -1,89 +1,62 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}{{ config.title }}{% endblock %}</title>
-        <meta name="description" content="{{ config.description }}" />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="/apple-touch-icon.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/favicon-32x32.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{{ config.title }}{% endblock %}</title>
+    <meta name="description" content="{{ config.description }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
-        <link rel="stylesheet" href="/oat.min.css" />
-        <script>
-            // Prevent FOUC - apply theme before rendering.
-            (function () {
-                var t = localStorage.getItem("theme");
-                if (t) {
-                    document.documentElement.style.colorScheme = t;
-                    document.documentElement.setAttribute("data-theme", t);
-                }
-            })();
-        </script>
+    <link rel="stylesheet" href="/oat.min.css" />
+    <script>
+      // Prevent FOUC - apply theme before rendering.
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (t) {
+          document.documentElement.style.colorScheme = t;
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      })();
+    </script>
 
-        <script src="/oat.min.js" defer></script>
-        <script src="/main.js"></script>
-        <link href="/style.css" rel="stylesheet" />
-    </head>
+    <script src="/oat.min.js" defer></script>
+    <script src="/main.js"></script>
+    <link href="/style.css" rel="stylesheet" />
+  </head>
 
-    <body>
-        <nav data-topnav>
-            <div class="row container">
-                <div class="col-4 hstack">
-                    <a href="/">Home</a>
-                    <span>/</span>
-                    <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
-                    <span>/</span>
-                    <a href="{{ get_url(path='@/curated/_index.md') }}"
-                        >Curated</a
-                    >
-                </div>
-                <div class="col-8 justify-end hstack">
-                    <a href="https://x.com/yshnggdev" target="_blank"
-                        >X(Twitter)</a
-                    >
-                    <span>/</span>
-                    <a href="https://www.youtube.com/@yshngg" target="_blank"
-                        >YouTube</a
-                    >
-                    <span>/</span>
-                    <a href="https://github.com/yshngg" target="_blank"
-                        >GitHub</a
-                    >
-                    <span>/</span>
-                    <a href="mailto:hello@yusheng.dev" target="_blank">Email</a>
-                    <span>/</span>
-                    <a href="https://kb.yshngg.dev" target="_blank"
-                        >Knowledge Base</a
-                    >
-                </div>
-            </div>
-        </nav>
-        <main>
-            <div class="container">
-                {% block content %}{% endblock content %}
-            </div>
-        </main>
-        <footer>
-            <hr />
-            <p class="align-center mb-2">
-                &copy; <span id="current-year"></span> Yusheng. All rights
-                reserved.
-            </p>
-        </footer>
-    </body>
+  <body>
+    <nav data-topnav>
+      <div class="row container">
+        <div class="col-4 hstack">
+          <a href="/">Home</a>
+          <span>/</span>
+          <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
+          <span>/</span>
+          <a href="{{ get_url(path='@/curated/_index.md') }}">Curated</a>
+        </div>
+        <div class="col-8 justify-end hstack">
+          <a href="https://x.com/yshnggdev" target="_blank">X(Twitter)</a>
+          <span>/</span>
+          <a href="https://www.youtube.com/@yshngg" target="_blank">YouTube</a>
+          <span>/</span>
+          <a href="https://github.com/yshngg" target="_blank">GitHub</a>
+          <span>/</span>
+          <a href="mailto:hello@yusheng.dev" target="_blank">Email</a>
+          <span>/</span>
+          <a href="https://kb.yshngg.dev" target="_blank">Knowledge Base</a>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <div class="container">{% block content %}{% endblock content %}</div>
+    </main>
+    <footer>
+      <hr />
+      <p class="align-center mb-2">
+        &copy; <span id="current-year"></span> Yusheng. All rights reserved.
+      </p>
+    </footer>
+  </body>
 </html>

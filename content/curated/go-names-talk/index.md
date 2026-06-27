@@ -9,7 +9,6 @@ author = "Andrew Gerrand"
 category = ["Go"]
 +++
 
-
 ### Names matter
 
 Readability is the defining quality of good code.

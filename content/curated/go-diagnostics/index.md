@@ -17,10 +17,10 @@ The Go ecosystem provides a large suite of APIs and tools to diagnose logic and 
 
 Diagnostics solutions can be categorized into the following groups:
 
-* **Profiling**: Profiling tools analyze the complexity and costs of a Go program such as its memory usage and frequently called functions to identify the expensive sections of a Go program.
-* **Tracing**: Tracing is a way to instrument code to analyze latency throughout the lifecycle of a call or user request. Traces provide an overview of how much latency each component contributes to the overall latency in a system. Traces can span multiple Go processes.
-* **Debugging**: Debugging allows us to pause a Go program and examine its execution. Program state and flow can be verified with debugging.
-* **Runtime statistics and events**: Collection and analysis of runtime stats and events provides a high-level overview of the health of Go programs. Spikes/dips of metrics helps us to identify changes in throughput, utilization, and performance.
+- **Profiling**: Profiling tools analyze the complexity and costs of a Go program such as its memory usage and frequently called functions to identify the expensive sections of a Go program.
+- **Tracing**: Tracing is a way to instrument code to analyze latency throughout the lifecycle of a call or user request. Traces provide an overview of how much latency each component contributes to the overall latency in a system. Traces can span multiple Go processes.
+- **Debugging**: Debugging allows us to pause a Go program and examine its execution. Program state and flow can be verified with debugging.
+- **Runtime statistics and events**: Collection and analysis of runtime stats and events provides a high-level overview of the health of Go programs. Spikes/dips of metrics helps us to identify changes in throughput, utilization, and performance.
 
 Note: Some diagnostics tools may interfere with each other. For example, precise memory profiling skews CPU profiles and goroutine blocking profiling affects scheduler trace. Use tools in isolation to get more precise info.
 
@@ -30,12 +30,12 @@ Profiling is useful for identifying expensive or frequently called sections of c
 
 Predefined profiles provided by the [runtime/pprof](https://pkg.go.dev/runtime/pprof) package:
 
-* **cpu**: CPU profile determines where a program spends its time while actively consuming CPU cycles (as opposed to while sleeping or waiting for I/O).
-* **heap**: Heap profile reports memory allocation samples; used to monitor current and historical memory usage, and to check for memory leaks.
-* **threadcreate**: Thread creation profile reports the sections of the program that lead the creation of new OS threads.
-* **goroutine**: Goroutine profile reports the stack traces of all current goroutines.
-* **block**: Block profile shows where goroutines block waiting on synchronization primitives (including timer channels). Block profile is not enabled by default; use `runtime.SetBlockProfileRate` to enable it.
-* **mutex**: Mutex profile reports the lock contentions. When you think your CPU is not fully utilized due to a mutex contention, use this profile. Mutex profile is not enabled by default, see `runtime.SetMutexProfileFraction` to enable it.
+- **cpu**: CPU profile determines where a program spends its time while actively consuming CPU cycles (as opposed to while sleeping or waiting for I/O).
+- **heap**: Heap profile reports memory allocation samples; used to monitor current and historical memory usage, and to check for memory leaks.
+- **threadcreate**: Thread creation profile reports the sections of the program that lead the creation of new OS threads.
+- **goroutine**: Goroutine profile reports the stack traces of all current goroutines.
+- **block**: Block profile shows where goroutines block waiting on synchronization primitives (including timer channels). Block profile is not enabled by default; use `runtime.SetBlockProfileRate` to enable it.
+- **mutex**: Mutex profile reports the lock contentions. When you think your CPU is not fully utilized due to a mutex contention, use this profile. Mutex profile is not enabled by default, see `runtime.SetMutexProfileFraction` to enable it.
 
 ### What other profilers can I use to profile Go programs?
 
@@ -103,9 +103,9 @@ Tracing is a way to instrument code to analyze latency throughout the lifecycle 
 
 Tracing enables us to:
 
-* Instrument and analyze application latency in a Go process.
-* Measure the cost of specific calls in a long chain of calls.
-* Figure out the utilization and performance improvements. Bottlenecks are not always obvious without tracing data.
+- Instrument and analyze application latency in a Go process.
+- Measure the cost of specific calls in a long chain of calls.
+- Figure out the utilization and performance improvements. Bottlenecks are not always obvious without tracing data.
 
 In monolithic systems, it's relatively easy to collect diagnostic data from the building blocks of a program. All modules live within one process and share common resources to report logs, errors, and other diagnostic information. Once your system grows beyond a single process and starts to become distributed, it becomes harder to follow a call starting from the front-end web server to all of its back-ends until a response is returned back to the user. This is where distributed tracing plays a big role to instrument and analyze your production systems.
 
@@ -113,9 +113,9 @@ Distributed tracing is a way to instrument code to analyze latency throughout th
 
 Distributed tracing enables us to:
 
-* Instrument and profile application latency in a large system.
-* Track all RPCs within the lifecycle of a user request and see integration issues that are only visible in production.
-* Figure out performance improvements that can be applied to our systems. Many bottlenecks are not obvious before the collection of tracing data.
+- Instrument and profile application latency in a large system.
+- Track all RPCs within the lifecycle of a user request and see integration issues that are only visible in production.
+- Figure out performance improvements that can be applied to our systems. Many bottlenecks are not obvious before the collection of tracing data.
 
 The Go ecosystem provides various distributed tracing libraries per tracing system and backend-agnostic ones.
 
@@ -137,8 +137,8 @@ Debugging is the process of identifying why a program misbehaves. Debuggers allo
 
 Go users mostly use the following debuggers:
 
-* [Delve](https://github.com/go-delve/delve): Delve is a debugger for the Go programming language. It has support for Go's runtime concepts and built-in types. Delve is trying to be a fully featured reliable debugger for Go programs.
-* [GDB](https://go.dev/doc/gdb): Go provides GDB support via the standard Go compiler and Gccgo. The stack management, threading, and runtime contain aspects that differ enough from the execution model GDB expects that they can confuse the debugger, even when the program is compiled with gccgo. Even though GDB can be used to debug Go programs, it is not ideal and may create confusion.
+- [Delve](https://github.com/go-delve/delve): Delve is a debugger for the Go programming language. It has support for Go's runtime concepts and built-in types. Delve is trying to be a fully featured reliable debugger for Go programs.
+- [GDB](https://go.dev/doc/gdb): Go provides GDB support via the standard Go compiler and Gccgo. The stack management, threading, and runtime contain aspects that differ enough from the execution model GDB expects that they can confuse the debugger, even when the program is compiled with gccgo. Even though GDB can be used to debug Go programs, it is not ideal and may create confusion.
 
 ### How well do debuggers work with Go programs?
 
@@ -168,11 +168,11 @@ The runtime provides stats and reporting of internal events for users to diagnos
 
 Users can monitor these stats to better understand the overall health and performance of Go programs. Some frequently monitored stats and states:
 
-* [`runtime.ReadMemStats`](https://pkg.go.dev/runtime/#ReadMemStats) reports the metrics related to heap allocation and garbage collection. Memory stats are useful for monitoring how much memory resources a process is consuming, whether the process can utilize memory well, and to catch memory leaks.
-* [`debug.ReadGCStats`](https://pkg.go.dev/runtime/debug/#ReadGCStats) reads statistics about garbage collection. It is useful to see how much of the resources are spent on GC pauses. It also reports a timeline of garbage collector pauses and pause time percentiles.
-* [`debug.Stack`](https://pkg.go.dev/runtime/debug/#Stack) returns the current stack trace. Stack trace is useful to see how many goroutines are currently running, what they are doing, and whether they are blocked or not.
-* [`debug.WriteHeapDump`](https://pkg.go.dev/runtime/debug/#WriteHeapDump) suspends the execution of all goroutines and allows you to dump the heap to a file. A heap dump is a snapshot of a Go process' memory at a given time. It contains all allocated objects as well as goroutines, finalizers, and more.
-* [`runtime.NumGoroutine`](https://pkg.go.dev/runtime#NumGoroutine) returns the number of current goroutines. The value can be monitored to see whether enough goroutines are utilized, or to detect goroutine leaks.
+- [`runtime.ReadMemStats`](https://pkg.go.dev/runtime/#ReadMemStats) reports the metrics related to heap allocation and garbage collection. Memory stats are useful for monitoring how much memory resources a process is consuming, whether the process can utilize memory well, and to catch memory leaks.
+- [`debug.ReadGCStats`](https://pkg.go.dev/runtime/debug/#ReadGCStats) reads statistics about garbage collection. It is useful to see how much of the resources are spent on GC pauses. It also reports a timeline of garbage collector pauses and pause time percentiles.
+- [`debug.Stack`](https://pkg.go.dev/runtime/debug/#Stack) returns the current stack trace. Stack trace is useful to see how many goroutines are currently running, what they are doing, and whether they are blocked or not.
+- [`debug.WriteHeapDump`](https://pkg.go.dev/runtime/debug/#WriteHeapDump) suspends the execution of all goroutines and allows you to dump the heap to a file. A heap dump is a snapshot of a Go process' memory at a given time. It contains all allocated objects as well as goroutines, finalizers, and more.
+- [`runtime.NumGoroutine`](https://pkg.go.dev/runtime#NumGoroutine) returns the number of current goroutines. The value can be monitored to see whether enough goroutines are utilized, or to detect goroutine leaks.
 
 ### Execution tracer
 
@@ -180,9 +180,9 @@ Go comes with a runtime execution tracer to capture a wide range of runtime even
 
 Tracer is useful to:
 
-* Understand how your goroutines execute.
-* Understand some of the core runtime events such as GC runs.
-* Identify poorly parallelized execution.
+- Understand how your goroutines execute.
+- Understand some of the core runtime events such as GC runs.
+- Identify poorly parallelized execution.
 
 However, it is not great for identifying hot spots such as analyzing the cause of excessive memory or CPU usage. Use profiling tools instead first to address them.
 
@@ -196,11 +196,11 @@ See [`go tool trace`](https://go.dev/cmd/trace/) to collect and analyze runtime 
 
 Runtime also emits events and information if [GODEBUG](https://pkg.go.dev/runtime/#hdr-Environment_Variables) environmental variable is set accordingly.
 
-* GODEBUG=gctrace=1 prints garbage collector events at each collection, summarizing the amount of memory collected and the length of the pause.
-* GODEBUG=inittrace=1 prints a summary of execution time and memory allocation information for completed package initialization work.
-* GODEBUG=schedtrace=X prints scheduling events every X milliseconds.
+- GODEBUG=gctrace=1 prints garbage collector events at each collection, summarizing the amount of memory collected and the length of the pause.
+- GODEBUG=inittrace=1 prints a summary of execution time and memory allocation information for completed package initialization work.
+- GODEBUG=schedtrace=X prints scheduling events every X milliseconds.
 
 The GODEBUG environmental variable can be used to disable use of instruction set extensions in the standard library and runtime.
 
-* GODEBUG=cpu.all=off disables the use of all optional instruction set extensions.
-* GODEBUG=cpu.*extension*=off disables use of instructions from the specified instruction set extension. *extension* is the lower case name for the instruction set extension such as *sse41* or *avx*.
+- GODEBUG=cpu.all=off disables the use of all optional instruction set extensions.
+- GODEBUG=cpu._extension_=off disables use of instructions from the specified instruction set extension. _extension_ is the lower case name for the instruction set extension such as _sse41_ or _avx_.

@@ -22,7 +22,7 @@ buggy controller you developed without understanding how to design idiomatic
 APIs and building reliable controllers.
 
 Low barrier to entry combined with good intentions and the "illusion of
-*working* implementation[1]" is not a recipe for
+_working_ implementation[1]" is not a recipe for
 success while developing production-grade controllers. I've seen the real-world
 consequences of controllers developed without adequate understanding of
 Kubernetes and the controller machinery at multiple large companies. We went
@@ -32,7 +32,7 @@ make.
 
 1. [Design CRDs like Kubernetes APIs](#Design_CRDs_like_Kubernetes_APIs)
 2. [Single-responsibility controllers](#Single-responsibility_controllers)
-3. [Reconcile() method shape](#Reconcile()_method_shape)
+3. [Reconcile() method shape](<#Reconcile()_method_shape>)
 4. [Report `status` and `conditions`](#Report_status_and_conditions)
 5. [Learn to use `observedGeneration`](#Learn_to_use_observedGeneration)
 6. [Understand the cached clients](#Understand_the_cached_clients)
@@ -84,7 +84,7 @@ already offers (like `ControllerRevision`, `PodSpecTemplate`).
 ## Single-responsibility controllers
 
 Time and time again we find engineers adding new unrelated responsibilities to
-existing controllers because it seems like a good place their *thing* can be
+existing controllers because it seems like a good place their _thing_ can be
 shoved into. Kubernetes core controllers don't have this problem for a reason.
 
 One of the main Kubernetes [design principles](https://github.com/kubernetes/design-proposals-archive/blob/acc25e14ca83dfda4f66d8cb1f1b491f26e78ffe/architecture/principles.md#design-principles) is that controllers have clear
@@ -108,7 +108,7 @@ in harmony as if they're integrating with Kubernetes core APIs or an
 off-the-shelf operator.
 
 When you controller design doesn't quite feel right, or has too many
-inputs/outputs, does too much, or in general doesn't *feel right*, you're
+inputs/outputs, does too much, or in general doesn't _feel right_, you're
 probably doing it unidiomatically. I struggled with this a lot myself,
 especially while developing controllers that manage external resources that have
 a non-declarative configuration paradigm.
@@ -166,7 +166,7 @@ update status inside `reconcileKind` even if the reconciliation fails.
 
 I recommend enforcing a similar common shape for controllers developed at your
 company (you can use custom kubebuilder plugins during scaffolding, but you
-can't really *enforce* that either).
+can't really _enforce_ that either).
 
 ## Report `status` and `conditions`
 
@@ -224,7 +224,7 @@ meaningful status info if and only if the `cond.observedGeneration == metadata.g
 of `observedGeneration`, so its callers would update the object's `spec` and
 immediately check its `Ready` condition. This condition would almost always be
 stale, as the controller hadn't reconciled the object yet. So the callers
-interpreted an app rollout as *completed*, even though it hadn't even started
+interpreted an app rollout as _completed_, even though it hadn't even started
 yet (and sometimes actually failed, but that failure was never noticed).
 
 ## Understand the cached clients
@@ -252,10 +252,10 @@ you haven't declared upfront in your controller setup, controller-runtime will
 initialize an informer on-the-fly and block on warming up its cache. This leads
 to issues like:
 
-* Controller-runtime starting a watch for a resource type and start caching all
+- Controller-runtime starting a watch for a resource type and start caching all
   its objects in memory (even if you were trying to query only one resource),
   potentially leading to the process running out of memory.
-* Unpredictable reconciliation times while the informer cache is syncing, during
+- Unpredictable reconciliation times while the informer cache is syncing, during
   which your worker goroutine will be blocked from reconciling other resources.
 
 That's why I recommend setting `ReaderFailOnMissingInformer: true` and disabling
@@ -309,8 +309,7 @@ to the external S3 API when the object is already up-to-date.[3]
 ## Reconcile return values
 
 Your `Reconcile()` function signature returns
-[`ctrl.Result`](https://pkg.go.dev/sigs.k8s.io/controller-runtime%40v0.20.0/pkg/reconcile#Result)
-+`error` values. Usually beginners don't have a solid grasp on what values to
+[`ctrl.Result`](https://pkg.go.dev/sigs.k8s.io/controller-runtime%40v0.20.0/pkg/reconcile#Result) +`error` values. Usually beginners don't have a solid grasp on what values to
 return from `Reconcile()`.
 
 You should know that your `Reconcile()` function is invoked every time your
@@ -341,7 +340,7 @@ that. I frequently see beginners not relying on assumptions like an object
 is guaranteed to be reconciled at the same time in different workers, so they
 end up implementing unnecessary locking mechanisms in their controllers.
 
-Similarly, beginners frequently don't understand *when* and *how many times* an
+Similarly, beginners frequently don't understand _when_ and _how many times_ an
 object gets reconciled. For example, when your controller updates the object
 it's working on, it'll be requeued for a reconciliation immediately again
 (because the update you made triggers watch event).
@@ -376,7 +375,7 @@ your controller scales or not.
 
 ## Expectations pattern
 
-We discussed above that controller-runtime client serves the *reads* from an
+We discussed above that controller-runtime client serves the _reads_ from an
 informer cache, and doesn't query the API server except during the
 startup/resyncs.
 
@@ -451,17 +450,17 @@ APIs:
 >
 > **Follow up questions:**
 >
-> * *How do users specify the list of containers? (Do you use the core types?)*
-> * *Do you report status? How is status calculated? How do you surface job failures?*
-> * *Where do you validate user inputs? Where do you report reconciliation failures?*
-> * *What happens if the SequentialJob changes while the jobs are running?*
-> * *How are the child resources you created cleaned up?*
+> - _How do users specify the list of containers? (Do you use the core types?)_
+> - _Do you report status? How is status calculated? How do you surface job failures?_
+> - _Where do you validate user inputs? Where do you report reconciliation failures?_
+> - _What happens if the SequentialJob changes while the jobs are running?_
+> - _How are the child resources you created cleaned up?_
 
 I hope this article helps you be a better controller developer. If you feel like
 this sort of work resonates with you, we're usually hiring nowadays [[1]](https://www.linkedin.com/jobs/view/4118956306/)
 [[2](https://www.linkedin.com/jobs/view/4138638859/)] so reach out to me for a referral!
 
-*Thanks to Mike Helmick for reading drafts of this article and giving feedback.*
+_Thanks to Mike Helmick for reading drafts of this article and giving feedback._
 
 ---
 

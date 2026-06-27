@@ -15,8 +15,8 @@ category = ["Kubernetes"]
   - [Requirements](#Requirements)
 - [Overview](#Overview)
   - [Key Concepts](#Key_Concepts)
-  - [v0 (Kubernetes v1.3)](#v0_(Kubernetes_v1.3))
-  - [Future (Kubernetes v1.4 and beyond)](#Future_(Kubernetes_v1.4_and_beyond))
+  - [v0 (Kubernetes v1.3)](<#v0_(Kubernetes_v1.3)>)
+  - [Future (Kubernetes v1.4 and beyond)](<#Future_(Kubernetes_v1.4_and_beyond)>)
   - [OutOfScope](#OutOfScope)
   - [System Diagram](#System_Diagram)
 - [Detailed Design](#Detailed_Design)
@@ -29,8 +29,8 @@ category = ["Kubernetes"]
   - [Deployment](#Deployment)
     - [Proposals](#Proposals-1)
   - [Report Pipeline](#Report_Pipeline)
-    - [Problem Daemon \-\> NodeProblemDetector](#Problem_Daemon_-&gt;_NodeProblemDetector)
-    - [NodeProblemDetector \-\> APIServer](#NodeProblemDetector_-&gt;_APIServer)
+    - [Problem Daemon \-\> NodeProblemDetector](#Problem_Daemon_->_NodeProblemDetector)
+    - [NodeProblemDetector \-\> APIServer](#NodeProblemDetector_->_APIServer)
   - [Problem Report Interface](#Problem_Report_Interface)
   - [LogMonitor](#LogMonitor)
 - [Project Information](#Project_Information)
@@ -305,7 +305,7 @@ Mostly different components should take in charge of different node conditions, 
 
 ## Problem Report Interface
 
-Problem report interface is the interface between NodeProblemDetector and problem daemons. The following interface definition assumes problem daemons will push problem to NodeProblemDetector ([Report Pipeline Alternative 1](#Problem_Daemon_-&gt;_NodeProblemDetector)).
+Problem report interface is the interface between NodeProblemDetector and problem daemons. The following interface definition assumes problem daemons will push problem to NodeProblemDetector ([Report Pipeline Alternative 1](#Problem_Daemon_->_NodeProblemDetector)).
 
 ```Go
 // Severity is the severity of the problem event. Now we only have 2 severity

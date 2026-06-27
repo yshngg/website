@@ -10,7 +10,6 @@ original_url = "https://github.com/gophercon/2014-talks"
 category = ["Go"]
 +++
 
-
 (_This was originally a talk at [GopherCon](http://www.gophercon.com) 2014. [Find the slides here](https://github.com/gophercon/2014-talks), and [the video here](http://confreaks.com/videos/3434-gophercon2014-best-practices-for-production-environments)._)
 
 (_This article has been [updated for 2016](/go-best-practices-2016)._)

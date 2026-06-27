@@ -196,7 +196,7 @@ runtime spec in the following way:
 
    A `slice` of `-` represents a root slice.
 
-   Next, `prefix` and `name` are used to compose the  unit name, which
+   Next, `prefix` and `name` are used to compose the unit name, which
    is `<prefix>-<name>.scope`, unless `name` has `.slice` suffix, in
    which case `prefix` is ignored and the `name` is used as is.
    The default value for both `prefix` and `name` is empty string.
@@ -216,16 +216,16 @@ runc always enables accounting for all controllers, regardless of any limits
 being set. This means it unconditionally sets the following properties for the
 systemd unit being created:
 
- * _CPUAccounting=true_
- * _IOAccounting=true_ (_BlockIOAccounting_ for cgroup v1)
- * _MemoryAccounting=true_
- * _TasksAccounting=true_
+- _CPUAccounting=true_
+- _IOAccounting=true_ (_BlockIOAccounting_ for cgroup v1)
+- _MemoryAccounting=true_
+- _TasksAccounting=true_
 
 The resource limits of the systemd unit are set by runc by translating the
 runtime spec resources to systemd unit properties.
 
 Such translation is by no means complete, as there are some cgroup properties
-that can not be set via systemd.  Therefore, runc systemd cgroup driver is
+that can not be set via systemd. Therefore, runc systemd cgroup driver is
 backed by fs driver (in other words, cgroup limits are first set via systemd
 unit properties, and when by writing to cgroupfs files).
 
@@ -239,7 +239,7 @@ The following tables summarize which properties are translated.
 #### cgroup v1
 
 | runtime spec resource | systemd property name | min systemd version |
-|-----------------------|-----------------------|---------------------|
+| --------------------- | --------------------- | ------------------- |
 | memory.limit          | MemoryLimit           |                     |
 | cpu.shares            | CPUShares             |                     |
 | blockIO.weight        | BlockIOWeight         |                     |
@@ -249,26 +249,26 @@ The following tables summarize which properties are translated.
 
 #### cgroup v2
 
-| runtime spec resource   | systemd property name | min systemd version |
-|-------------------------|-----------------------|---------------------|
-| memory.limit            | MemoryMax             |                     |
-| memory.reservation      | MemoryLow             |                     |
-| memory.swap             | MemorySwapMax         |                     |
-| cpu.shares              | CPUWeight             |                     |
-| pids.limit              | TasksMax              |                     |
-| cpu.cpus                | AllowedCPUs           | v244                |
-| cpu.mems                | AllowedMemoryNodes    | v244                |
-| unified.cpu.max         | CPUQuota, CPUQuotaPeriodSec | v242          |
-| unified.cpu.weight      | CPUWeight             |                     |
-| unified.cpu.idle        | CPUWeight             | v252                |
-| unified.cpuset.cpus     | AllowedCPUs           | v244                |
-| unified.cpuset.mems     | AllowedMemoryNodes    | v244                |
-| unified.memory.high     | MemoryHigh            |                     |
-| unified.memory.low      | MemoryLow             |                     |
-| unified.memory.min      | MemoryMin             |                     |
-| unified.memory.max      | MemoryMax             |                     |
-| unified.memory.swap.max | MemorySwapMax         |                     |
-| unified.pids.max        | TasksMax              |                     |
+| runtime spec resource   | systemd property name       | min systemd version |
+| ----------------------- | --------------------------- | ------------------- |
+| memory.limit            | MemoryMax                   |                     |
+| memory.reservation      | MemoryLow                   |                     |
+| memory.swap             | MemorySwapMax               |                     |
+| cpu.shares              | CPUWeight                   |                     |
+| pids.limit              | TasksMax                    |                     |
+| cpu.cpus                | AllowedCPUs                 | v244                |
+| cpu.mems                | AllowedMemoryNodes          | v244                |
+| unified.cpu.max         | CPUQuota, CPUQuotaPeriodSec | v242                |
+| unified.cpu.weight      | CPUWeight                   |                     |
+| unified.cpu.idle        | CPUWeight                   | v252                |
+| unified.cpuset.cpus     | AllowedCPUs                 | v244                |
+| unified.cpuset.mems     | AllowedMemoryNodes          | v244                |
+| unified.memory.high     | MemoryHigh                  |                     |
+| unified.memory.low      | MemoryLow                   |                     |
+| unified.memory.min      | MemoryMin                   |                     |
+| unified.memory.max      | MemoryMax                   |                     |
+| unified.memory.swap.max | MemorySwapMax               |                     |
+| unified.pids.max        | TasksMax                    |                     |
 
 For documentation on systemd unit resource properties, see
 `systemd.resource-control(5)` man page.
@@ -290,8 +290,8 @@ For example:
 
 The above will set the following properties:
 
-* `TimeoutStopSec` to 2 minutes and 3 seconds;
-* `CollectMode` to "inactive-or-failed".
+- `TimeoutStopSec` to 2 minutes and 3 seconds;
+- `CollectMode` to "inactive-or-failed".
 
 The values must be in the gvariant text format, as described in
 [gvariant documentation](https://docs.gtk.org/glib/gvariant-text-format.html).
@@ -301,18 +301,18 @@ consult systemd sources.
 
 ## Terminals and Standard IO
 
-*Note that the default configuration of `runc` (foreground, new terminal) is
+_Note that the default configuration of `runc` (foreground, new terminal) is
 generally the best option for most users. This document exists to help explain
 what the purpose of the different modes is, and to try to steer users away from
-common mistakes and misunderstandings.*
+common mistakes and misunderstandings._
 
 In general, most processes on Unix (and Unix-like) operating systems have 3
 standard file descriptors provided at the start, collectively referred to as
 "standard IO" (`stdio`):
 
-* `0`: standard-in (`stdin`), the input stream into the process
-* `1`: standard-out (`stdout`), the output stream from the process
-* `2`: standard-error (`stderr`), the error stream from the process
+- `0`: standard-in (`stdin`), the input stream into the process
+- `1`: standard-out (`stdout`), the output stream from the process
+- `2`: standard-error (`stderr`), the error stream from the process
 
 When creating and running a container via `runc`, it is important to take care
 to structure the `stdio` the new container's process receives. In some ways
@@ -371,8 +371,8 @@ namespace. [This has resulted in CVEs in the past.][CVE-2016-9962]
 `runc` supports two distinct methods for passing `stdio` to the container's
 primary process:
 
-* [new terminal](#new-terminal) (`terminal: true`)
-* [pass-through](#pass-through) (`terminal: false`)
+- [new terminal](#new-terminal) (`terminal: true`)
+- [pass-through](#pass-through) (`terminal: false`)
 
 When first using `runc` these two modes will look incredibly similar, but this
 can be quite deceptive as these different modes have quite different
@@ -382,10 +382,10 @@ By default, `runc spec` will create a configuration that will create a new
 terminal (`terminal: true`). However, if the `terminal: ...` line is not
 present in `config.json` then pass-through is the default.
 
-*In general we recommend using new terminal, because it means that tools like
+_In general we recommend using new terminal, because it means that tools like
 `sudo` will work inside your container. But pass-through can be useful if you
 know what you're doing, or if you're using `runc` as part of a non-interactive
-pipeline.*
+pipeline._
 
 #### <a name="new-terminal"> New Terminal
 
@@ -426,7 +426,7 @@ from runc, it means it can't open a terminal (because there isn't one). This
 can happen when stdin (and possibly also stdout and stderr) are redirected,
 or in some environments that lack a tty (such as GitHub Actions runners).
 
-The solution to this is to *not* use a terminal for the container, i.e. have
+The solution to this is to _not_ use a terminal for the container, i.e. have
 `terminal: false` in `config.json`. If the container really needs a terminal
 (some programs require one), you can provide one, using one of the following
 methods.
@@ -458,9 +458,9 @@ echo input | runc run some_container > /tmp/log.out 2> /tmp/log.err
 Here the container's various `stdio` file descriptors will be substituted with
 the following:
 
-* `stdin` will be sourced from the `echo input` pipeline.
-* `stdout` will be output into `/tmp/log.out` on the host.
-* `stderr` will be output into `/tmp/log.err` on the host.
+- `stdin` will be sourced from the `echo input` pipeline.
+- `stdout` will be output into `/tmp/log.out` on the host.
+- `stderr` will be output into `/tmp/log.err` on the host.
 
 It should be noted that the actual file handles seen inside the container may
 be different [based on the mode `runc` is being used in](#runc-modes) (for
@@ -474,8 +474,8 @@ more clear when you are introduced to [`runc`'s detached mode](#runc-modes).
 
 `runc` itself runs in two modes:
 
-* [foreground](#foreground)
-* [detached](#detached)
+- [foreground](#foreground)
+- [detached](#detached)
 
 You can use either [terminal mode](#terminal-modes) with either `runc` mode.
 However, there are considerations that may indicate preference for one mode
@@ -483,10 +483,10 @@ over another. It should be noted that while two types of modes (terminal and
 `runc`) are conceptually independent from each other, you should be aware of
 the intricacies of which combination you are using.
 
-*In general we recommend using foreground because it's the most
+_In general we recommend using foreground because it's the most
 straight-forward to use, with the only downside being that you will have a
 long-running `runc` process. Detached mode is difficult to get right and
-generally requires having your own `stdio` management.*
+generally requires having your own `stdio` management._
 
 #### Foreground
 
@@ -500,7 +500,7 @@ in a shell interactively, this is what you should use).
 Because the `stdio` will be buffered in this mode, some very important
 peculiarities of this mode should be kept in mind:
 
-* With [new terminal mode](#new-terminal), the container will see a
+- With [new terminal mode](#new-terminal), the container will see a
   pseudo-terminal as its `stdio` (as you might expect). However, the `stdio` of
   the foreground `runc` process will remain the `stdio` that the process was
   started with -- and `runc` will copy all `stdio` between its `stdio` and the
@@ -508,7 +508,7 @@ peculiarities of this mode should be kept in mind:
   created, the foreground `runc` process manages it over the lifetime of the
   container.
 
-* With [pass-through mode](#pass-through), the foreground `runc`'s `stdio` is
+- With [pass-through mode](#pass-through), the foreground `runc`'s `stdio` is
   **not** passed to the container. Instead, the container's `stdio` is a set of
   pipes which are used to copy data between `runc`'s `stdio` and the
   container's `stdio`. This means that the container never has direct access to
@@ -540,8 +540,8 @@ shell, after the container has been set up.
 
 You can run `runc` in detached mode in one of the following ways:
 
-* `runc run -d ...` which operates similar to `runc run` but is detached.
-* `runc create` followed by `runc start` which is the standard container
+- `runc run -d ...` which operates similar to `runc run` but is detached.
+- `runc create` followed by `runc start` which is the standard container
   lifecycle defined by the OCI runtime specification (`runc create` sets up the
   container completely, waiting for `runc start` to begin execution of user
   code).
@@ -575,8 +575,8 @@ In detached mode, pass-through actually does what it says on the tin -- the
 `stdio` file descriptors of the `runc` process are passed through (untouched)
 to the container's `stdio`. The purpose of this option is to allow a user to
 set up `stdio` for a container themselves and then force `runc` to just use
-their pre-prepared `stdio` (without any pseudo-terminal funny business). *If
-you don't see why this would be useful, don't use this option.*
+their pre-prepared `stdio` (without any pseudo-terminal funny business). _If
+you don't see why this would be useful, don't use this option._
 
 **You must be incredibly careful when using detached pass-through (especially
 in a shell).** The reason for this is that by using detached pass-through you
@@ -591,11 +591,11 @@ There are also several other issues with running non-malicious containers in a
 shell with detached pass-through (where you pass your shell's `stdio` to the
 container):
 
-* Output from the container will be interleaved with output from your shell (in
+- Output from the container will be interleaved with output from your shell (in
   a non-deterministic way), without any real way of distinguishing from where a
   particular piece of output came from.
 
-* Any input to `stdin` will be non-deterministically split and given to either
+- Any input to `stdin` will be non-deterministically split and given to either
   the container or the shell (because both are blocked on a `read(2)` of the
   same FIFO-style file descriptor).
 
@@ -616,7 +616,7 @@ to return).
 When creating a new pseudo-terminal in detached mode, and fairly obvious
 problem appears -- how do we use the new terminal that `runc` created? Unlike
 in pass-through, `runc` has created a new set of file descriptors that need to
-be used by *something* in order for container communication to work.
+be used by _something_ in order for container communication to work.
 
 The way this problem is resolved is through the use of Unix domain sockets.
 There is a feature of Unix sockets called `SCM_RIGHTS` which allows a file
@@ -633,7 +633,7 @@ the pseudo-terminal master is as follows:
 
 1. Create a Unix domain socket at some path, `$socket_path`.
 2. Call `runc run` or `runc create` with the argument `--console-socket
-   $socket_path`.
+$socket_path`.
 3. Using `recvmsg(2)` retrieve the file descriptor sent using `SCM_RIGHTS` by
    `runc`.
 4. Now the manager can interact with the `stdio` of the container, using the

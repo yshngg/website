@@ -31,7 +31,7 @@ Don't be clever.
 
 Go approaches its memory model in much the same way as the rest of the language, aiming to keep the semantics simple, understandable, and useful. This section gives a general overview of the approach and should suffice for most programmers. The memory model is specified more formally in the next section.
 
-A *data race* is defined as a write to a memory location happening concurrently with another read or write to that same location, unless all the accesses involved are atomic data accesses as provided by the `sync/atomic` package. As noted already, programmers are strongly encouraged to use appropriate synchronization to avoid data races. In the absence of data races, Go programs behave as if all the goroutines were multiplexed onto a single processor. This property is sometimes referred to as DRF-SC: data-race-free programs execute in a sequentially consistent manner.
+A _data race_ is defined as a write to a memory location happening concurrently with another read or write to that same location, unless all the accesses involved are atomic data accesses as provided by the `sync/atomic` package. As noted already, programmers are strongly encouraged to use appropriate synchronization to avoid data races. In the absence of data races, Go programs behave as if all the goroutines were multiplexed onto a single processor. This property is sometimes referred to as DRF-SC: data-race-free programs execute in a sequentially consistent manner.
 
 While programmers should write Go programs without data races, there are limitations to what a Go implementation can do in response to a data race. An implementation may always react to a data race by reporting the race and terminating the program. Otherwise, each read of a single-word-sized or sub-word-sized memory location must observe a value actually written to that location (perhaps by a concurrent executing goroutine) and not yet overwritten. These implementation constraints make Go more like Java or JavaScript, in that most races have a limited number of outcomes, and less like C and C++, where the meaning of any program with a race is entirely undefined, and the compiler may do anything at all. Go's approach aims to make errant programs more reliable and easier to debug, while still insisting that races are errors and that tools can diagnose and report them.
 
@@ -41,37 +41,37 @@ The following formal definition of Go's memory model closely follows the approac
 
 The memory model describes the requirements on program executions, which are made up of goroutine executions, which in turn are made up of memory operations.
 
-A *memory operation* is modeled by four details:
+A _memory operation_ is modeled by four details:
 
-- its kind, indicating whether it is an ordinary data read, an ordinary data write, or a *synchronizing operation* such as an atomic data access, a mutex operation, or a channel operation,
+- its kind, indicating whether it is an ordinary data read, an ordinary data write, or a _synchronizing operation_ such as an atomic data access, a mutex operation, or a channel operation,
 - its location in the program,
 - the memory location or variable being accessed, and
 - the values read or written by the operation.
 
-Some memory operations are *read-like*, including read, atomic read, mutex lock, and channel receive. Other memory operations are *write-like*, including write, atomic write, mutex unlock, channel send, and channel close. Some, such as atomic compare-and-swap, are both read-like and write-like.
+Some memory operations are _read-like_, including read, atomic read, mutex lock, and channel receive. Other memory operations are _write-like_, including write, atomic write, mutex unlock, channel send, and channel close. Some, such as atomic compare-and-swap, are both read-like and write-like.
 
-A *goroutine execution* is modeled as a set of memory operations executed by a single goroutine.
+A _goroutine execution_ is modeled as a set of memory operations executed by a single goroutine.
 
-**Requirement 1**: The memory operations in each goroutine must correspond to a correct sequential execution of that goroutine, given the values read from and written to memory. That execution must be consistent with the *sequenced before* relation, defined as the partial order requirements set out by the [Go language specification](https://go.dev/ref/spec) for Go's control flow constructs as well as the [order of evaluation for expressions](https://go.dev/ref/spec#Order_of_evaluation).
+**Requirement 1**: The memory operations in each goroutine must correspond to a correct sequential execution of that goroutine, given the values read from and written to memory. That execution must be consistent with the _sequenced before_ relation, defined as the partial order requirements set out by the [Go language specification](https://go.dev/ref/spec) for Go's control flow constructs as well as the [order of evaluation for expressions](https://go.dev/ref/spec#Order_of_evaluation).
 
-A Go *program execution* is modeled as a set of goroutine executions, together with a mapping *W* that specifies the write-like operation that each read-like operation reads from. (Multiple executions of the same program can have different program executions.)
+A Go _program execution_ is modeled as a set of goroutine executions, together with a mapping _W_ that specifies the write-like operation that each read-like operation reads from. (Multiple executions of the same program can have different program executions.)
 
-**Requirement 2**: For a given program execution, the mapping *W*, when limited to synchronizing operations, must be explainable by some implicit total order of the synchronizing operations that is consistent with sequencing and the values read and written by those operations.
+**Requirement 2**: For a given program execution, the mapping _W_, when limited to synchronizing operations, must be explainable by some implicit total order of the synchronizing operations that is consistent with sequencing and the values read and written by those operations.
 
-The *synchronized before* relation is a partial order on synchronizing memory operations, derived from *W*. If a synchronizing read-like memory operation *r* observes a synchronizing write-like memory operation *w* (that is, if *W*(*r*) = *w*), then *w* is synchronized before *r*. Informally, the synchronized before relation is a subset of the implied total order mentioned in the previous paragraph, limited to the information that *W* directly observes.
+The _synchronized before_ relation is a partial order on synchronizing memory operations, derived from _W_. If a synchronizing read-like memory operation _r_ observes a synchronizing write-like memory operation _w_ (that is, if _W_(_r_) = _w_), then _w_ is synchronized before _r_. Informally, the synchronized before relation is a subset of the implied total order mentioned in the previous paragraph, limited to the information that _W_ directly observes.
 
-The *happens before* relation is defined as the transitive closure of the union of the sequenced before and synchronized before relations.
+The _happens before_ relation is defined as the transitive closure of the union of the sequenced before and synchronized before relations.
 
-**Requirement 3**: For an ordinary (non-synchronizing) data read *r* on a memory location *x*, *W*(*r*) must be a write *w* that is *visible* to *r*, where visible means that both of the following hold:
+**Requirement 3**: For an ordinary (non-synchronizing) data read _r_ on a memory location _x_, _W_(_r_) must be a write _w_ that is _visible_ to _r_, where visible means that both of the following hold:
 
-1. *w* happens before *r*.
-2. *w* does not happen before any other write *w'* (to *x*) that happens before *r*.
+1. _w_ happens before _r_.
+2. _w_ does not happen before any other write _w'_ (to _x_) that happens before _r_.
 
-A *read-write data race* on memory location *x* consists of a read-like memory operation *r* on *x* and a write-like memory operation *w* on *x*, at least one of which is non-synchronizing, which are unordered by happens before (that is, neither *r* happens before *w* nor *w* happens before *r*).
+A _read-write data race_ on memory location _x_ consists of a read-like memory operation _r_ on _x_ and a write-like memory operation _w_ on _x_, at least one of which is non-synchronizing, which are unordered by happens before (that is, neither _r_ happens before _w_ nor _w_ happens before _r_).
 
-A *write-write data race* on memory location *x* consists of two write-like memory operations *w* and *w'* on *x*, at least one of which is non-synchronizing, which are unordered by happens before.
+A _write-write data race_ on memory location _x_ consists of two write-like memory operations _w_ and _w'_ on _x_, at least one of which is non-synchronizing, which are unordered by happens before.
 
-Note that if there are no read-write or write-write data races on memory location *x*, then any read *r* on *x* has only one possible *W*(*r*): the single *w* that immediately precedes it in the happens before order.
+Note that if there are no read-write or write-write data races on memory location _x_, then any read _r_ on _x_ has only one possible _W_(_r_): the single _w_ that immediately precedes it in the happens before order.
 
 More generally, it can be shown that any Go program that is data-race-free, meaning it has no program executions with read-write or write-write data races, can only have outcomes explained by some sequentially consistent interleaving of the goroutine executions. (The proof is the same as Section 7 of Boehm and Adve's paper cited above.) This property is called DRF-SC.
 
@@ -87,11 +87,11 @@ Any implementation can, upon detecting a data race, report the race and halt exe
 
 A read of an array, struct, or complex number may be implemented as a read of each individual sub-value (array element, struct field, or real/imaginary component), in any order. Similarly, a write of an array, struct, or complex number may be implemented as a write of each individual sub-value, in any order.
 
-A read *r* of a memory location *x* holding a value that is not larger than a machine word must observe some write *w* such that *r* does not happen before *w* and there is no write *w'* such that *w* happens before *w'* and *w'* happens before *r*. That is, each read must observe a value written by a preceding or concurrent write.
+A read _r_ of a memory location _x_ holding a value that is not larger than a machine word must observe some write _w_ such that _r_ does not happen before _w_ and there is no write _w'_ such that _w_ happens before _w'_ and _w'_ happens before _r_. That is, each read must observe a value written by a preceding or concurrent write.
 
 Additionally, observation of acausal and "out of thin air" writes is disallowed.
 
-Reads of memory locations larger than a single machine word are encouraged but not required to meet the same semantics as word-sized memory locations, observing a single allowed write *w*. For performance reasons, implementations may instead treat larger operations as a set of individual machine-word-sized operations in an unspecified order. This means that races on multiword data structures can lead to inconsistent values not corresponding to a single write. When the values depend on the consistency of internal (pointer, length) or (pointer, type) pairs, as can be the case for interface values, maps, slices, and strings in most Go implementations, such races can in turn lead to arbitrary memory corruption.
+Reads of memory locations larger than a single machine word are encouraged but not required to meet the same semantics as word-sized memory locations, observing a single allowed write _w_. For performance reasons, implementations may instead treat larger operations as a set of individual machine-word-sized operations in an unspecified order. This means that races on multiword data structures can lead to inconsistent values not corresponding to a single write. When the values depend on the consistency of internal (pointer, length) or (pointer, type) pairs, as can be the case for interface values, maps, slices, and strings in most Go implementations, such races can in turn lead to arbitrary memory corruption.
 
 Examples of incorrect synchronization are given in the "Incorrect synchronization" section below.
 
@@ -199,7 +199,7 @@ is also guaranteed to print `"hello, world"`. The write to `a` is sequenced befo
 
 If the channel were buffered (e.g., `c = make(chan int, 1)`) then the program would not be guaranteed to print `"hello, world"`. (It might print the empty string, crash, or do something else.)
 
-The *k*th receive from a channel with capacity *C* is synchronized before the completion of the *k*+*C*th send on that channel.
+The *k*th receive from a channel with capacity _C_ is synchronized before the completion of the _k_+*C*th send on that channel.
 
 This rule generalizes the previous rule to buffered channels. It allows a counting semaphore to be modeled by a buffered channel: the number of items in the channel corresponds to the number of active uses, the capacity of the channel corresponds to the maximum number of simultaneous uses, sending an item acquires the semaphore, and receiving an item releases the semaphore. This is a common idiom for limiting concurrency.
 
@@ -224,7 +224,7 @@ func main() {
 
 The `sync` package implements two lock data types, `sync.Mutex` and `sync.RWMutex`.
 
-For any `sync.Mutex` or `sync.RWMutex` variable `l` and *n* < *m*, call *n* of `l.Unlock()` is synchronized before call *m* of `l.Lock()` returns.
+For any `sync.Mutex` or `sync.RWMutex` variable `l` and _n_ < _m_, call _n_ of `l.Unlock()` is synchronized before call _m_ of `l.Lock()` returns.
 
 This program:
 
@@ -247,9 +247,9 @@ func main() {
 
 is guaranteed to print `"hello, world"`. The first call to `l.Unlock()` (in `f`) is synchronized before the second call to `l.Lock()` (in `main`) returns, which is sequenced before the `print`.
 
-For any call to `l.RLock` on a `sync.RWMutex` variable `l`, there is an *n* such that the *n*th call to `l.Unlock` is synchronized before the return from `l.RLock`, and the matching call to `l.RUnlock` is synchronized before the return from call *n*+1 to `l.Lock`.
+For any call to `l.RLock` on a `sync.RWMutex` variable `l`, there is an _n_ such that the *n*th call to `l.Unlock` is synchronized before the return from `l.RLock`, and the matching call to `l.RUnlock` is synchronized before the return from call _n_+1 to `l.Lock`.
 
-A successful call to `l.TryLock` (or `l.TryRLock`) is equivalent to a call to `l.Lock` (or `l.RLock`). An unsuccessful call has no synchronizing effect at all. As far as the memory model is concerned, `l.TryLock` (or `l.TryRLock`) may be considered to be able to return false even when the mutex *l* is unlocked.
+A successful call to `l.TryLock` (or `l.TryRLock`) is equivalent to a call to `l.Lock` (or `l.RLock`). An unsuccessful call has no synchronizing effect at all. As far as the memory model is concerned, `l.TryLock` (or `l.TryRLock`) may be considered to be able to return false even when the mutex _l_ is unlocked.
 
 ### Once
 
@@ -282,7 +282,7 @@ calling `twoprint` will call `setup` exactly once. The `setup` function will com
 
 ### Atomic Values
 
-The APIs in the [`sync/atomic`](https://pkg.go.dev/sync/atomic/) package are collectively "atomic operations" that can be used to synchronize the execution of different goroutines. If the effect of an atomic operation *A* is observed by atomic operation *B*, then *A* is synchronized before *B*. All the atomic operations executed in a program behave as though executed in some sequentially consistent order.
+The APIs in the [`sync/atomic`](https://pkg.go.dev/sync/atomic/) package are collectively "atomic operations" that can be used to synchronize the execution of different goroutines. If the effect of an atomic operation _A_ is observed by atomic operation _B_, then _A_ is synchronized before _B_. All the atomic operations executed in a program behave as though executed in some sequentially consistent order.
 
 The preceding definition has the same semantics as C++'s sequentially consistent atomics and Java's `volatile` variables.
 
@@ -298,7 +298,7 @@ Other packages that provide synchronization abstractions should document the gua
 
 ## Incorrect synchronization
 
-Programs with races are incorrect and can exhibit non-sequentially consistent executions. In particular, note that a read *r* may observe the value written by any write *w* that executes concurrently with *r*. Even if this occurs, it does not imply that reads happening after *r* will observe writes that happened before *w*.
+Programs with races are incorrect and can exhibit non-sequentially consistent executions. In particular, note that a read _r_ may observe the value written by any write _w_ that executes concurrently with _r_. Even if this occurs, it does not imply that reads happening after _r_ will observe writes that happened before _w_.
 
 In this program:
 
