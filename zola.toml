@@ -1,28 +1,32 @@
-# The URL the site will be built for
 base_url = "https://yshngg.dev"
-
-# The site title and description; used in feeds by default.
 title = "Yusheng - An Open Source Developer"
 description = ""
-
-# The site theme to use.
-# theme = ""
-
-# For overriding the default output directory `public`, set it to another value (e.g.: "docs")
 output_dir = "public"
-
-# Whether to automatically compile all Sass files in the sass directory
+default_language = "en"
 compile_sass = false
-
-# Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
+taxonomies = [
+    { name = "category", feed = true },
+    { name = "tags", feed = true },
+]
+
+[languages.zh]
+taxonomies = [
+    { name = "category", feed = true },
+    { name = "tags", feed = true },
+]
+
+[slugify]
+anchors = "safe"
+
 [markdown]
+bottom_footnotes = true
+github_alerts = true
+insert_anchor_links = "heading"
 
 [markdown.highlighting]
-# theme = "catppuccin-mocha"
 light_theme = "github-light"
 dark_theme = "github-dark"
 
 [extra]
-# Put all your custom variables here
