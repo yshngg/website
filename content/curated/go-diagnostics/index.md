@@ -53,23 +53,23 @@ You may want to periodically profile your production services. Especially in a s
 
 The Go tools provide text, graph, and [callgrind](http://valgrind.org/docs/manual/cl-manual.html) visualization of the profile data using [`go tool pprof`](https://github.com/google/pprof/blob/master/doc/README.md). Read [Profiling Go programs](https://go.dev/blog/profiling-go-programs) to see them in action.
 
-![pprof text](https://go.dev/images/diagnostics/pprof-text.png)
+![pprof text](pprof-text.png)
 
 Listing of the most expensive calls as text.
 
-![pprof dot](https://go.dev/images/diagnostics/pprof-dot.png)
+![pprof dot](pprof-dot.png)
 
 Visualization of the most expensive calls as a graph.
 
 Weblist view displays the expensive parts of the source line by line in an HTML page. In the following example, 530ms is spent in the `runtime.concatstrings` and cost of each line is presented in the listing.
 
-![pprof weblist](https://go.dev/images/diagnostics/pprof-weblist.png)
+![pprof weblist](pprof-weblist.png)
 
 Visualization of the most expensive calls as weblist.
 
 Another way to visualize profile data is a [flame graph](http://www.brendangregg.com/flamegraphs.html). Flame graphs allow you to move in a specific ancestry path, so you can zoom in/out of specific sections of code. The [upstream pprof](https://github.com/google/pprof) has support for flame graphs.
 
-![flame graph](https://go.dev/images/diagnostics/flame.png)
+![flame graph](flame.png)
 
 Flame graphs offers visualization to spot the most expensive code-paths.
 
@@ -188,7 +188,7 @@ Tracer is useful to:
 
 However, it is not great for identifying hot spots such as analyzing the cause of excessive memory or CPU usage. Use profiling tools instead first to address them.
 
-![execution tracer](https://go.dev/images/diagnostics/tracer-lock.png)
+![execution tracer](tracer-lock.png)
 
 Above, the go tool trace visualization shows the execution started fine, and then it became serialized. It suggests that there might be lock contention for a shared resource that creates a bottleneck.
 
