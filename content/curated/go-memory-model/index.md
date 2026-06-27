@@ -11,8 +11,6 @@ original_url = "https://go.dev/ref/mem"
 category = ["Go"]
 +++
 
-# The Go Memory Model
-
 Version of June 6, 2022
 
 ## Introduction

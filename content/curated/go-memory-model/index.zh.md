@@ -11,8 +11,6 @@ original_url = "https://go.dev/ref/mem"
 category = ["Go"]
 +++
 
-# Go 内存模型
-
 版本：2022 年 6 月 6 日
 
 ## 引言

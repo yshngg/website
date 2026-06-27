@@ -11,8 +11,6 @@ original_url = "https://go.dev/doc/diagnostics"
 category = ["Go"]
 +++
 
-# Diagnostics
-
 ## Introduction
 
 The Go ecosystem provides a large suite of APIs and tools to diagnose logic and performance problems in Go programs. This page summarizes the available tools and helps Go users pick the right one for their specific problem.

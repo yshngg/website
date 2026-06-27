@@ -11,8 +11,6 @@ original_url = "https://go.dev/doc/diagnostics"
 category = ["Go"]
 +++
 
-# 诊断
-
 ## 简介
 
 Go 生态系统提供了大量的 API 和工具，用于诊断 Go 程序中的逻辑和性能问题。本文总结了可用的工具，帮助 Go 用户为其特定问题选择合适的工具。
