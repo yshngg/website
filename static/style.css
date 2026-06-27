@@ -1,6 +1,7 @@
 /* Smooth scrolling */
 main {
     scroll-behavior: smooth;
+    padding-bottom: 6rem;
 }
 
 footer {
