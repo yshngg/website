@@ -1,7 +1,7 @@
 +++
 title = "Go 诊断"
 weight = 15
-description = "Go 程序性能分析、追踪、调试和运行时诊断指南"
+description = "Go 性能分析、追踪、调试和运行时诊断"
 
 [extra]
 author = "The Go Team"

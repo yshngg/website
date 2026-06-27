@@ -21,6 +21,7 @@ taxonomies = [
 anchors = "safe"
 
 [markdown]
+insert_anchor_links = "heading"
 
 [markdown.highlighting]
 light_theme = "github-light"

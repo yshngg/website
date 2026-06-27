@@ -1,7 +1,7 @@
 +++
 title = "Go 内存模型"
 weight = 16
-description = "规定了在一个 goroutine 中对变量的读取能够保证观察到另一个 goroutine 中对同一变量写入所产生值的条件"
+description = "Go goroutine 内存同步与顺序一致性规范"
 
 [extra]
 author = "The Go Team"

@@ -1,7 +1,7 @@
 +++
 title = "Go Diagnostics"
 weight = 15
-description = "A guide to profiling, tracing, debugging, and runtime diagnostics in Go"
+description = "Go profiling, tracing, debugging and runtime diagnostics"
 
 [extra]
 author = "The Go Team"

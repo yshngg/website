@@ -1,7 +1,7 @@
 +++
 title = "The Go Memory Model"
 weight = 16
-description = "Specifies the conditions under which reads of a variable in one goroutine can be guaranteed to observe values produced by writes to the same variable in a different goroutine"
+description = "Go goroutine memory synchronization and sequential consistency"
 
 [extra]
 author = "The Go Team"

@@ -4,9 +4,9 @@
 
 <div class="row">
   <div class="col-8">
-      {{ page.content | safe }}
+      <div class="content">{{ page.content | safe }}</div>
   </div>
-  <div class="col-3" style="grid-column: 10 / span 3">
+  <div class="col-3" style="grid-column: 10 / span 3; position: sticky; top: 4rem; align-self: start">
       {% if page.toc %}
       <ul class="toc">
           {% for h1 in page.toc %}
