@@ -1,6 +1,9 @@
 /* Smooth scrolling */
-main {
+html {
   scroll-behavior: smooth;
+}
+
+main {
   padding-bottom: 6rem;
 }
 
