@@ -26,3 +26,7 @@ dark_theme = "github-dark"
 
 [extra]
 # Put all your custom variables here
+
+taxonomies = [
+    { name = "category", feed = true },
+]
