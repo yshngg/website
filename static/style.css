@@ -1,0 +1,15 @@
+/* Smooth scrolling */
+main {
+    scroll-behavior: smooth;
+}
+
+footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0%;
+}
+
+a[target="_blank"]::after {
+    content: "↗";
+    margin-left: 0.2em;
+}
