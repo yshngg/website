@@ -1,7 +1,7 @@
 +++
 title = "Go 内存模型"
 weight = 16
-description = "规定了一个 goroutine 中对变量的读取操作在何种条件下能够保证观察到另一个不同 goroutine 中对该变量的写入操作所产生的值"
+description = "规定了在一个 goroutine 中对变量的读取能够保证观察到另一个 goroutine 中对同一变量写入所产生值的条件"
 
 [extra]
 author = "The Go Team"
@@ -11,109 +11,109 @@ original_url = "https://go.dev/ref/mem"
 category = ["Go"]
 +++
 
-# The Go Memory Model
+# Go 内存模型
 
-Version of June 6, 2022
+版本：2022 年 6 月 6 日
 
-## Introduction
+## 引言
 
-The Go memory model specifies the conditions under which reads of a variable in one goroutine can be guaranteed to observe values produced by writes to the same variable in a different goroutine.
+Go 内存模型规定了在一个 goroutine 中对变量的读取能够保证观察到另一个不同 goroutine 中对同一变量写入所产生值的条件。
 
-### Advice
+### 建议
 
-Programs that modify data being simultaneously accessed by multiple goroutines must serialize such access.
+被多个 goroutine 同时访问数据的程序必须对这些访问进行序列化。
 
-To serialize access, protect the data with channel operations or other synchronization primitives such as those in the [`sync`](https://pkg.go.dev/sync/) and [`sync/atomic`](https://pkg.go.dev/sync/atomic/) packages.
+要序列化访问，请使用通道操作或其他同步原语（如 [`sync`](https://pkg.go.dev/sync/) 和 [`sync/atomic`](https://pkg.go.dev/sync/atomic/) 包中的原语）来保护数据。
 
-If you must read the rest of this document to understand the behavior of your program, you are being too clever.
+如果你必须阅读本文档的其余部分才能理解程序的行为，那你过于聪明了。
 
-Don't be clever.
+不要耍小聪明。
 
-### Informal Overview
+### 非正式概述
 
-Go approaches its memory model in much the same way as the rest of the language, aiming to keep the semantics simple, understandable, and useful. This section gives a general overview of the approach and should suffice for most programmers. The memory model is specified more formally in the next section.
+Go 处理其内存模型的方式与语言的其他部分大致相同，旨在保持语义简单、易懂和有用。本节概述了一般方法，对大多数程序员来说应该足够了。内存模型在下一节中有更正式的规范。
 
-A *data race* is defined as a write to a memory location happening concurrently with another read or write to that same location, unless all the accesses involved are atomic data accesses as provided by the `sync/atomic` package. As noted already, programmers are strongly encouraged to use appropriate synchronization to avoid data races. In the absence of data races, Go programs behave as if all the goroutines were multiplexed onto a single processor. This property is sometimes referred to as DRF-SC: data-race-free programs execute in a sequentially consistent manner.
+**数据竞争**（*data race*）定义为对同一内存位置的写入与对该位置的另一次读取或写入并发发生，除非所有涉及的访问都是 `sync/atomic` 包提供的原子数据访问。如前所述，强烈建议程序员使用适当的同步来避免数据竞争。在没有数据竞争的情况下，Go 程序的行为就像所有 goroutine 都被多路复用到单个处理器上一样。这个属性有时称为 DRF-SC：无数据竞争的程序以顺序一致性方式执行。
 
-While programmers should write Go programs without data races, there are limitations to what a Go implementation can do in response to a data race. An implementation may always react to a data race by reporting the race and terminating the program. Otherwise, each read of a single-word-sized or sub-word-sized memory location must observe a value actually written to that location (perhaps by a concurrent executing goroutine) and not yet overwritten. These implementation constraints make Go more like Java or JavaScript, in that most races have a limited number of outcomes, and less like C and C++, where the meaning of any program with a race is entirely undefined, and the compiler may do anything at all. Go's approach aims to make errant programs more reliable and easier to debug, while still insisting that races are errors and that tools can diagnose and report them.
+虽然程序员应该编写没有数据竞争的 Go 程序，但 Go 实现对于数据竞争的反应是有限制的。实现总是可以通过报告竞争并终止程序来响应数据竞争。否则，对单字大小或亚字大小内存位置的每次读取必须观察到实际写入该位置（可能由并发执行的 goroutine 写入）且尚未被覆盖的值。这些实现限制使得 Go 更像 Java 或 JavaScript，大多数竞争只有有限数量的结果；而不像 C 和 C++，其中任何存在竞争的程序的含义完全未定义，编译器可以做任何事情。Go 的方法旨在使错误程序更可靠、更易于调试，同时仍然坚持竞争是错误，并且工具可以诊断和报告它们。
 
-## Memory Model
+## 内存模型
 
-The following formal definition of Go's memory model closely follows the approach presented by Hans-J. Boehm and Sarita V. Adve in "[Foundations of the C++ Concurrency Memory Model](https://dl.acm.org/doi/10.1145/1375581.1375591)", published in PLDI 2008. The definition of data-race-free programs and the guarantee of sequential consistency for race-free programs are equivalent to the ones in that work.
+以下 Go 内存模型的正式定义紧密遵循 Hans-J. Boehm 和 Sarita V. Adve 在 PLDI 2008 上发表的"[Foundations of the C++ Concurrency Memory Model](https://dl.acm.org/doi/10.1145/1375581.1375591)"中提出的方法。无数据竞争程序的定义以及对无竞争程序的顺序一致性保证与该文中的定义和保证等效。
 
-The memory model describes the requirements on program executions, which are made up of goroutine executions, which in turn are made up of memory operations.
+内存模型描述了程序执行的要求，程序执行由 goroutine 执行组成，而 goroutine 执行又由内存操作组成。
 
-A *memory operation* is modeled by four details:
+**内存操作**（*memory operation*）通过四个细节来建模：
 
-- its kind, indicating whether it is an ordinary data read, an ordinary data write, or a *synchronizing operation* such as an atomic data access, a mutex operation, or a channel operation,
-- its location in the program,
-- the memory location or variable being accessed, and
-- the values read or written by the operation.
+- 其种类，指示它是普通数据读取、普通数据写入，还是**同步操作**（如原子数据访问、互斥锁操作或通道操作），
+- 其在程序中的位置，
+- 正在访问的内存位置或变量，以及
+- 该操作读取或写入的值。
 
-Some memory operations are *read-like*, including read, atomic read, mutex lock, and channel receive. Other memory operations are *write-like*, including write, atomic write, mutex unlock, channel send, and channel close. Some, such as atomic compare-and-swap, are both read-like and write-like.
+某些内存操作是**读类**（*read-like*）操作，包括读取、原子读取、互斥锁锁定和通道接收。其他内存操作是**写类**（*write-like*）操作，包括写入、原子写入、互斥锁解锁、通道发送和通道关闭。某些操作（如原子比较并交换）既是读类又是写类的。
 
-A *goroutine execution* is modeled as a set of memory operations executed by a single goroutine.
+**goroutine 执行**（*goroutine execution*）建模为由单个 goroutine 执行的一组内存操作。
 
-**Requirement 1**: The memory operations in each goroutine must correspond to a correct sequential execution of that goroutine, given the values read from and written to memory. That execution must be consistent with the *sequenced before* relation, defined as the partial order requirements set out by the [Go language specification](https://go.dev/ref/spec) for Go's control flow constructs as well as the [order of evaluation for expressions](https://go.dev/ref/spec#Order_of_evaluation).
+**要求 1**：考虑到从内存读取和写入内存的值，每个 goroutine 中的内存操作必须对应于该 goroutine 的正确顺序执行。该执行必须与**顺序先于**（*sequenced before*）关系一致，该关系定义为 [Go 语言规范](https://go.dev/ref/spec)中为 Go 的控制流结构以及[表达式求值顺序](https://go.dev/ref/spec#Order_of_evaluation)所规定的偏序要求。
 
-A Go *program execution* is modeled as a set of goroutine executions, together with a mapping *W* that specifies the write-like operation that each read-like operation reads from. (Multiple executions of the same program can have different program executions.)
+Go **程序执行**（*program execution*）建模为一组 goroutine 执行，以及一个映射 *W*，该映射指定每个读类操作从哪个写类操作读取。（同一程序的多次执行可以有不同的程序执行。）
 
-**Requirement 2**: For a given program execution, the mapping *W*, when limited to synchronizing operations, must be explainable by some implicit total order of the synchronizing operations that is consistent with sequencing and the values read and written by those operations.
+**要求 2**：对于给定的程序执行，映射 *W*（当限制在同步操作时）必须能够通过某个隐含的同步操作全序来解释，该全序与顺序以及这些操作读取和写入的值一致。
 
-The *synchronized before* relation is a partial order on synchronizing memory operations, derived from *W*. If a synchronizing read-like memory operation *r* observes a synchronizing write-like memory operation *w* (that is, if *W*(*r*) = *w*), then *w* is synchronized before *r*. Informally, the synchronized before relation is a subset of the implied total order mentioned in the previous paragraph, limited to the information that *W* directly observes.
+**同步于...之前**（*synchronized before*）关系是同步内存操作上的一个偏序，从 *W* 导出。如果一个同步读类内存操作 *r* 观察到一个同步写类内存操作 *w*（即 *W*(*r*) = *w*），那么 *w* 同步于 *r* 之前。非正式地说，同步于...之前关系是上一段提到的隐含全序的一个子集，仅限于 *W* 直接观察到的信息。
 
-The *happens before* relation is defined as the transitive closure of the union of the sequenced before and synchronized before relations.
+**先发生于**（*happens before*）关系定义为顺序先于关系和同步于...之前关系的并集的传递闭包。
 
-**Requirement 3**: For an ordinary (non-synchronizing) data read *r* on a memory location *x*, *W*(*r*) must be a write *w* that is *visible* to *r*, where visible means that both of the following hold:
+**要求 3**：对于内存位置 *x* 上的普通（非同步）数据读取 *r*，*W*(*r*) 必须是 *r* **可见**（*visible*）的写入 *w*，其中可见意味着以下两者都成立：
 
-1. *w* happens before *r*.
-2. *w* does not happen before any other write *w'* (to *x*) that happens before *r*.
+1. *w* 先发生于 *r*。
+2. *w* 不先发生于任何其他先发生于 *r* 的（对 *x* 的）写入 *w'*。
 
-A *read-write data race* on memory location *x* consists of a read-like memory operation *r* on *x* and a write-like memory operation *w* on *x*, at least one of which is non-synchronizing, which are unordered by happens before (that is, neither *r* happens before *w* nor *w* happens before *r*).
+内存位置 *x* 上的**读写数据竞争**（*read-write data race*）由 *x* 上的一个读类内存操作 *r* 和 *x* 上的一个写类内存操作 *w* 组成，其中至少一个是非同步的，并且它们不由先发生于关系排序（即，*r* 既不先发生于 *w*，*w* 也不先发生于 *r*）。
 
-A *write-write data race* on memory location *x* consists of two write-like memory operations *w* and *w'* on *x*, at least one of which is non-synchronizing, which are unordered by happens before.
+内存位置 *x* 上的**写写数据竞争**（*write-write data race*）由 *x* 上的两个写类内存操作 *w* 和 *w'* 组成，其中至少一个是非同步的，并且它们不由先发生于关系排序。
 
-Note that if there are no read-write or write-write data races on memory location *x*, then any read *r* on *x* has only one possible *W*(*r*): the single *w* that immediately precedes it in the happens before order.
+注意，如果内存位置 *x* 上没有读写或写写数据竞争，那么 *x* 上的任何读取 *r* 只有一个可能的 *W*(*r*)：在先发生于顺序中紧邻其前的单个 *w*。
 
-More generally, it can be shown that any Go program that is data-race-free, meaning it has no program executions with read-write or write-write data races, can only have outcomes explained by some sequentially consistent interleaving of the goroutine executions. (The proof is the same as Section 7 of Boehm and Adve's paper cited above.) This property is called DRF-SC.
+更一般地，可以证明任何无数据竞争的 Go 程序（即没有具有读写或写写数据竞争的程序执行的程序）只能产生由 goroutine 执行的某种顺序一致性交错所解释的结果。（证明与上述 Boehm 和 Adve 论文的第 7 节相同。）这个属性称为 DRF-SC。
 
-The intent of the formal definition is to match the DRF-SC guarantee provided to race-free programs by other languages, including C, C++, Java, JavaScript, Rust, and Swift.
+正式定义的意图是与其他语言（包括 C、C++、Java、JavaScript、Rust 和 Swift）为无竞争程序提供的 DRF-SC 保证相匹配。
 
-Certain Go language operations such as goroutine creation and memory allocation act as synchronization operations. The effect of these operations on the synchronized-before partial order is documented in the "Synchronization" section below. Individual packages are responsible for providing similar documentation for their own operations.
+某些 Go 语言操作（如 goroutine 创建和内存分配）充当同步操作。这些操作对同步于...之前偏序的影响在下面的"同步"节中有文档说明。各个包负责为其自身的操作提供类似的文档。
 
-## Implementation Restrictions for Programs Containing Data Races
+## 包含数据竞争程序的实现限制
 
-The preceding section gave a formal definition of data-race-free program execution. This section informally describes the semantics that implementations must provide for programs that do contain races.
+前一节给出了无数据竞争程序执行的正式定义。本节非正式地描述了实现必须为确实包含竞争的程序提供的语义。
 
-Any implementation can, upon detecting a data race, report the race and halt execution of the program. Implementations using ThreadSanitizer (accessed with "`go build -race`") do exactly this.
+任何实现都可以在检测到数据竞争时报告竞争并停止程序执行。使用 ThreadSanitizer（通过 "`go build -race`" 访问）的实现正是这样做的。
 
-A read of an array, struct, or complex number may be implemented as a read of each individual sub-value (array element, struct field, or real/imaginary component), in any order. Similarly, a write of an array, struct, or complex number may be implemented as a write of each individual sub-value, in any order.
+对数组、结构体或复数的读取可以实现为对每个单独子值（数组元素、结构体字段或实部/虚部）的读取，顺序任意。类似地，对数组、结构体或复数的写入可以实现为对每个单独子值的写入，顺序任意。
 
-A read *r* of a memory location *x* holding a value that is not larger than a machine word must observe some write *w* such that *r* does not happen before *w* and there is no write *w'* such that *w* happens before *w'* and *w'* happens before *r*. That is, each read must observe a value written by a preceding or concurrent write.
+对保存不超过机器字大小的值的内存位置 *x* 的读取 *r* 必须观察到某个写入 *w*，使得 *r* 不先发生于 *w*，并且不存在这样的写入 *w'*：*w* 先发生于 *w'* 并且 *w'* 先发生于 *r*。也就是说，每次读取必须观察到由先前或并发写入所写的值。
 
-Additionally, observation of acausal and "out of thin air" writes is disallowed.
+此外，禁止观察到非因果的和"凭空而来"（out of thin air）的写入。
 
-Reads of memory locations larger than a single machine word are encouraged but not required to meet the same semantics as word-sized memory locations, observing a single allowed write *w*. For performance reasons, implementations may instead treat larger operations as a set of individual machine-word-sized operations in an unspecified order. This means that races on multiword data structures can lead to inconsistent values not corresponding to a single write. When the values depend on the consistency of internal (pointer, length) or (pointer, type) pairs, as can be the case for interface values, maps, slices, and strings in most Go implementations, such races can in turn lead to arbitrary memory corruption.
+鼓励（但不要求）对大于单个机器字的内存位置的读取满足与字大小内存位置相同的语义，即观察单个允许的写入 *w*。出于性能原因，实现可能将较大的操作视为以未指定顺序的一组单个机器字大小的操作。这意味着对多字数据结构的竞争可能导致不一致的值（不对应于单个写入）。当值依赖于内部（指针、长度）或（指针、类型）对的 consistency 时（在大多数 Go 实现中，接口值、映射、切片和字符串就是这种情况），这种竞争可能进一步导致任意内存损坏。
 
-Examples of incorrect synchronization are given in the "Incorrect synchronization" section below.
+"不正确的同步"节中给出了不正确同步的示例。
 
-Examples of the limitations on implementations are given in the "Incorrect compilation" section below.
+"不正确的编译"节中给出了实现限制的示例。
 
-## Synchronization
+## 同步
 
-### Initialization
+### 初始化
 
-Program initialization runs in a single goroutine, but that goroutine may create other goroutines, which run concurrently.
+程序初始化在单个 goroutine 中运行，但该 goroutine 可能创建其他并发运行的 goroutine。
 
-If a package `p` imports package `q`, the completion of `q`'s `init` functions happens before the start of any of `p`'s.
+如果包 `p` 导入了包 `q`，则 `q` 的 `init` 函数完成先发生于 `p` 的任何 `init` 函数开始。
 
-The completion of all `init` functions is synchronized before the start of the function `main.main`.
+所有 `init` 函数完成同步于 `main.main` 函数开始之前。
 
-### Goroutine creation
+### Goroutine 创建
 
-The `go` statement that starts a new goroutine is synchronized before the start of the goroutine's execution.
+启动新 goroutine 的 `go` 语句同步于该 goroutine 执行开始之前。
 
-For example, in this program:
+例如，在此程序中：
 
 ```go
 var a string
@@ -128,11 +128,11 @@ func hello() {
 }
 ```
 
-calling `hello` will print `"hello, world"` at some point in the future (perhaps after `hello` has returned).
+调用 `hello` 将在未来的某个时刻打印 `"hello, world"`（可能在 `hello` 返回之后）。
 
-### Goroutine destruction
+### Goroutine 销毁
 
-The exit of a goroutine is not guaranteed to be synchronized before any event in the program. For example, in this program:
+不保证 goroutine 的退出同步于程序中的任何事件之前。例如，在此程序中：
 
 ```go
 var a string
@@ -143,17 +143,17 @@ func hello() {
 }
 ```
 
-the assignment to `a` is not followed by any synchronization event, so it is not guaranteed to be observed by any other goroutine. In fact, an aggressive compiler might delete the entire `go` statement.
+对 `a` 的赋值之后没有任何同步事件，因此不保证任何其他 goroutine 能观察到它。实际上，激进的编译器可能会删除整个 `go` 语句。
 
-If the effects of a goroutine must be observed by another goroutine, use a synchronization mechanism such as a lock or channel communication to establish a relative ordering.
+如果一个 goroutine 的效果必须被另一个 goroutine 观察到，请使用诸如锁或通道通信之类的同步机制来建立相对顺序。
 
-### Channel communication
+### 通道通信
 
-Channel communication is the main method of synchronization between goroutines. Each send on a particular channel is matched to a corresponding receive from that channel, usually in a different goroutine.
+通道通信是 goroutine 之间同步的主要方法。每个对特定通道的发送都与该通道的相应接收匹配，通常在不同的 goroutine 中。
 
-A send on a channel is synchronized before the completion of the corresponding receive from that channel.
+通道上的发送同步于该通道的相应接收完成之前。
 
-This program:
+此程序：
 
 ```go
 var c = make(chan int, 10)
@@ -171,15 +171,15 @@ func main() {
 }
 ```
 
-is guaranteed to print `"hello, world"`. The write to `a` is sequenced before the send on `c`, which is synchronized before the corresponding receive on `c` completes, which is sequenced before the `print`.
+保证打印 `"hello, world"`。对 `a` 的写入顺序先于对 `c` 的发送，该发送同步于 `c` 上的相应接收完成之前，而该接收顺序先于 `print`。
 
-The closing of a channel is synchronized before a receive that returns a zero value because the channel is closed.
+通道的关闭同步于因通道关闭而返回零值的接收之前。
 
-In the previous example, replacing `c <- 0` with `close(c)` yields a program with the same guaranteed behavior.
+在前面的示例中，将 `c <- 0` 替换为 `close(c)` 会得到一个具有相同保证行为的程序。
 
-A receive from an unbuffered channel is synchronized before the completion of the corresponding send on that channel.
+对无缓冲通道的接收同步于该通道上相应发送完成之前。
 
-This program (as above, but with the send and receive statements swapped and using an unbuffered channel):
+此程序（与上面相同，但发送和接收语句互换，并使用无缓冲通道）：
 
 ```go
 var c = make(chan int)
@@ -197,15 +197,15 @@ func main() {
 }
 ```
 
-is also guaranteed to print `"hello, world"`. The write to `a` is sequenced before the receive on `c`, which is synchronized before the corresponding send on `c` completes, which is sequenced before the `print`.
+也保证打印 `"hello, world"`。对 `a` 的写入顺序先于对 `c` 的接收，该接收同步于 `c` 上的相应发送完成之前，而该发送顺序先于 `print`。
 
-If the channel were buffered (e.g., `c = make(chan int, 1)`) then the program would not be guaranteed to print `"hello, world"`. (It might print the empty string, crash, or do something else.)
+如果通道是有缓冲的（例如 `c = make(chan int, 1)`），则该程序不保证打印 `"hello, world"`。（它可能打印空字符串、崩溃或执行其他操作。）
 
-The *k*th receive from a channel with capacity *C* is synchronized before the completion of the *k*+*C*th send on that channel.
+容量为 *C* 的通道上的第 *k* 次接收同步于该通道上的第 *k*+*C* 次发送完成之前。
 
-This rule generalizes the previous rule to buffered channels. It allows a counting semaphore to be modeled by a buffered channel: the number of items in the channel corresponds to the number of active uses, the capacity of the channel corresponds to the maximum number of simultaneous uses, sending an item acquires the semaphore, and receiving an item releases the semaphore. This is a common idiom for limiting concurrency.
+此规则将前一条规则推广到有缓冲通道。它允许将计数信号量建模为有缓冲通道：通道中的项数对应于正在使用的数量，通道容量对应于最大同时使用数量，发送项获取信号量，接收项释放信号量。这是限制并发的常见惯用法。
 
-This program starts a goroutine for every entry in the work list, but the goroutines coordinate using the `limit` channel to ensure that at most three are running work functions at a time.
+此程序为工作列表中的每个条目启动一个 goroutine，但这些 goroutine 通过 `limit` 通道协调，以确保最多同时有三个正在运行工作函数。
 
 ```go
 var limit = make(chan int, 3)
@@ -222,13 +222,13 @@ func main() {
 }
 ```
 
-### Locks
+### 锁
 
-The `sync` package implements two lock data types, `sync.Mutex` and `sync.RWMutex`.
+`sync` 包实现了两种锁数据类型：`sync.Mutex` 和 `sync.RWMutex`。
 
-For any `sync.Mutex` or `sync.RWMutex` variable `l` and *n* < *m*, call *n* of `l.Unlock()` is synchronized before call *m* of `l.Lock()` returns.
+对于任何 `sync.Mutex` 或 `sync.RWMutex` 变量 `l` 和 *n* < *m*，第 *n* 次调用 `l.Unlock()` 同步于第 *m* 次调用 `l.Lock()` 返回之前。
 
-This program:
+此程序：
 
 ```go
 var l sync.Mutex
@@ -247,19 +247,19 @@ func main() {
 }
 ```
 
-is guaranteed to print `"hello, world"`. The first call to `l.Unlock()` (in `f`) is synchronized before the second call to `l.Lock()` (in `main`) returns, which is sequenced before the `print`.
+保证打印 `"hello, world"`。第一次调用 `l.Unlock()`（在 `f` 中）同步于第二次调用 `l.Lock()`（在 `main` 中）返回之前，而该返回顺序先于 `print`。
 
-For any call to `l.RLock` on a `sync.RWMutex` variable `l`, there is an *n* such that the *n*th call to `l.Unlock` is synchronized before the return from `l.RLock`, and the matching call to `l.RUnlock` is synchronized before the return from call *n*+1 to `l.Lock`.
+对于在 `sync.RWMutex` 变量 `l` 上对 `l.RLock` 的任何调用，存在一个 *n*，使得第 *n* 次对 `l.Unlock` 的调用同步于 `l.RLock` 返回之前，并且匹配的对 `l.RUnlock` 的调用同步于第 *n*+1 次对 `l.Lock` 的调用返回之前。
 
-A successful call to `l.TryLock` (or `l.TryRLock`) is equivalent to a call to `l.Lock` (or `l.RLock`). An unsuccessful call has no synchronizing effect at all. As far as the memory model is concerned, `l.TryLock` (or `l.TryRLock`) may be considered to be able to return false even when the mutex *l* is unlocked.
+对 `l.TryLock`（或 `l.TryRLock`）的成功调用等价于对 `l.Lock`（或 `l.RLock`）的调用。不成功的调用完全没有同步效果。就内存模型而言，可以认为 `l.TryLock`（或 `l.TryRLock`）即使在互斥锁 *l* 未锁定时也可能返回 false。
 
 ### Once
 
-The `sync` package provides a safe mechanism for initialization in the presence of multiple goroutines through the use of the `Once` type. Multiple threads can execute `once.Do(f)` for a particular `f`, but only one will run `f()`, and the other calls block until `f()` has returned.
+`sync` 包通过 `Once` 类型提供了在多个 goroutine 存在下的安全初始化机制。多个线程可以对同一个 `f` 执行 `once.Do(f)`，但只有一个会运行 `f()`，其他调用阻塞直到 `f()` 返回。
 
-The completion of a single call of `f()` from `once.Do(f)` is synchronized before the return of any call of `once.Do(f)`.
+`once.Do(f)` 中对 `f()` 的单个调用的完成同步于任何 `once.Do(f)` 调用返回之前。
 
-In this program:
+在此程序中：
 
 ```go
 var a string
@@ -280,29 +280,29 @@ func twoprint() {
 }
 ```
 
-calling `twoprint` will call `setup` exactly once. The `setup` function will complete before either call of `print`. The result will be that `"hello, world"` will be printed twice.
+调用 `twoprint` 将恰好调用 `setup` 一次。`setup` 函数将在任一次 `print` 调用之前完成。结果将是 `"hello, world"` 被打印两次。
 
-### Atomic Values
+### 原子值
 
-The APIs in the [`sync/atomic`](https://pkg.go.dev/sync/atomic/) package are collectively "atomic operations" that can be used to synchronize the execution of different goroutines. If the effect of an atomic operation *A* is observed by atomic operation *B*, then *A* is synchronized before *B*. All the atomic operations executed in a program behave as though executed in some sequentially consistent order.
+[`sync/atomic`](https://pkg.go.dev/sync/atomic/) 包中的 API 统称为"原子操作"，可用于同步不同 goroutine 的执行。如果原子操作 *A* 的效果被原子操作 *B* 观察到，则 *A* 同步于 *B* 之前。程序中执行的所有原子操作的行为就像以某种顺序一致的顺序执行一样。
 
-The preceding definition has the same semantics as C++'s sequentially consistent atomics and Java's `volatile` variables.
+上述定义与 C++ 的顺序一致性原子操作和 Java 的 `volatile` 变量具有相同的语义。
 
-### Finalizers
+### 终结器
 
-The [`runtime`](https://pkg.go.dev/runtime/) package provides a `SetFinalizer` function that adds a finalizer to be called when a particular object is no longer reachable by the program. A call to `SetFinalizer(x, f)` is synchronized before the finalization call `f(x)`.
+[`runtime`](https://pkg.go.dev/runtime/) 包提供了一个 `SetFinalizer` 函数，用于添加一个终结器，当特定对象不再被程序可达时调用。对 `SetFinalizer(x, f)` 的调用同步于终结调用 `f(x)` 之前。
 
-### Additional Mechanisms
+### 其他机制
 
-The `sync` package provides additional synchronization abstractions, including [condition variables](https://pkg.go.dev/sync/#Cond), [lock-free maps](https://pkg.go.dev/sync/#Map), [allocation pools](https://pkg.go.dev/sync/#Pool), and [wait groups](https://pkg.go.dev/sync/#WaitGroup). The documentation for each of these specifies the guarantees it makes concerning synchronization.
+`sync` 包提供了额外的同步抽象，包括[条件变量](https://pkg.go.dev/sync/#Cond)、[无锁映射](https://pkg.go.dev/sync/#Map)、[分配池](https://pkg.go.dev/sync/#Pool)和[等待组](https://pkg.go.dev/sync/#WaitGroup)。这些中每一个的文档都规定了其关于同步的保证。
 
-Other packages that provide synchronization abstractions should document the guarantees they make too.
+其他提供同步抽象的包也应记录它们所做的保证。
 
-## Incorrect synchronization
+## 不正确的同步
 
-Programs with races are incorrect and can exhibit non-sequentially consistent executions. In particular, note that a read *r* may observe the value written by any write *w* that executes concurrently with *r*. Even if this occurs, it does not imply that reads happening after *r* will observe writes that happened before *w*.
+存在竞争的程序是不正确的，并且可能表现出非顺序一致性的执行。特别要注意，读取 *r* 可能观察到任何与 *r* 并发执行的写入 *w* 所写的值。即使发生这种情况，也不意味着 *r* 之后的读取会观察到 *w* 之前的写入。
 
-In this program:
+在此程序中：
 
 ```go
 var a, b int
@@ -323,11 +323,11 @@ func main() {
 }
 ```
 
-it can happen that `g` prints `2` and then `0`.
+可能发生 `g` 打印 `2` 然后打印 `0`。
 
-This fact invalidates a few common idioms.
+这一事实否定了几种常见的惯用法。
 
-Double-checked locking is an attempt to avoid the overhead of synchronization. For example, the `twoprint` program might be incorrectly written as:
+双重检查锁定（double-checked locking）试图避免同步开销。例如，`twoprint` 程序可能被错误地写成：
 
 ```go
 var a string
@@ -351,9 +351,9 @@ func twoprint() {
 }
 ```
 
-but there is no guarantee that, in `doprint`, observing the write to `done` implies observing the write to `a`. This version can (incorrectly) print an empty string instead of `"hello, world"`.
+但不能保证在 `doprint` 中观察到对 `done` 的写入意味着观察到对 `a` 的写入。此版本可能（错误地）打印空字符串而不是 `"hello, world"`。
 
-Another incorrect idiom is busy waiting for a value, as in:
+另一种不正确的惯用法是忙等待一个值，例如：
 
 ```go
 var a string
@@ -372,9 +372,9 @@ func main() {
 }
 ```
 
-As before, there is no guarantee that, in `main`, observing the write to `done` implies observing the write to `a`, so this program could print an empty string too. Worse, there is no guarantee that the write to `done` will ever be observed by `main`, since there are no synchronization events between the two threads. The loop in `main` is not guaranteed to finish.
+和前面一样，不能保证在 `main` 中观察到对 `done` 的写入意味着观察到对 `a` 的写入，因此此程序也可能打印空字符串。更糟的是，不能保证 `main` 能观察到对 `done` 的写入，因为两个线程之间没有同步事件。`main` 中的循环不保证结束。
 
-There are subtler variants on this theme, such as this program.
+这个主题还有更微妙的变体，例如下面的程序。
 
 ```go
 type T struct {
@@ -397,17 +397,17 @@ func main() {
 }
 ```
 
-Even if `main` observes `g != nil` and exits its loop, there is no guarantee that it will observe the initialized value for `g.msg`.
+即使 `main` 观察到 `g != nil` 并退出循环，也不能保证它能观察到 `g.msg` 的初始化值。
 
-In all these examples, the solution is the same: use explicit synchronization.
+在所有这些示例中，解决方案都是一样的：使用显式同步。
 
-## Incorrect compilation
+## 不正确的编译
 
-The Go memory model restricts compiler optimizations as much as it does Go programs. Some compiler optimizations that would be valid in single-threaded programs are not valid in all Go programs. In particular, a compiler must not introduce writes that do not exist in the original program, it must not allow a single read to observe multiple values, and it must not allow a single write to write multiple values.
+Go 内存模型对编译器优化的限制与对 Go 程序的限制一样多。某些在单线程程序中有效的编译器优化在所有 Go 程序中并不有效。特别是，编译器不得引入原程序中不存在的写入，不得允许单个读取观察到多个值，也不得允许单个写入写出多个值。
 
-All the following examples assume that `*p` and `*q` refer to memory locations accessible to multiple goroutines.
+以下所有示例均假设 `*p` 和 `*q` 引用多个 goroutine 可访问的内存位置。
 
-Not introducing data races into race-free programs means not moving writes out of conditional statements in which they appear. For example, a compiler must not invert the conditional in this program:
+不向无竞争程序中引入数据竞争意味着不能将写入移出它们所在的条件语句。例如，编译器不得反转此程序中的条件：
 
 ```go
 *p = 1
@@ -416,7 +416,7 @@ if cond {
 }
 ```
 
-That is, the compiler must not rewrite the program into this one:
+也就是说，编译器不得将程序重写为：
 
 ```go
 *p = 2
@@ -425,9 +425,9 @@ if !cond {
 }
 ```
 
-If `cond` is false and another goroutine is reading `*p`, then in the original program, the other goroutine can only observe any prior value of `*p` and `1`. In the rewritten program, the other goroutine can observe `2`, which was previously impossible.
+如果 `cond` 为 false 且另一个 goroutine 正在读取 `*p`，那么在原始程序中，另一个 goroutine 只能观察到 `*p` 的任何先前值和 `1`。在重写后的程序中，另一个 goroutine 可以观察到 `2`，这在以前是不可能的。
 
-Not introducing data races also means not assuming that loops terminate. For example, a compiler must in general not move the accesses to `*p` or `*q` ahead of the loop in this program:
+不引入数据竞争也意味着不假设循环会终止。例如，编译器通常不得将对 `*p` 或 `*q` 的访问移到此程序中的循环前面：
 
 ```go
 n := 0
@@ -438,9 +438,9 @@ i := *p
 *q = 1
 ```
 
-If `list` pointed to a cyclic list, then the original program would never access `*p` or `*q`, but the rewritten program would.
+如果 `list` 指向一个循环链表，那么原始程序永远不会访问 `*p` 或 `*q`，但重写后的程序会。
 
-Not introducing data races also means not assuming that called functions always return or are free of synchronization operations. For example, a compiler must not move the accesses to `*p` or `*q` ahead of the function call in this program (at least not without direct knowledge of the precise behavior of `f`):
+不引入数据竞争还意味着不假设被调用的函数总是返回或没有同步操作。例如，编译器不得将对 `*p` 或 `*q` 的访问移到此程序中的函数调用前面（至少在没有直接了解 `f` 的精确行为的情况下）：
 
 ```go
 f()
@@ -448,9 +448,9 @@ i := *p
 *q = 1
 ```
 
-If the call never returned, then once again the original program would never access `*p` or `*q`, but the rewritten program would. And if the call contained synchronizing operations, then the original program could establish happens before edges preceding the accesses to `*p` and `*q`, but the rewritten program would not.
+如果调用从不返回，那么原始程序再次永远不会访问 `*p` 或 `*q`，但重写后的程序会。如果调用包含同步操作，那么原始程序可以在对 `*p` 和 `*q` 的访问之前建立先发生于边，但重写后的程序则不能。
 
-Not allowing a single read to observe multiple values means not reloading local variables from shared memory. For example, a compiler must not discard `i` and reload it a second time from `*p` in this program:
+不允许单个读取观察到多个值意味着不能从共享内存重新加载局部变量。例如，编译器不得丢弃 `i` 并在此程序中第二次从 `*p` 重新加载它：
 
 ```go
 i := *p
@@ -462,26 +462,26 @@ if i < 0 || i >= len(funcs) {
 funcs[i]()
 ```
 
-If the complex code needs many registers, a compiler for single-threaded programs could discard `i` without saving a copy and then reload `i = *p` just before `funcs[i]()`. A Go compiler must not, because the value of `*p` may have changed. (Instead, the compiler could spill `i` to the stack.)
+如果复杂代码需要大量寄存器，单线程程序的编译器可以丢弃 `i`（不保存副本）然后在 `funcs[i]()` 之前重新加载 `i = *p`。Go 编译器不能这样做，因为 `*p` 的值可能已经改变。（相反，编译器可以将 `i` 溢出到栈上。）
 
-Not allowing a single write to write multiple values also means not using the memory where a local variable will be written as temporary storage before the write. For example, a compiler must not use `*p` as temporary storage in this program:
+不允许单个写入写出多个值也意味着不能在写入之前将局部变量即将写入的内存用作临时存储。例如，编译器不得在此程序中使用 `*p` 作为临时存储：
 
 ```go
 *p = i + *p/2
 ```
 
-That is, it must not rewrite the program into this one:
+也就是说，它不得将程序重写为：
 
 ```go
 *p /= 2
 *p += i
 ```
 
-If `i` and `*p` start equal to 2, the original code does `*p = 3`, so a racing thread can read only 2 or 3 from `*p`. The rewritten code does `*p = 1` and then `*p = 3`, allowing a racing thread to read 1 as well.
+如果 `i` 和 `*p` 初始都等于 2，原始代码执行 `*p = 3`，因此竞争线程只能从 `*p` 读取 2 或 3。重写后的代码执行 `*p = 1` 然后 `*p = 3`，允许竞争线程也读取到 1。
 
-Note that all these optimizations are permitted in C/C++ compilers: a Go compiler sharing a back end with a C/C++ compiler must take care to disable optimizations that are invalid for Go.
+注意，所有这些优化在 C/C++ 编译器中都是允许的：与 C/C++ 编译器共享后端的 Go 编译器必须注意禁用对 Go 无效的优化。
 
-Note that the prohibition on introducing data races does not apply if the compiler can prove that the races do not affect correct execution on the target platform. For example, on essentially all CPUs, it is valid to rewrite
+注意，如果编译器能够证明数据竞争不会影响目标平台上的正确执行，则禁止引入数据竞争的限制不适用。例如，在几乎所有 CPU 上，将以下代码：
 
 ```go
 n := 0
@@ -490,7 +490,7 @@ for i := 0; i < m; i++ {
 }
 ```
 
-into:
+重写为：
 
 ```go
 n := 0
@@ -500,10 +500,10 @@ for i := 0; i < m; i++ {
 }
 ```
 
-provided it can be proved that `*shared` will not fault on access, because the potential added read will not affect any existing concurrent reads or writes. On the other hand, the rewrite would not be valid in a source-to-source translator.
+是有效的，前提是能够证明 `*shared` 在访问时不会引发故障，因为潜在的新增读取不会影响任何现有的并发读取或写入。另一方面，在源码到源码的翻译器中，这种重写是无效的。
 
-## Conclusion
+## 结论
 
-Go programmers writing data-race-free programs can rely on sequentially consistent execution of those programs, just as in essentially all other modern programming languages.
+编写无数据竞争程序的 Go 程序员可以依赖这些程序的顺序一致性执行，就像几乎所有其他现代编程语言一样。
 
-When it comes to programs with races, both programmers and compilers should remember the advice: don't be clever.
+当涉及存在竞争的程序时，程序员和编译器都应记住这条建议：不要耍小聪明。
