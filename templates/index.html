@@ -1,21 +1,21 @@
 {% extends "base.html" %} {% block content %}
-<section class="align-center" style="padding-block: var(--space-12)">
-  <h1 style="margin-block: 0; font-size: var(--text-0)">{{ section.title }}</h1>
+<section style="margin-block-end: var(--space-14)">
+  <h1 style="margin-block: 0; font-size: var(--text-1)">{{ section.title }}</h1>
   <p class="text-light" style="font-size: var(--text-3); margin-block: var(--space-2) 0">
     {{ config.extra.tagline }}
   </p>
 </section>
 
-<section style="max-width: 48rem; margin-block-end: var(--space-12)">
-  <h2>About</h2>
+<section style="max-width: 48rem; margin-block-end: var(--space-14)">
+  <h2 style="">About</h2>
   {{ section.content | safe }}
 </section>
 
-<section style="margin-block-end: var(--space-12)">
-  <h2>Skills</h2>
+<section style="margin-block-end: var(--space-14)">
+  <h2 style="">Skills</h2>
   {% for group in config.extra.skills %}
-    <h3>{{ group.category }}</h3>
-    <div class="hstack" style="margin-block-end: var(--space-4)">
+    <div class="hstack" style="margin-block-end: var(--space-2)">
+      <strong style="min-width: 8rem">{{ group.category }}:</strong>
       {% for skill in group.items %}
         <span class="badge">{{ skill }}</span>
       {% endfor %}
@@ -23,8 +23,8 @@
   {% endfor %}
 </section>
 
-<section style="margin-block-end: var(--space-12)">
-  <h2>Recent Posts</h2>
+<section style="margin-block-end: var(--space-14)">
+  <h2 style="">Recent Posts</h2>
   <ul class="unstyled vstack">
     {% set blog = get_section(path="blog/_index.md") %}
     {% for post in blog.pages | slice(end=3) %}
@@ -37,8 +37,8 @@
   <a href="{{ get_url(path='@/blog/_index.md') }}">View all blog posts &rarr;</a>
 </section>
 
-<section style="margin-block-end: var(--space-12)">
-  <h2>Featured Articles</h2>
+<section style="margin-block-end: var(--space-14)">
+  <h2 style="">Featured Articles</h2>
   <ul class="unstyled vstack">
     {% for path in config.extra.featured_articles %}
       {% set article = get_page(path=path) %}
@@ -53,8 +53,8 @@
   <a href="{{ get_url(path='@/curated/_index.md') }}">View all curated articles &rarr;</a>
 </section>
 
-<section style="margin-block-end: var(--space-12)">
-  <h2>Projects</h2>
+<section style="margin-block-end: var(--space-14)">
+  <h2 style="">Projects</h2>
   {% set projects_data = load_data(path="data/projects.toml") %}
   <ul class="unstyled vstack">
     {% for project in projects_data.projects %}

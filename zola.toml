@@ -1,5 +1,5 @@
 base_url = "https://yshngg.dev"
-title = "Yusheng - An Open Source Developer"
+title = "Yusheng - Personal Website"
 description = ""
 output_dir = "public"
 default_language = "en"
@@ -30,7 +30,7 @@ light_theme = "github-light"
 dark_theme = "github-dark"
 
 [extra]
-tagline = "An Open Source Developer"
+tagline = "Open Source, Cloud Native"
 
 skills = [
   { category = "Languages", items = ["Go", "Python", "Rust", "Bash"] },
