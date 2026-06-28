@@ -1,0 +1,24 @@
+[[projects]]
+name = "prometheus-mcp-server"
+description = "A Prometheus Model Context Protocol Server"
+url = "https://github.com/yshngg/prometheus-mcp-server"
+
+[[projects]]
+name = "knowledge-base"
+description = "Personal knowledge base"
+url = "https://github.com/yshngg/knowledge-base"
+
+[[projects]]
+name = "ibus-ice"
+description = "ibus-ice"
+url = "https://github.com/yshngg/ibus-ice"
+
+[[projects]]
+name = "screenshot"
+description = "A GTK+Rust screenshot tool for GNOME/Wayland with annotation support"
+url = "https://github.com/yshngg/screenshot"
+
+[[projects]]
+name = "knowledge-base-website"
+description = "Website for personal knowledge base"
+url = "https://github.com/yshngg/knowledge-base-website"
