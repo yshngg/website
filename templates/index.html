@@ -55,8 +55,9 @@
 
 <section style="margin-block-end: var(--space-12)">
   <h2>Projects</h2>
+  {% set projects_data = load_data(path="data/projects.toml") %}
   <ul class="unstyled vstack">
-    {% for project in data.projects %}
+    {% for project in projects_data.projects %}
       <li>
         <a href="{{ project.url }}" target="_blank">{{ project.name }}</a>
         <span class="text-light">&mdash; {{ project.description }}</span>
