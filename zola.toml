@@ -1,5 +1,5 @@
 base_url = "https://yshngg.dev"
-title = "Yusheng - An Open Source Developer"
+title = "Yusheng - Personal Website"
 description = ""
 output_dir = "public"
 default_language = "en"
@@ -30,3 +30,17 @@ light_theme = "github-light"
 dark_theme = "github-dark"
 
 [extra]
+tagline = "Open Source, Cloud Native"
+
+skills = [
+  { category = "Languages", items = ["Go", "Python", "Rust", "Bash"] },
+  { category = "Platforms", items = ["Kubernetes", "Docker", "Linux", "Cloud Native"] },
+  { category = "Observability", items = ["Prometheus", "Grafana"] },
+]
+
+featured_articles = [
+  "curated/go-in-production/index.md",
+  "curated/kubernetes-controllers/index.md",
+  "curated/lxc-vs-docker/index.md",
+  "curated/memory-layout/index.md",
+]
