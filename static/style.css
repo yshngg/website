@@ -1,22 +1,22 @@
 /* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 main {
-  padding-bottom: 4rem;
+    padding-bottom: 4rem;
 }
 
 footer {
-  position: fixed;
-  width: 100%;
-  bottom: 0%;
-  background: var(--background);
+    position: fixed;
+    width: 100%;
+    bottom: 0%;
+    background: var(--background);
 }
 
 a[target="_blank"]::after {
-  content: "↗";
-  margin-left: 0.2em;
+    content: "↗";
+    margin-left: 0.2em;
 }
 
 .content h2,
@@ -24,47 +24,80 @@ a[target="_blank"]::after {
 .content h4,
 .content h5,
 .content h6 {
-  position: relative;
+    position: relative;
 }
 .content h2::before {
-  content: "##";
-  position: absolute;
-  right: calc(100% + 0.4em);
-  opacity: 0;
-  transition: opacity 0.15s;
+    content: "##";
+    position: absolute;
+    right: calc(100% + 0.4em);
+    opacity: 0;
+    transition: opacity 0.15s;
 }
 .content h3::before {
-  content: "###";
-  position: absolute;
-  right: calc(100% + 0.4em);
-  opacity: 0;
-  transition: opacity 0.15s;
+    content: "###";
+    position: absolute;
+    right: calc(100% + 0.4em);
+    opacity: 0;
+    transition: opacity 0.15s;
 }
 .content h4::before {
-  content: "####";
-  position: absolute;
-  right: calc(100% + 0.4em);
-  opacity: 0;
-  transition: opacity 0.15s;
+    content: "####";
+    position: absolute;
+    right: calc(100% + 0.4em);
+    opacity: 0;
+    transition: opacity 0.15s;
 }
 .content h5::before {
-  content: "#####";
-  position: absolute;
-  right: calc(100% + 0.4em);
-  opacity: 0;
-  transition: opacity 0.15s;
+    content: "#####";
+    position: absolute;
+    right: calc(100% + 0.4em);
+    opacity: 0;
+    transition: opacity 0.15s;
 }
 .content h6::before {
-  content: "######";
-  position: absolute;
-  right: calc(100% + 0.4em);
-  opacity: 0;
-  transition: opacity 0.15s;
+    content: "######";
+    position: absolute;
+    right: calc(100% + 0.4em);
+    opacity: 0;
+    transition: opacity 0.15s;
 }
 .content h2:hover::before,
 .content h3:hover::before,
 .content h4:hover::before,
 .content h5:hover::before,
 .content h6:hover::before {
-  opacity: 0.35;
+    opacity: 0.35;
+}
+
+ot-dropdown {
+    position: relative;
+}
+
+.lang-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px;
+    font: inherit;
+    color: var(--primary);
+    background: none;
+    border: none;
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.lang-btn:hover {
+    background-color: var(--accent);
+}
+
+#lang-menu {
+    min-width: auto;
+    inset-block-start: calc(100% + 4px);
+    inset-inline-end: 0;
+    position: absolute;
+}
+
+#lang-menu a {
+    text-decoration: none;
 }
