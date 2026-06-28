@@ -10,9 +10,11 @@
 </p>
 {% endif %} {% if page.translations %}
 <p>
-  {% for t in page.translations %}
-  <a href="{{ t.permalink | safe }}">{{ t.lang | default(value="English") }}</a>
-  {% endfor %}
+  {% for t in page.translations %} {% if t.lang != lang %}
+  <a href="{{ t.permalink | safe }}"
+    >{{ trans(key="lang_" ~ t.lang, lang=lang) }}</a
+  >
+  {% endif %} {% endfor %}
 </p>
 {% endif %}
 
