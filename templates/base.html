@@ -28,7 +28,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="stylesheet" href="/oat.min.css" />
     <script>
       // Prevent FOUC - apply theme before rendering.
       (function () {
@@ -40,20 +39,19 @@
       })();
     </script>
 
-    <script src="/oat.min.js" defer></script>
     <script src="/main.js"></script>
     <link href="/style.css" rel="stylesheet" />
   </head>
 
   <body>
     <nav data-topnav>
-      <div class="row container">
-        <div class="col-4 hstack">
+      <div class="nav-inner">
+        <div class="hstack">
           <a href="{{ get_url(path='@/_index.md', lang=lang) }}"
             >{{ trans(key="nav_home", lang=lang) }}</a
           >
         </div>
-        <div class="col-8 justify-end hstack">
+        <div class="hstack justify-end">
           <a href="https://x.com/yshnggdev" target="_blank"
             >{{ trans(key="nav_x", lang=lang) }}</a
           >
@@ -74,11 +72,12 @@
             >{{ trans(key="nav_kb", lang=lang) }}</a
           >
         </div>
-        </div>
       </div>
     </nav>
     <main>
-      <div class="container">{% block content %}{% endblock content %}</div>
+      <div style="max-width: 1280px; margin: 0 auto; padding: 0 1rem">
+        {% block content %}{% endblock content %}
+      </div>
     </main>
     <footer>
       <hr />
