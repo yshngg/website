@@ -246,23 +246,8 @@
 }
 
 .content .zola-anchor {
-  position: absolute;
-  right: 100%;
-  padding-right: 0.5rem;
-  font-size: 0.85em;
   text-decoration: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-  color: var(--muted);
-}
-
-.content h1:hover .zola-anchor,
-.content h2:hover .zola-anchor,
-.content h3:hover .zola-anchor,
-.content h4:hover .zola-anchor,
-.content h5:hover .zola-anchor,
-.content h6:hover .zola-anchor {
-  opacity: 0.5;
+  color: inherit;
 }
 
 .content h1,
