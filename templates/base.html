@@ -46,15 +46,6 @@
   </head>
 
   <body>
-    {% set other_lang = "zh" %} {% if lang == "zh" %} {% set other_lang = "en"
-    %} {% endif %} {% set other_url = "/" %} {% if other_lang == "zh" %} {% set
-    other_url = "/zh/" %} {% endif %} {% if page and page.translations %} {% for
-    t in page.translations %} {% if t.lang == other_lang %} {% set other_url =
-    t.permalink %} {% endif %} {% endfor %} {% elif section and
-    section.translations %} {% for t in section.translations %} {% if t.lang ==
-    other_lang %} {% set other_url = t.permalink %} {% endif %} {% endfor %} {%
-    endif %}
-
     <nav data-topnav>
       <div class="row container">
         <div class="col-4 hstack">
@@ -82,28 +73,7 @@
           <a href="https://kb.yshngg.dev" target="_blank"
             >{{ trans(key="nav_kb", lang=lang) }}</a
           >
-          <span>/</span>
-          <ot-dropdown>
-            <button popovertarget="lang-menu" class="lang-btn">
-              {{ trans(key="lang_" ~ lang, lang=lang) }}
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                style="margin-inline-start: 2px"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            <menu popover id="lang-menu">
-              <a href="{{ other_url | safe }}" role="menuitem" class="unstyled"
-                >{{ trans(key="lang_" ~ other_lang, lang=lang) }}</a
-              >
-            </menu>
-          </ot-dropdown>
+        </div>
         </div>
       </div>
     </nav>
