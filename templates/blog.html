@@ -8,7 +8,9 @@
       <span class="text-light">&middot; {{ page.date }}</span>
     </div>
     {% if page.description %}
-    <p class="text-light" style="margin: 2px 0 0; font-size: var(--text-7)">{{ page.description }}</p>
+    <p class="text-light" style="margin: 2px 0 0; font-size: var(--text-7)">
+      {{ page.description }}
+    </p>
     {% endif %}
   </li>
   {% endfor %}

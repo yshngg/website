@@ -3,14 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <title>{% block title %}{{ config.title }}{% endblock %}</title>
-    <meta name="description" content="{% set meta_desc = '' %}{%- if page.description -%}{% set_global meta_desc = page.description %}{%- elif section.description -%}{% set_global meta_desc = section.description %}{%- else -%}{% set_global meta_desc = config.description %}{%- endif -%}{{ meta_desc }}" />
+    <meta
+      name="description"
+      content="{% set meta_desc = '' %}{%- if page.description -%}{% set_global meta_desc = page.description %}{%- elif section.description -%}{% set_global meta_desc = section.description %}{%- else -%}{% set_global meta_desc = config.description %}{%- endif -%}{{ meta_desc }}"
+    />
 
-    <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock %}" />
+    <meta
+      property="og:title"
+      content="{% block og_title %}{{ config.title }}{% endblock %}"
+    />
     <meta property="og:description" content="{{ meta_desc }}" />
     <meta property="og:type" content="website" />
-    {% if current_url %}<meta property="og:url" content="{{ current_url | safe }}" />{% endif %}
+    {% if current_url %}
+    <meta property="og:url" content="{{ current_url | safe }}" />
+    {% endif %}
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="{% block twitter_title %}{{ config.title }}{% endblock %}" />
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %}{{ config.title }}{% endblock %}"
+    />
     <meta name="twitter:description" content="{{ meta_desc }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -105,6 +116,13 @@
         &copy; <span id="current-year"></span> Yusheng. All rights reserved.
       </p>
     </footer>
-    <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">&uarr;</button>
+    <button
+      class="back-to-top"
+      id="back-to-top"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      &uarr;
+    </button>
   </body>
 </html>
