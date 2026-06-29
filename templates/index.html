@@ -26,6 +26,7 @@
   {% endfor %}
 </section>
 
+{% if lang != "zh" %}
 <section style="margin-block-end: var(--space-14)">
   <h2 style="">{{ trans(key="heading_recent_posts", lang=lang) }}</h2>
   <ul class="unstyled vstack">
@@ -43,6 +44,7 @@
     </li>
   </ul>
 </section>
+{% endif %}
 
 <section style="margin-block-end: var(--space-14)">
   <h2 style="">{{ trans(key="heading_featured_articles", lang=lang) }}</h2>
