@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initSidebarResize();
 
-  var backToTop = document.getElementById("back-to-top");
+  const backToTop = document.getElementById("back-to-top");
   if (backToTop) {
     window.addEventListener("scroll", function () {
       if (window.scrollY > window.innerHeight * 1.5) {
@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  var tocToggle = document.getElementById("toc-toggle");
-  var tocPanel = document.getElementById("toc-panel");
+  const tocToggle = document.getElementById("toc-toggle");
+  const tocPanel = document.getElementById("toc-panel");
   if (tocToggle && tocPanel) {
     tocToggle.addEventListener("click", function () {
       var parent = tocPanel.parentElement;
