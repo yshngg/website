@@ -16,7 +16,7 @@
   --text-1: clamp(1.75rem, 1.5rem + 1.1vw, 2.25rem);
   --text-3: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
   --text-7: 0.875rem;
-  --font-sans: "Noto Sans SC", system-ui, -apple-system, sans-serif;
+  --font-sans: system-ui, -apple-system, sans-serif;
   --font-mono: "Ubuntu Mono", ui-monospace, Consolas, monospace;
   --transition-fast: 0.12s cubic-bezier(0.4, 0, 0.2, 1);
 }
