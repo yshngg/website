@@ -146,6 +146,7 @@
   border-radius: 4px;
 }
 
+.content h1,
 .content h2,
 .content h3,
 .content h4,
@@ -248,15 +249,6 @@
 .content .zola-anchor {
   text-decoration: none;
   color: inherit;
-}
-
-.content h1,
-.content h2,
-.content h3,
-.content h4,
-.content h5,
-.content h6 {
-  position: relative;
 }
 
 .post-meta {

@@ -1,6 +1,6 @@
 base_url = "https://yshngg.dev"
 title = "Yusheng - Personal Website"
-description = ""
+description = "Personal website of Yusheng - Open source, cloud native"
 output_dir = "public"
 default_language = "en"
 compile_sass = false
