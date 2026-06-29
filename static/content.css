@@ -8,6 +8,7 @@
 .content h4,
 .content h5,
 .content h6 {
+  font-family: "EB Garamond", serif;
   font-weight: bold;
   line-height: 1.25;
   color: var(--fg);
