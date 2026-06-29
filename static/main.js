@@ -16,6 +16,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   initSidebarResize();
+
+  var backToTop = document.getElementById("back-to-top");
+  if (backToTop) {
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > window.innerHeight * 1.5) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+    });
+    backToTop.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  var tocToggle = document.getElementById("toc-toggle");
+  var tocPanel = document.getElementById("toc-panel");
+  if (tocToggle && tocPanel) {
+    tocToggle.addEventListener("click", function () {
+      var parent = tocPanel.parentElement;
+      if (parent.classList.contains("post-toc")) {
+        parent.classList.toggle("open");
+      }
+    });
+  }
 });
 
 // Initialize sidebar resize functionality
