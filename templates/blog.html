@@ -1,10 +1,16 @@
 {% extends "base.html" %} {% block content %}
 <h1 class="title">{{ section.title }}</h1>
-<ul>
-  <!-- If you are using pagination, section.pages will be empty.
-       You need to use the paginator object -->
+<ul class="unstyled vstack">
   {% for page in section.pages %}
-  <li><a href="{{ page.permalink | safe }}">{{ page.title }}</a></li>
+  <li class="blog-list-item">
+    <div>
+      <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
+      <span class="text-light">&middot; {{ page.date }}</span>
+    </div>
+    {% if page.description %}
+    <p class="text-light" style="margin: 2px 0 0; font-size: var(--text-7)">{{ page.description }}</p>
+    {% endif %}
+  </li>
   {% endfor %}
 </ul>
 {% endblock content %}
