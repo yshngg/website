@@ -13,7 +13,7 @@ zola build    # build to public/
 
 ```
 ├── content/       # Markdown pages and blog posts
-├── templates/     # Zola templates (base.html, index.html, blog.html, post.html)
+├── templates/     # Zola templates (base.html, index.html, blog.html, blog-post.html)
 ├── static/        # Static assets (CSS, JS, images, favicons)
 └── zola.toml     # Site configuration
 ```

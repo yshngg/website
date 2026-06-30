@@ -62,7 +62,7 @@ main {
 a {
   color: var(--primary);
 }
-a[target="_blank"]::after {
+.content a[target="_blank"]::after {
   content: "↗";
   margin-left: 0.2em;
 }
