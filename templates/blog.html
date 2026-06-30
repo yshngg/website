@@ -2,9 +2,17 @@
 <h1 class="title">{{ section.title }}</h1>
 {% set posts_by_year = section.pages | group_by(attribute="year") %} {%
 set_global years = [] %} {% for year, ignored in posts_by_year %} {% set_global
-years = years | concat(with=year) %} {% endfor %} {% for year in years | sort | reverse
-%} {% set year_posts = posts_by_year[year] %}
-<h2 style="margin-block: var(--space-6) var(--space-2)">{{ year }}</h2>
+years = years | concat(with=year) %} {% endfor %} {% set years = years | sort |
+reverse %} {% if years | length > 1 %}
+<ul style="margin-block-end: var(--space-6)">
+  {% for year in years %}
+  <li><a href="#year-{{ year }}">{{ year }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %} {% for year in years %} {% set year_posts = posts_by_year[year] %}
+<h2 id="year-{{ year }}" style="margin-block: var(--space-6) var(--space-2)">
+  {{ year }}
+</h2>
 {% for month in [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1] %} {% set month_posts =
 year_posts | filter(attribute="month", value=month) %} {% if month_posts |
 length > 0 %}
