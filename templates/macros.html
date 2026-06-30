@@ -1,0 +1,25 @@
+{% macro reading_time(page) %} {% set words = page.word_count |
+default(value=page.content | split(pat=" ") | length) %} {% set minutes = (words
+/ 200) | round(method="ceil") | int %} {% if minutes < 1 %}{% set minutes = 1
+%}{% endif %}
+<span class="reading-time">{{ minutes }} min read</span>
+{% endmacro reading_time %} {% macro post_meta(page) %}
+<div class="post-meta">
+  <span><strong>{{ page.date }}</strong></span>
+  {{ self::reading_time(page=page) }} {% if page.taxonomies.category %} {% for
+  cat in page.taxonomies.category %}
+  <a
+    class="badge-taxonomy"
+    href="{{ get_taxonomy_url(kind='category', name=cat, lang=lang) }}"
+    >{{ cat }}</a
+  >
+  {% endfor %} {% endif %} {% if page.taxonomies.tags %} {% for tag in
+  page.taxonomies.tags %}
+  <a
+    class="badge-taxonomy"
+    href="{{ get_taxonomy_url(kind='tags', name=tag, lang=lang) }}"
+    >#{{ tag }}</a
+  >
+  {% endfor %} {% endif %}
+</div>
+{% endmacro post_meta %}

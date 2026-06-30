@@ -1,48 +1,34 @@
 {% extends "base.html" %} {% block content %}
 <h1 class="title">{{ section.title }}</h1>
 {% set months_en = ["", "January", "February", "March", "April", "May", "June",
-"July", "August", "September", "October", "November", "December"] %}
-{% set months_zh = ["", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月",
-"10月", "11月", "12月"] %}
-{% if lang == "en" %}
-  {% set month_names = months_en %}
-{% else %}
-  {% set month_names = months_zh %}
-{% endif %}
-{% set posts_by_year = section.pages | group_by(attribute="year") %}
-{% set_global years = [] %}
-{% for year, ignored in posts_by_year %}
-  {% set_global years = years | concat(with=year) %}
-{% endfor %}
-{% for year in years | reverse %}
-  {% set year_posts = posts_by_year[year] %}
-  <h2 style="margin-block: var(--space-6) var(--space-2)">{{ year }}</h2>
-  {% set_global seen = [] %}
-  {% for post in year_posts %}
-    {% set m = post.month %}
-    {% if m not in seen %}
-      {% set_global seen = seen | concat(with=m) %}
+"July", "August", "September", "October", "November", "December"] %} {% set
+months_zh = ["", "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月",
+"10月", "11月", "12月"] %} {% if lang == "en" %} {% set month_names = months_en
+%} {% else %} {% set month_names = months_zh %} {% endif %} {% set posts_by_year
+= section.pages | group_by(attribute="year") %} {% set_global years = [] %} {%
+for year, ignored in posts_by_year %} {% set_global years = years |
+concat(with=year) %} {% endfor %} {% for year in years | reverse %} {% set
+year_posts = posts_by_year[year] %}
+<h2 style="margin-block: var(--space-6) var(--space-2)">{{ year }}</h2>
+{% set_global seen = [] %} {% for post in year_posts %} {% set m = post.month %}
+{% if m not in seen %} {% set_global seen = seen | concat(with=m) %} {% endif %}
+{% endfor %} {% for month in seen | sort | reverse %}
+<h3 style="margin-block: var(--space-4) var(--space-2); font-size: 1rem">
+  {{ month_names[month] }}
+</h3>
+<ul class="unstyled vstack" style="margin-block-end: var(--space-6)">
+  {% for post in year_posts | filter(attribute="month", value=month) %}
+  <li class="blog-list-item">
+    <div>
+      <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
+      <span class="text-light">&middot; {{ post.date }}</span>
+    </div>
+    {% if post.description %}
+    <p class="text-light" style="margin: 2px 0 0; font-size: var(--text-7)">
+      {{ post.description }}
+    </p>
     {% endif %}
+  </li>
   {% endfor %}
-  {% for month in seen | sort | reverse %}
-    <h3 style="margin-block: var(--space-4) var(--space-2); font-size: 1rem">
-      {{ month_names[month] }}
-    </h3>
-    <ul class="unstyled vstack" style="margin-block-end: var(--space-6)">
-      {% for post in year_posts | filter(attribute="month", value=month) %}
-      <li class="blog-list-item">
-        <div>
-          <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
-          <span class="text-light">&middot; {{ post.date }}</span>
-        </div>
-        {% if post.description %}
-        <p class="text-light" style="margin: 2px 0 0; font-size: var(--text-7)">
-          {{ post.description }}
-        </p>
-        {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
-  {% endfor %}
-{% endfor %}
-{% endblock content %}
+</ul>
+{% endfor %} {% endfor %} {% endblock content %}

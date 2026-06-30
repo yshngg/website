@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% import "macros.html" as macros %} {% block content
+%}
 <h1 class="title">{{ page.title }}</h1>
 
 {% if page.extra.author %}
@@ -8,21 +9,7 @@
   <a href="{{ page.extra.original_url }}" target="_blank">Original source ↻</a>
   {% endif %}
 </p>
-{% endif %}
-<div class="post-meta">
-  {% set words = page.word_count | default(value=page.content | split(pat=" ") |
-  length) %} {% set minutes = (words / 200) | round(method="ceil") | int %} {%
-  if minutes < 1 %}{% set minutes = 1 %}{% endif %}
-  <span class="reading-time">{{ minutes }} min read</span>
-  {% if page.taxonomies.category %} {% for cat in page.taxonomies.category %}
-  <a
-    class="badge-taxonomy"
-    href="{{ get_taxonomy_url(kind='category', name=cat, lang=lang) }}"
-    >{{ cat }}</a
-  >
-  {% endfor %} {% endif %}
-</div>
-{% if page.translations %}
+{% endif %} {{ macros::post_meta(page=page) }} {% if page.translations %}
 <p>
   {% for t in page.translations %} {% if t.lang != lang %}
   <a href="{{ t.permalink | safe }}"

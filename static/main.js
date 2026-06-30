@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const goHome = document.getElementById("go-home");
+  if (goHome) {
+    goHome.href = window.location.pathname.indexOf("/zh") === 0 ? "/zh/" : "/";
+  }
+
   document.querySelectorAll("pre code").forEach((block) => {
     const lines = block.innerHTML.split("\n");
     if (lines.at(-1).trim() === "") lines.pop();

@@ -2,12 +2,8 @@
 <h1 class="title">{{ section.title }}</h1>
 
 {% set categories = ["Go", "Kubernetes", "Containers", "Systems",
-"Observability"] %} {% for cat_name in categories %} {% set tkey = "cat_go" %}
-{% if cat_name == "Kubernetes" %} {% set tkey = "cat_kubernetes" %} {% elif
-cat_name == "Containers" %} {% set tkey = "cat_containers" %} {% elif cat_name
-== "Systems" %} {% set tkey = "cat_systems" %} {% elif cat_name ==
-"Observability" %} {% set tkey = "cat_observability" %} {% endif %}
-<h2>{{ trans(key=tkey, lang=lang) }}</h2>
+"Observability"] %} {% for cat_name in categories %}
+<h2>{{ trans(key="cat_" ~ cat_name | lower, lang=lang) }}</h2>
 <ul>
   {% for page in section.pages %} {% if cat_name in page.taxonomies.category %}
   <li>
