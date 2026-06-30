@@ -170,16 +170,6 @@
   opacity: 0.35;
 }
 
-@media (max-width: 640px) {
-  .content h2::before,
-  .content h3::before,
-  .content h4::before,
-  .content h5::before,
-  .content h6::before {
-    display: none;
-  }
-}
-
 .content .zola-anchor {
   text-decoration: none;
   color: inherit;

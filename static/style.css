@@ -206,4 +206,11 @@ nav[data-topnav] .nav-inner {
   .main-wrapper {
     padding-inline-start: 1rem;
   }
+  .content h2::before,
+  .content h3::before,
+  .content h4::before,
+  .content h5::before,
+  .content h6::before {
+    display: none;
+  }
 }
