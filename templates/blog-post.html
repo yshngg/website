@@ -12,14 +12,15 @@ page.title }}{% endblock %} {% block content %}
   <div class="post-toc">{% include "toc.html" %}</div>
 </div>
 
-{% if page.later or page.earlier %}
+{% if page.lower or page.higher %}
 <hr />
 <nav class="post-nav">
-  {% if page.later %}
-  <a href="{{ page.later.permalink | safe }}">&larr; {{ page.later.title }}</a>
-  {% endif %} {% if page.earlier %}
-  <a href="{{ page.earlier.permalink | safe }}"
-    >{{ page.earlier.title }} &rarr;</a
+  {% if page.lower %}
+  <a href="{{ page.lower.permalink | safe }}">&larr; {{ page.lower.title }}</a>
+  {% endif %}
+  {% if page.higher %}
+  <a href="{{ page.higher.permalink | safe }}"
+    >{{ page.higher.title }} &rarr;</a
   >
   {% endif %}
 </nav>
