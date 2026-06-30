@@ -244,3 +244,22 @@
 .post-nav a {
   max-width: 48%;
 }
+
+@media (max-width: 640px) {
+  .main-wrapper {
+    padding-inline-start: 1rem;
+  }
+  .post-layout {
+    flex-direction: column;
+  }
+  .post-toc {
+    order: 0;
+  }
+  .content h2::before,
+  .content h3::before,
+  .content h4::before,
+  .content h5::before,
+  .content h6::before {
+    display: none;
+  }
+}
