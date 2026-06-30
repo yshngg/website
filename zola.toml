@@ -23,7 +23,7 @@ anchors = "safe"
 [markdown]
 bottom_footnotes = true
 github_alerts = true
-insert_anchor_links = "left"
+insert_anchor_links = "heading"
 
 [markdown.highlighting]
 light_theme = "github-light"
