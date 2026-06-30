@@ -216,22 +216,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 767px) {
-  .post-layout {
-    flex-direction: column;
-  }
-  .post-toc {
-    flex: none;
-    position: static;
-  }
-  .post-toc #toc-panel {
-    display: none;
-  }
-  .post-toc.open #toc-panel {
-    display: block;
-    margin-bottom: var(--space-4);
-  }
-  .toc-toggle {
+.toc-toggle {
     display: inline-block;
   }
 }

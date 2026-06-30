@@ -206,6 +206,23 @@ nav[data-topnav] .nav-inner {
   .main-wrapper {
     padding-inline-start: 1rem;
   }
+  .post-layout {
+    flex-direction: column;
+  }
+  .post-toc {
+    flex: none;
+    position: static;
+  }
+  .post-toc #toc-panel {
+    display: none;
+  }
+  .post-toc.open #toc-panel {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+  .toc-toggle {
+    display: inline-block;
+  }
   .content h2::before,
   .content h3::before,
   .content h4::before,
