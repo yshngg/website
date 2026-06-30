@@ -1,7 +1,0 @@
-Task 1: complete (commits baf6714..bc21042, review clean, Minor: duplicate position:relative in h1-h6 selectors)
-Task 2: complete (commits bc21042..3c78412, implemented inline, no concerns)
-Task 3: complete (commits 3c78412..074be1c, inline, no concerns)
-Task 4: complete (commits 074be1c..837ccd5, inline)
-Task 5: complete (commits 837ccd5..d78694f, inline)
-Task 6: complete (commits d78694f..6795213, inline)
-Task 7: complete (commits 6795213..4f3828c, inline)
