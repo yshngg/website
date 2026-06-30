@@ -21,10 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     goHome.href = window.location.pathname.indexOf("/zh") === 0 ? "/zh/" : "/";
   }
 
-  document.querySelectorAll("pre code .giallo-l").forEach((line, i) => {
-    const ln = document.createElement("span");
-    ln.className = "giallo-ln";
-    ln.textContent = i + 1;
-    line.prepend(ln);
+  document.querySelectorAll("pre code").forEach((block) => {
+    block.querySelectorAll(".giallo-l").forEach((line, i) => {
+      const ln = document.createElement("span");
+      ln.className = "giallo-ln";
+      ln.textContent = i + 1;
+      line.prepend(ln);
+    });
   });
 });
