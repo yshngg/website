@@ -108,9 +108,9 @@ footer hr {
 .giallo-ln {
   display: inline-block;
   user-select: none;
-  margin-right: 0.4em;
-  padding: 0.4em;
-  min-width: 3ch;
+  margin-right: 0.3em;
+  padding: 0 0.4em;
+  min-width: 2ch;
   text-align: right;
   opacity: 0.8;
 }

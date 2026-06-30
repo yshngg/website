@@ -80,9 +80,9 @@
 }
 .content pre {
   margin: 0 0 1rem;
-  padding: 1rem;
+  padding: 0.6rem;
   font-size: 0.8rem;
-  line-height: 1.4;
+  line-height: 1.35;
   overflow-x: auto;
   background: var(--accent);
   border-radius: 4px;
