@@ -188,7 +188,7 @@
   min-width: 0;
 }
 .post-toc {
-  flex: 0 0 14rem;
+  flex: 0 1 auto;
   position: sticky;
   top: 4rem;
   align-self: start;
