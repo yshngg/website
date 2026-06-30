@@ -76,10 +76,6 @@ footer {
   margin-top: var(--space-14);
 }
 
-footer hr {
-  margin-bottom: var(--space-4);
-}
-
 .text-light {
   color: var(--muted);
 }

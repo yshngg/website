@@ -28,17 +28,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <script>
-      // Prevent FOUC - apply theme before rendering.
-      (function () {
-        var t = localStorage.getItem("theme");
-        if (t) {
-          document.documentElement.style.colorScheme = t;
-          document.documentElement.setAttribute("data-theme", t);
-        }
-      })();
-    </script>
-
     <script src="/main.js"></script>
     <link href="/style.css" rel="stylesheet" />
     <link href="/content.css" rel="stylesheet" />
