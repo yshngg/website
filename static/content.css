@@ -137,13 +137,6 @@
 .content h6 {
   position: relative;
 }
-.content h2,
-.content h3,
-.content h4,
-.content h5,
-.content h6 {
-  padding-left: 3.5ch;
-}
 .content h2::before {
   content: "##";
 }
