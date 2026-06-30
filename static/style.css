@@ -110,10 +110,9 @@ footer {
 }
 .giallo-l {
   display: flex;
-  min-height: 1lh;
+  line-height: inherit;
 }
 .giallo-ln {
-  display: inline-block;
   user-select: none;
   flex-shrink: 0;
   margin-right: 0.3em;
