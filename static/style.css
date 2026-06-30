@@ -201,3 +201,9 @@ nav[data-topnav] .nav-inner {
   opacity: 1;
   pointer-events: auto;
 }
+
+@media (max-width: 640px) {
+  .main-wrapper {
+    padding-inline-start: 1rem;
+  }
+}
