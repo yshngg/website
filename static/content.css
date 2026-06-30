@@ -163,11 +163,8 @@
 .content h4::before,
 .content h5::before,
 .content h6::before {
-  display: inline-block;
-  width: 3.5ch;
-  margin-left: -3.5ch;
-  text-align: right;
-  padding-right: 0.4ch;
+  position: absolute;
+  right: calc(100% + 0.4em);
   opacity: 0;
   transition: opacity 0.15s;
 }
@@ -177,6 +174,31 @@
 .content h5:hover::before,
 .content h6:hover::before {
   opacity: 0.35;
+}
+
+@media (max-width: 640px) {
+  .content h2::before,
+  .content h3::before,
+  .content h4::before,
+  .content h5::before,
+  .content h6::before {
+    display: none;
+  }
+}
+
+.content .zola-anchor {
+  text-decoration: none;
+  color: inherit;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.content h1:hover .zola-anchor,
+.content h2:hover .zola-anchor,
+.content h3:hover .zola-anchor,
+.content h4:hover .zola-anchor,
+.content h5:hover .zola-anchor,
+.content h6:hover .zola-anchor {
+  opacity: 0.5;
 }
 
 .post-layout {
@@ -236,11 +258,6 @@
   .toc-toggle {
     display: inline-block;
   }
-}
-
-.content .zola-anchor {
-  text-decoration: none;
-  color: inherit;
 }
 
 .post-meta {
