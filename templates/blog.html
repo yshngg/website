@@ -12,7 +12,7 @@ length > 0 %}
   {{ trans(key="month_" ~ month, lang=lang) }}
 </h3>
 <ul class="unstyled vstack" style="margin-block-end: var(--space-6)">
-  {% for post in month_posts %}
+  {% for post in month_posts | reverse %}
   <li class="blog-list-item">
     <div>
       <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
