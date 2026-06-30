@@ -188,8 +188,8 @@
   position: sticky;
   top: 4rem;
   align-self: start;
+  order: 1;
 }
-.post-toc ul {
   list-style: none;
   padding: 0;
 }
@@ -201,24 +201,6 @@
 }
 .post-toc .depth-3 {
   padding-left: 2rem;
-}
-
-.toc-toggle {
-  display: none;
-  margin-bottom: var(--space-4);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-7);
-  font-family: var(--font-sans);
-  background: var(--accent);
-  color: var(--fg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.toc-toggle {
-    display: inline-block;
-  }
 }
 
 .post-meta {

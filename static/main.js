@@ -16,14 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const tocToggle = document.getElementById("toc-toggle");
-  const tocPanel = document.getElementById("toc-panel");
-  if (tocToggle && tocPanel) {
-    tocToggle.addEventListener("click", () => {
-      tocPanel.parentElement.classList.toggle("open");
-    });
-  }
-
   const goHome = document.getElementById("go-home");
   if (goHome) {
     goHome.href = window.location.pathname.indexOf("/zh") === 0 ? "/zh/" : "/";
