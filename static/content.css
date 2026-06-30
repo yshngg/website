@@ -223,9 +223,11 @@
   .post-toc {
     flex: none;
     position: static;
+  }
+  .post-toc #toc-panel {
     display: none;
   }
-  .post-toc.open {
+  .post-toc.open #toc-panel {
     display: block;
     margin-bottom: var(--space-4);
   }
