@@ -4,9 +4,11 @@
 set_global years = [] %} {% for year, ignored in posts_by_year %} {% set_global
 years = years | concat(with=year) %} {% endfor %} {% set years = years | sort |
 reverse %} {% if years | length > 1 %}
-<ul style="margin-block-end: var(--space-6)">
+<ul class="unstyled" style="margin-block-end: var(--space-6)">
   {% for year in years %}
-  <li><a href="#year-{{ year }}">{{ year }}</a></li>
+  <li class="toc-item" style="margin-bottom: 0.25rem">
+    <a href="#year-{{ year }}">{{ year }}</a>
+  </li>
   {% endfor %}
 </ul>
 {% endif %} {% for year in years %} {% set year_posts = posts_by_year[year] %}
