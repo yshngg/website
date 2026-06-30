@@ -8,8 +8,8 @@ page.title }}{% endblock %} {% block content %}
 {{ macros::post_meta(page=page) }}
 
 <div class="post-layout">
-  <div class="post-toc">{% include "toc.html" %}</div>
   <div class="post-content content">{{ page.content | safe }}</div>
+  <div class="post-toc">{% include "toc.html" %}</div>
 </div>
 
 {% if page.lower or page.higher %}
