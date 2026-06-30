@@ -109,13 +109,13 @@ footer {
   margin: 0;
 }
 .giallo-l {
-  display: inline-block;
+  display: flex;
   min-height: 1lh;
-  width: 100%;
 }
 .giallo-ln {
   display: inline-block;
   user-select: none;
+  flex-shrink: 0;
   margin-right: 0.3em;
   padding: 0 0.4em;
   min-width: 2ch;

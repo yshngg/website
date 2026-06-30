@@ -83,6 +83,7 @@
   border-radius: 4px;
 }
 .content pre code {
+  display: block;
   padding: 0;
   font-size: 100%;
   color: inherit;
