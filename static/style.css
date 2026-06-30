@@ -169,7 +169,11 @@ nav[data-topnav] .nav-inner {
 .back-to-top {
   position: fixed;
   bottom: 1.5rem;
-  right: 1.5rem;
+  /* Aligns with .post-toc right edge inside centered 1280px container.
+     50vw - 640px = viewport right edge → container right edge.
+     + 1rem = accounts for container padding, matching TOC inner edge.
+     max(1.5rem, ...) = kept off the edge on narrow screens. */
+  right: max(1.5rem, calc(50vw - 640px + 1rem));
   width: 2.25rem;
   height: 2.25rem;
   display: flex;
