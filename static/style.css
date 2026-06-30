@@ -209,6 +209,9 @@ nav[data-topnav] .nav-inner {
   .post-layout {
     flex-direction: column;
   }
+  .post-toc {
+    order: 0;
+  }
   .content h2::before,
   .content h3::before,
   .content h4::before,
