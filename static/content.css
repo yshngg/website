@@ -12,6 +12,7 @@
   line-height: 1.25;
   color: var(--fg);
   text-rendering: optimizeLegibility;
+  position: relative;
 }
 .content h1 {
   font-size: 2rem;
@@ -132,14 +133,6 @@
   background: var(--accent);
 }
 
-.content h1,
-.content h2,
-.content h3,
-.content h4,
-.content h5,
-.content h6 {
-  position: relative;
-}
 .content h2::before {
   content: "##";
 }
@@ -193,6 +186,7 @@
   align-self: start;
   order: 1;
 }
+.post-toc ul {
   list-style: none;
   padding: 0;
 }

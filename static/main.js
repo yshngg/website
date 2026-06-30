@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         backToTop.classList.remove("visible");
       }
-    });
+    }, { passive: true });
     backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
