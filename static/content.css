@@ -255,6 +255,10 @@
   .post-layout {
     flex-direction: column;
   }
+  .post-toc {
+    position: static;
+    align-self: auto;
+  }
   .content h2::before,
   .content h3::before,
   .content h4::before,
