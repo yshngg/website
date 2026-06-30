@@ -136,6 +136,13 @@
 .content h6 {
   position: relative;
 }
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  padding-left: 3.5ch;
+}
 .content h2::before {
   content: "##";
 }
@@ -156,8 +163,11 @@
 .content h4::before,
 .content h5::before,
 .content h6::before {
-  position: absolute;
-  right: calc(100% + 0.4em);
+  display: inline-block;
+  width: 3.5ch;
+  margin-left: -3.5ch;
+  text-align: right;
+  padding-right: 0.4ch;
   opacity: 0;
   transition: opacity 0.15s;
 }
@@ -167,16 +177,6 @@
 .content h5:hover::before,
 .content h6:hover::before {
   opacity: 0.35;
-}
-
-@media (max-width: 640px) {
-  .content h2::before,
-  .content h3::before,
-  .content h4::before,
-  .content h5::before,
-  .content h6::before {
-    display: none;
-  }
 }
 
 .post-layout {
