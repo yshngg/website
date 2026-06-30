@@ -61,7 +61,7 @@ month_10 = "October"
 month_11 = "November"
 month_12 = "December"
 lang_en = "English"
-lang_zh = "Simplified Chinese"
+lang_zh = "简体中文"
 
 [languages.zh.translations]
 nav_home = "首页"
@@ -94,7 +94,7 @@ month_9 = "9月"
 month_10 = "10月"
 month_11 = "11月"
 month_12 = "12月"
-lang_en = "英语"
+lang_en = "English"
 lang_zh = "中文"
 
 [extra]

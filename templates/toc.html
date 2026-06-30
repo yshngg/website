@@ -25,13 +25,4 @@
   </li>
   {% endfor %}
 </ul>
-{% elif toc_years %}
-<button class="toc-toggle" id="toc-toggle">Contents</button>
-<ul id="toc-panel">
-  {% for year in toc_years %}
-  <li class="toc-item depth-1">
-    <a href="#year-{{ year }}">{{ year }}</a>
-  </li>
-  {% endfor %}
-</ul>
 {% endif %}
