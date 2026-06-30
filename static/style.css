@@ -84,6 +84,12 @@ footer {
   padding: 0;
   text-decoration: none;
 }
+.main-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  padding-inline-start: calc(1rem + 4.5ch);
+}
 .section {
   margin-block-end: var(--space-14);
 }
