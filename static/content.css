@@ -258,6 +258,7 @@
   .post-toc {
     position: static;
     align-self: auto;
+    order: 0;
   }
   .content h2::before,
   .content h3::before,
