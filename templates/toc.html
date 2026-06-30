@@ -1,4 +1,4 @@
-{% if page.toc %}
+{% if page and page.toc %}
 <button class="toc-toggle" id="toc-toggle">Contents</button>
 <ul id="toc-panel">
   {% for h1 in page.toc %}
