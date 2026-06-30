@@ -84,7 +84,8 @@
   border-radius: var(--radius);
 }
 .content pre code {
-  display: block;
+  display: flex;
+  flex-direction: column;
   padding: 0;
   font-size: 100%;
   color: inherit;
