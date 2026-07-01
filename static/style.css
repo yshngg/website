@@ -252,14 +252,13 @@ nav[data-topnav] .nav-inner {
 
 .post-nav {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
-.post-nav a:last-child {
-  margin-inline-start: auto;
+.post-prev {
+  align-self: flex-start;
 }
-
-.post-nav a {
-  max-width: 48%;
+.post-next {
+  align-self: flex-end;
 }
 
 .back-to-top-mobile {
