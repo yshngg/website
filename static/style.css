@@ -147,6 +147,7 @@ footer {
   display: inline-flex;
   align-items: center;
   padding: 0.125rem var(--space-3);
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   background: var(--primary);
   color: var(--bg);
