@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% import "macros.html" as macros %} {% block title
+%}{{ page.title }} — {{ config.title }}{% endblock %} {% block og_title %}{{
+page.title }} — {{ config.title }}{% endblock %} {% block twitter_title %}{{
+page.title }}{% endblock %} {% block content %}
+
+<h1 class="title">{{ page.title }}</h1>
+
+{{ macros::post_meta(page=page) }}
+
+<div class="post-layout">
+  <div class="post-toc">{% include "toc.html" %}</div>
+  <div class="post-content content">
+    {{ page.content | safe }}
+    {% if page.lower or page.higher %}
+    <hr />
+    <nav class="post-nav">
+      {% if page.lower %}
+      <a class="post-prev" href="{{ page.lower.permalink | safe }}">&larr; {{ page.lower.title }}</a>
+      {% endif %}
+      {% if page.higher %}
+      <a class="post-next" href="{{ page.higher.permalink | safe }}">{{ page.higher.title }} &rarr;</a>
+      {% endif %}
+    </nav>
+    {% endif %}
+  </div>
+</div>
+<a class="back-to-top-mobile" href="#">&uarr; {{ trans(key="back_to_top", lang=lang) }}</a>
+{% endblock content %}

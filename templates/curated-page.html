@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% import "macros.html" as macros %} {% block content
+%}
 <h1 class="title">{{ page.title }}</h1>
 
 {% if page.extra.author %}
@@ -8,7 +9,7 @@
   <a href="{{ page.extra.original_url }}" target="_blank">Original source ↻</a>
   {% endif %}
 </p>
-{% endif %} {% if page.translations %}
+{% endif %} {{ macros::post_meta(page=page) }} {% if page.translations %}
 <p>
   {% for t in page.translations %} {% if t.lang != lang %}
   <a href="{{ t.permalink | safe }}"
@@ -18,46 +19,9 @@
 </p>
 {% endif %}
 
-<div class="row">
-  <div class="col-8">
-    <div class="content">{{ page.content | safe }}</div>
-  </div>
-  <div
-    class="col-3"
-    style="
-      grid-column-start: 10;
-      position: sticky;
-      top: 4rem;
-      align-self: start;
-    "
-  >
-    {% if page.toc %}
-    <ul class="toc">
-      {% for h1 in page.toc %}
-      <li class="toc-item depth-1">
-        <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
-        {% if h1.children %}
-        <ul>
-          {% for h2 in h1.children %}
-          <li class="toc-item depth-2">
-            <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
-            {% if h2.children %}
-            <ul>
-              {% for h3 in h2.children %}
-              <li class="toc-item depth-3">
-                <a href="{{ h3.permalink | safe }}">{{ h3.title }}</a>
-              </li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-  </div>
+<div class="post-layout">
+  <div class="post-toc">{% include "toc.html" %}</div>
+  <div class="post-content content">{{ page.content | safe }}</div>
 </div>
+<a class="back-to-top-mobile" href="#">&uarr; {{ trans(key="back_to_top", lang=lang) }}</a>
 {% endblock content %}

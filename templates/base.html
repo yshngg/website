@@ -2,48 +2,79 @@
 <html lang="{{ lang }}">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}{{ config.title }}{% endblock %}</title>
-    <meta name="description" content="{{ config.description }}" />
+    <meta
+      name="description"
+      content="{% set meta_desc = '' %}{%- if page.description -%}{% set_global meta_desc = page.description %}{%- elif section.description -%}{% set_global meta_desc = section.description %}{%- else -%}{% set_global meta_desc = config.description %}{%- endif -%}{{ meta_desc }}"
+    />
+
+    <meta
+      property="og:title"
+      content="{% block og_title %}{{ config.title }}{% endblock %}"
+    />
+    <meta property="og:description" content="{{ meta_desc }}" />
+    <meta property="og:type" content="website" />
+    {% if current_url %}
+    <meta property="og:url" content="{{ current_url | safe }}" />
+    {% endif %}
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %}{{ config.title }}{% endblock %}"
+    />
+    <meta name="twitter:description" content="{{ meta_desc }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="stylesheet" href="/oat.min.css" />
-    <script>
-      // Prevent FOUC - apply theme before rendering.
-      (function () {
-        var t = localStorage.getItem("theme");
-        if (t) {
-          document.documentElement.style.colorScheme = t;
-          document.documentElement.setAttribute("data-theme", t);
-        }
-      })();
-    </script>
-
-    <script src="/oat.min.js" defer></script>
-    <script src="/main.js"></script>
+    <script src="/main.js" defer></script>
     <link href="/style.css" rel="stylesheet" />
+    <link href="/content.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Ubuntu+Mono&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    {% set other_lang = "zh" %} {% if lang == "zh" %} {% set other_lang = "en"
-    %} {% endif %} {% set other_url = "/" %} {% if other_lang == "zh" %} {% set
-    other_url = "/zh/" %} {% endif %} {% if page and page.translations %} {% for
-    t in page.translations %} {% if t.lang == other_lang %} {% set other_url =
-    t.permalink %} {% endif %} {% endfor %} {% elif section and
-    section.translations %} {% for t in section.translations %} {% if t.lang ==
-    other_lang %} {% set other_url = t.permalink %} {% endif %} {% endfor %} {%
-    endif %}
-
     <nav data-topnav>
-      <div class="row container">
-        <div class="col-4 hstack">
-          <a href="{{ get_url(path='@/_index.md', lang=lang) }}"
-            >{{ trans(key="nav_home", lang=lang) }}</a
-          >
+      <div class="nav-inner">
+        <div class="hstack">
+          {% if current_path %}
+          {% set is_root = current_path == "/" or current_path == "/zh/" %}
+          {% set in_blog = current_path is starting_with("/blog/") or current_path is starting_with("/zh/blog/") %}
+          {% set in_curated = current_path is starting_with("/curated/") or current_path is starting_with("/zh/curated/") %}
+          {% if is_root %}
+            <strong>{{ trans(key="nav_home", lang=lang) }}</strong>
+          {% else %}
+            <a href="{{ get_url(path='@/_index.md', lang=lang) }}">{{ trans(key="nav_home", lang=lang) }}</a>
+            {% if in_blog %}
+              <span>/</span>
+              {% if current_path == "/blog/" or current_path == "/zh/blog/" %}
+                <strong>{{ trans(key="nav_blog", lang=lang) }}</strong>
+              {% else %}
+                <a href="{{ get_url(path='@/blog/_index.md', lang=lang) }}">{{ trans(key="nav_blog", lang=lang) }}</a>
+                <span>/</span>
+                <strong>{{ page.title }}</strong>
+              {% endif %}
+            {% elif in_curated %}
+              <span>/</span>
+              {% if current_path == "/curated/" or current_path == "/zh/curated/" %}
+                <strong>{{ trans(key="nav_curated", lang=lang) }}</strong>
+              {% else %}
+                <a href="{{ get_url(path='@/curated/_index.md', lang=lang) }}">{{ trans(key="nav_curated", lang=lang) }}</a>
+                <span>/</span>
+                <strong>{{ page.title }}</strong>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+          {% endif %}
         </div>
-        <div class="col-8 justify-end hstack">
+        <div class="hstack justify-end">
           <a href="https://x.com/yshnggdev" target="_blank"
             >{{ trans(key="nav_x", lang=lang) }}</a
           >
@@ -63,28 +94,6 @@
           <a href="https://kb.yshngg.dev" target="_blank"
             >{{ trans(key="nav_kb", lang=lang) }}</a
           >
-          <span>/</span>
-          <ot-dropdown>
-            <button popovertarget="lang-menu" class="lang-btn">
-              {{ trans(key="lang_" ~ lang, lang=lang) }}
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                style="margin-inline-start: 2px"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            <menu popover id="lang-menu">
-              <a href="{{ other_url | safe }}" role="menuitem" class="unstyled"
-                >{{ trans(key="lang_" ~ other_lang, lang=lang) }}</a
-              >
-            </menu>
-          </ot-dropdown>
         </div>
       </div>
     </nav>

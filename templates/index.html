@@ -1,24 +1,19 @@
 {% extends "base.html" %} {% block content %}
-<section style="margin-block-end: var(--space-14)">
-  <h1 style="margin-block: 0; font-size: var(--text-1)">{{ section.title }}</h1>
-  <p
-    class="text-light"
-    style="font-size: var(--text-3); margin-block: var(--space-2) 0"
-  >
-    {{ config.extra.tagline }}
-  </p>
+<section class="section">
+  <h1 class="site-title">{{ section.title }}</h1>
+  <p class="tagline">{{ config.extra.tagline }}</p>
 </section>
 
-<section style="max-width: 48rem; margin-block-end: var(--space-14)">
-  <h2 style="">{{ trans(key="heading_about", lang=lang) }}</h2>
+<section class="section-wide">
+  <h2>{{ trans(key="heading_about", lang=lang) }}</h2>
   {{ section.content | safe }}
 </section>
 
-<section style="margin-block-end: var(--space-14)">
-  <h2 style="">{{ trans(key="heading_skills", lang=lang) }}</h2>
+<section class="section">
+  <h2>{{ trans(key="heading_skills", lang=lang) }}</h2>
   {% for group in config.extra.skills %}
-  <div class="hstack" style="margin-block-end: var(--space-2)">
-    <strong style="min-width: 8rem">{{ group.category }}:</strong>
+  <div class="hstack mb-2">
+    <strong class="skill-label">{{ group.category }}:</strong>
     {% for skill in group.items %}
     <span class="badge">{{ skill }}</span>
     {% endfor %}
@@ -26,8 +21,8 @@
   {% endfor %}
 </section>
 
-<section style="margin-block-end: var(--space-14)">
-  <h2 style="">{{ trans(key="heading_recent_posts", lang=lang) }}</h2>
+<section class="section">
+  <h2>{{ trans(key="heading_recent_posts", lang=lang) }}</h2>
   <ul class="unstyled vstack">
     {% set blog = get_section(path="blog/_index.md") %} {% for post in
     blog.pages | slice(end=3) %}
@@ -36,14 +31,16 @@
       <span class="text-light">&middot; {{ post.date }}</span>
     </li>
     {% endfor %}
+    <li>
+      <a href="{{ get_url(path='@/blog/_index.md', lang=lang) }}"
+        >{{ trans(key="view_all_blog", lang=lang) }}</a
+      >
+    </li>
   </ul>
-  <a href="{{ get_url(path='@/blog/_index.md') }}"
-    >{{ trans(key="view_all_blog", lang=lang) }}</a
-  >
 </section>
 
-<section style="margin-block-end: var(--space-14)">
-  <h2 style="">{{ trans(key="heading_featured_articles", lang=lang) }}</h2>
+<section class="section">
+  <h2>{{ trans(key="heading_featured_articles", lang=lang) }}</h2>
   <ul class="unstyled vstack">
     {% for path in config.extra.featured_articles %} {% set article =
     get_page(path=path) %}
@@ -54,14 +51,16 @@
       {% endif %}
     </li>
     {% endfor %}
+    <li>
+      <a href="{{ get_url(path='@/curated/_index.md', lang=lang) }}"
+        >{{ trans(key="view_all_curated", lang=lang) }}</a
+      >
+    </li>
   </ul>
-  <a href="{{ get_url(path='@/curated/_index.md') }}"
-    >{{ trans(key="view_all_curated", lang=lang) }}</a
-  >
 </section>
 
-<section style="margin-block-end: var(--space-14)">
-  <h2 style="">{{ trans(key="heading_projects", lang=lang) }}</h2>
+<section class="section">
+  <h2>{{ trans(key="heading_projects", lang=lang) }}</h2>
   {% set projects_data = load_data(path="data/projects.toml") %}
   <ul class="unstyled vstack">
     {% for project in projects_data.projects %}
