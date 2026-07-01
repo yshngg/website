@@ -4,13 +4,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const backToTop = document.getElementById("back-to-top");
   if (backToTop) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > window.innerHeight * 1.5) {
-        backToTop.classList.add("visible");
-      } else {
-        backToTop.classList.remove("visible");
-      }
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (window.scrollY > window.innerHeight * 1.5) {
+          backToTop.classList.add("visible");
+        } else {
+          backToTop.classList.remove("visible");
+        }
+      },
+      { passive: true },
+    );
     backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });

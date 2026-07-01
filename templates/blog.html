@@ -8,15 +8,11 @@ reverse %}
 <div class="post-layout">
   <div class="post-content content">
     {% for year in years %} {% set year_posts = posts_by_year[year] %}
-    <h2 id="year-{{ year }}" class="year-heading">
-      {{ year }}
-    </h2>
+    <h2 id="year-{{ year }}" class="year-heading">{{ year }}</h2>
     {% for month in [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1] %} {% set
     month_posts = year_posts | filter(attribute="month", value=month) %} {% if
     month_posts | length > 0 %}
-    <h3 class="month-heading">
-      {{ trans(key="month_" ~ month, lang=lang) }}
-    </h3>
+    <h3 class="month-heading">{{ trans(key="month_" ~ month, lang=lang) }}</h3>
     <ul class="unstyled vstack mb-6">
       {% for post in month_posts | reverse %}
       <li class="blog-list-item">
@@ -25,9 +21,7 @@ reverse %}
           <span class="text-light">&middot; {{ post.date }}</span>
         </div>
         {% if post.description %}
-        <p class="post-desc">
-          {{ post.description }}
-        </p>
+        <p class="post-desc">{{ post.description }}</p>
         {% endif %}
       </li>
       {% endfor %}

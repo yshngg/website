@@ -17,8 +17,7 @@ page.title }}{% endblock %} {% block content %}
 <nav class="post-nav">
   {% if page.lower %}
   <a href="{{ page.lower.permalink | safe }}">&larr; {{ page.lower.title }}</a>
-  {% endif %}
-  {% if page.higher %}
+  {% endif %} {% if page.higher %}
   <a href="{{ page.higher.permalink | safe }}"
     >{{ page.higher.title }} &rarr;</a
   >
