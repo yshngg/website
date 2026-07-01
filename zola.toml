@@ -3,8 +3,6 @@ title = "Yusheng - Personal Website"
 description = "Personal website of Yusheng - Open source, cloud native"
 output_dir = "public"
 default_language = "en"
-compile_sass = false
-build_search_index = false
 
 taxonomies = [
     { name = "category", feed = true },
