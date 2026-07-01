@@ -173,48 +173,6 @@
   color: inherit;
 }
 
-.post-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-  font-size: var(--text-7);
-  color: var(--muted);
-  margin-bottom: var(--space-4);
-}
-
-.reading-time {
-  color: var(--muted);
-  font-style: italic;
-}
-
-.badge-taxonomy {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.125rem 0.5rem;
-  font-size: 0.75rem;
-  background: var(--accent);
-  color: var(--fg);
-  border-radius: 9999px;
-  text-decoration: none;
-}
-
-.badge-taxonomy:hover {
-  background: var(--border);
-}
-
-.post-nav {
-  display: flex;
-  justify-content: space-between;
-}
-.post-nav a:last-child {
-  margin-inline-start: auto;
-}
-
-.post-nav a {
-  max-width: 48%;
-}
-
 @media (max-width: 640px) {
   .content h2::before,
   .content h3::before,
