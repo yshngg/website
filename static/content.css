@@ -173,35 +173,6 @@
   color: inherit;
 }
 
-.post-layout {
-  display: flex;
-  gap: 2rem;
-}
-.post-content {
-  flex: 1;
-  min-width: 0;
-}
-.post-toc {
-  flex: 0 1 auto;
-  position: sticky;
-  top: 4rem;
-  align-self: start;
-  order: 1;
-}
-.post-toc ul {
-  list-style: none;
-  padding: 0;
-}
-.post-toc .toc-item {
-  margin-bottom: 0.25rem;
-}
-.post-toc .depth-2 {
-  padding-left: 1rem;
-}
-.post-toc .depth-3 {
-  padding-left: 2rem;
-}
-
 .post-meta {
   display: flex;
   align-items: center;
@@ -245,17 +216,6 @@
 }
 
 @media (max-width: 640px) {
-  .main-wrapper {
-    padding-inline-start: 1rem;
-  }
-  .post-layout {
-    flex-direction: column;
-  }
-  .post-toc {
-    position: static;
-    align-self: auto;
-    order: 0;
-  }
   .content h2::before,
   .content h3::before,
   .content h4::before,

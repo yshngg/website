@@ -21,6 +21,10 @@
   --transition-fast: 0.12s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 h1,
 h2,
 h3,
@@ -35,6 +39,7 @@ body {
   color: var(--fg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  margin: 0;
 }
 
 main {
@@ -67,7 +72,7 @@ footer {
   padding: 0;
   text-decoration: none;
 }
-.main-wrapper {
+.container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1rem;
@@ -158,6 +163,10 @@ nav[data-topnav] {
   align-items: center;
   padding: var(--space-2) var(--space-4);
   border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
 }
 nav[data-topnav] a {
   text-decoration: none;
@@ -172,32 +181,118 @@ nav[data-topnav] .nav-inner {
   margin: 0 auto;
 }
 
-.back-to-top {
-  position: fixed;
-  bottom: 1.5rem;
-  /* Aligns with .post-toc right edge inside centered 1280px container.
-     50vw - 640px = viewport right edge → container right edge.
-     + 1rem = accounts for container padding, matching TOC inner edge.
-     max(1.5rem, ...) = kept off the edge on narrow screens. */
-  right: max(1.5rem, calc(50vw - 640px + 1rem));
-  width: 2.25rem;
-  height: 2.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  background: var(--accent);
-  color: var(--primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+.toc-details summary {
   cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-fast);
-  z-index: 50;
+  user-select: none;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.post-toc details #toc-panel {
+  padding-inline-start: 1em;
 }
 
-.back-to-top.visible {
-  opacity: 1;
-  pointer-events: auto;
+.post-layout {
+  display: flex;
+  gap: 6rem;
+}
+.post-content {
+  flex: 1;
+  min-width: 0;
+}
+.post-toc {
+  flex: 0 1 auto;
+  position: sticky;
+  top: 4rem;
+  align-self: start;
+  order: 1;
+}
+.post-toc ul {
+  list-style: none;
+  padding: 0;
+}
+.post-toc .toc-item {
+  margin-bottom: 0.25rem;
+}
+.post-toc .depth-2 {
+  padding-left: 1rem;
+}
+.post-toc .depth-3 {
+  padding-left: 2rem;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  font-size: var(--text-7);
+  color: var(--muted);
+  margin-bottom: var(--space-4);
+}
+
+.reading-time {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.badge-taxonomy {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  background: var(--accent);
+  color: var(--fg);
+  border-radius: 9999px;
+  text-decoration: none;
+}
+
+.badge-taxonomy:hover {
+  background: var(--border);
+}
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+}
+.post-nav a:last-child {
+  margin-inline-start: auto;
+}
+
+.post-nav a {
+  max-width: 48%;
+}
+
+.back-to-top-mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-inline-start: 1rem;
+  }
+  .post-layout {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .post-toc {
+    position: static;
+    align-self: auto;
+    order: 0;
+  }
+  .content h2::before,
+  .content h3::before,
+  .content h4::before,
+  .content h5::before,
+  .content h6::before {
+    display: none;
+  }
+  .back-to-top-mobile {
+    display: block;
+    text-align: center;
+    margin-top: var(--space-6);
+    padding: var(--space-2);
+  }
+  .post-toc .hide-mobile {
+    display: none;
+  }
 }

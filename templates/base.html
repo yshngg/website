@@ -2,6 +2,7 @@
 <html lang="{{ lang }}">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}{{ config.title }}{% endblock %}</title>
     <meta
       name="description"
@@ -43,9 +44,35 @@
     <nav data-topnav>
       <div class="nav-inner">
         <div class="hstack">
-          <a href="{{ get_url(path='@/_index.md', lang=lang) }}"
-            >{{ trans(key="nav_home", lang=lang) }}</a
-          >
+          {% if current_path %}
+          {% set is_root = current_path == "/" or current_path == "/zh/" %}
+          {% set in_blog = current_path is starting_with("/blog/") or current_path is starting_with("/zh/blog/") %}
+          {% set in_curated = current_path is starting_with("/curated/") or current_path is starting_with("/zh/curated/") %}
+          {% if is_root %}
+            <strong>{{ trans(key="nav_home", lang=lang) }}</strong>
+          {% else %}
+            <a href="{{ get_url(path='@/_index.md', lang=lang) }}">{{ trans(key="nav_home", lang=lang) }}</a>
+            {% if in_blog %}
+              <span>/</span>
+              {% if current_path == "/blog/" or current_path == "/zh/blog/" %}
+                <strong>{{ trans(key="nav_blog", lang=lang) }}</strong>
+              {% else %}
+                <a href="{{ get_url(path='@/blog/_index.md', lang=lang) }}">{{ trans(key="nav_blog", lang=lang) }}</a>
+                <span>/</span>
+                <strong>{{ page.title }}</strong>
+              {% endif %}
+            {% elif in_curated %}
+              <span>/</span>
+              {% if current_path == "/curated/" or current_path == "/zh/curated/" %}
+                <strong>{{ trans(key="nav_curated", lang=lang) }}</strong>
+              {% else %}
+                <a href="{{ get_url(path='@/curated/_index.md', lang=lang) }}">{{ trans(key="nav_curated", lang=lang) }}</a>
+                <span>/</span>
+                <strong>{{ page.title }}</strong>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+          {% endif %}
         </div>
         <div class="hstack justify-end">
           <a href="https://x.com/yshnggdev" target="_blank"
@@ -71,7 +98,7 @@
       </div>
     </nav>
     <main>
-      <div class="main-wrapper">{% block content %}{% endblock content %}</div>
+      <div class="container">{% block content %}{% endblock content %}</div>
     </main>
     <footer>
       <hr />
@@ -79,13 +106,5 @@
         &copy; <span id="current-year"></span> Yusheng. All rights reserved.
       </p>
     </footer>
-    <button
-      class="back-to-top"
-      id="back-to-top"
-      aria-label="Back to top"
-      title="Back to top"
-    >
-      &uarr;
-    </button>
   </body>
 </html>

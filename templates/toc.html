@@ -1,27 +1,31 @@
 {% if page and page.toc %}
-<ul id="toc-panel">
-  {% for h1 in page.toc %}
-  <li class="toc-item depth-1">
-    <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
-    {% if h1.children %}
-    <ul>
-      {% for h2 in h1.children %}
-      <li class="toc-item depth-2">
-        <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
-        {% if h2.children %}
-        <ul>
-          {% for h3 in h2.children %}
-          <li class="toc-item depth-3">
-            <a href="{{ h3.permalink | safe }}">{{ h3.title }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-  </li>
-  {% endfor %}
-</ul>
+<details class="toc-details" open>
+  <summary>{{ trans(key="toc_label", lang=lang) }}</summary>
+  <ul id="toc-panel">
+    <li class="toc-item depth-1 hide-mobile"><a href="#">&uarr; {{ trans(key="back_to_top", lang=lang) }}</a></li>
+    {% for h1 in page.toc %}
+    <li class="toc-item depth-1">
+      <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+      {% if h1.children %}
+      <ul>
+        {% for h2 in h1.children %}
+        <li class="toc-item depth-2">
+          <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+          {% if h2.children %}
+          <ul>
+            {% for h3 in h2.children %}
+            <li class="toc-item depth-3">
+              <a href="{{ h3.permalink | safe }}">{{ h3.title }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</details>
 {% endif %}
