@@ -97,17 +97,19 @@ footer {
   margin: 0;
 }
 .giallo-l {
-  display: flex;
+  display: block;
   line-height: inherit;
+  padding-left: 3ch;
+  position: relative;
 }
 .giallo-ln {
+  position: absolute;
+  left: 0;
   user-select: none;
-  flex-shrink: 0;
-  margin-right: 0.3em;
-  padding: 0 0.4em;
+  opacity: 0.8;
   min-width: 2ch;
   text-align: right;
-  opacity: 0.8;
+  padding-right: 0.4em;
 }
 .hstack {
   display: flex;
