@@ -15,4 +15,23 @@ document.addEventListener("DOMContentLoaded", () => {
       line.prepend(ln);
     });
   });
+
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const id = link.getAttribute("href").slice(1);
+    if (!id) return;
+
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    e.preventDefault();
+
+    const nav = document.querySelector("nav[data-topnav]");
+    const navHeight = nav ? nav.getBoundingClientRect().height : 0;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY - navHeight;
+
+    window.scrollTo({ top: targetTop, behavior: "smooth" });
+  });
 });
