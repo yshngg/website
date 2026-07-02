@@ -94,9 +94,6 @@
   background: transparent;
   border: none;
 }
-.content pre code .giallo-l {
-  counter-increment: line;
-}
 .content .highlight {
   margin-bottom: 1rem;
   border-radius: var(--radius);
@@ -176,9 +173,11 @@
 }
 
 .content pre code .giallo-l {
+  display: block;
   line-height: inherit;
   padding-left: 3ch;
   position: relative;
+  counter-increment: line;
 }
 .content pre code .giallo-l::before {
   content: counter(line);
