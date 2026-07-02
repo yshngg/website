@@ -165,10 +165,15 @@ nav[data-topnav] {
   align-items: center;
   padding: var(--space-2) var(--space-4);
   border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bg);
+
+  /* Sticky nav disabled: anchor hash scrolls (e.g. #Configuration) would land
+     behind the nav. scroll-padding-top and JS offset solutions added complexity
+     without a clean fix. Keeping nav in normal flow means anchor targets are
+     always fully visible at the viewport top. */
+  /* position: sticky; */
+  /* top: 0; */
+  /* z-index: 100; */
+  /* background: var(--bg); */
 }
 nav[data-topnav] a {
   text-decoration: none;
