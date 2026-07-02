@@ -6,7 +6,7 @@ weight = 10
 author = "The Go Team"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 在2024年，我们向世界介绍了[更强大的 Go 执行跟踪](https://go.dev/blog/execution-traces-2024)。在那篇博客文章中，我们预览了新的执行跟踪器可以解锁的一些新功能，包括*飞行记录*。我们很高兴地宣布，飞行记录现在已在 Go 1.25 中可用，它是 Go 诊断工具箱中的一个强大新工具。

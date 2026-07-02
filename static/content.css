@@ -85,15 +85,17 @@
   background: var(--accent);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  counter-reset: line;
 }
 .content pre code {
-  display: flex;
-  flex-direction: column;
   padding: 0;
   font-size: 100%;
   color: inherit;
   background: transparent;
   border: none;
+}
+.content pre code .giallo-l {
+  counter-increment: line;
 }
 .content .highlight {
   margin-bottom: 1rem;
@@ -171,6 +173,22 @@
 .content .zola-anchor {
   text-decoration: none;
   color: inherit;
+}
+
+.content pre code .giallo-l {
+  line-height: inherit;
+  padding-left: 3ch;
+  position: relative;
+}
+.content pre code .giallo-l::before {
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  user-select: none;
+  opacity: 0.8;
+  min-width: 2ch;
+  text-align: right;
+  padding-right: 0.4em;
 }
 
 

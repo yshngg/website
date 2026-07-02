@@ -6,7 +6,7 @@ weight = 20
 author = "Ahmet Alp Balkan"
 
 [taxonomies]
-category = ["Kubernetes"]
+tags = ["Kubernetes"]
 +++
 
 ### What they don't tell you about developing scalable and reliable controllers
@@ -70,7 +70,7 @@ mistakes:
    validation) and end up with fields that are not set, or set to wrong values
    accepted into the API.
    I covered this topic in my
-   [CRD generation pitfalls article](/blog/crd-generation-pitfalls/). If the behavior of the
+   CRD generation pitfalls article. If the behavior of the
    API is not clear when a field is not set, you've already failed.
    [API conventions](https://github.com/kubernetes/community/blob/8a99192b3780b656f9dd53c0c37d9372a1c975f9/contributors/devel/sig-architecture/api-conventions.md) guide covers this topic fairly well.
 

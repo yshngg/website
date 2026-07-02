@@ -2,7 +2,7 @@
   color-scheme: light dark;
   --bg: light-dark(#fff, #09090b);
   --fg: light-dark(#09090b, #fafafa);
-  --primary: light-dark(#574747, #fafafa);
+  --primary: light-dark(#2563eb, #fafafa);
   --accent: light-dark(#f4f4f5, #27272a);
   --muted: light-dark(#71717a, #a1a1aa);
   --border: light-dark(#d4d4d8, #52525b);
@@ -23,6 +23,23 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 h1,
@@ -95,21 +112,6 @@ footer {
 }
 .blog-list-item {
   margin: 0;
-}
-.giallo-l {
-  display: block;
-  line-height: inherit;
-  padding-left: 3ch;
-  position: relative;
-}
-.giallo-ln {
-  position: absolute;
-  left: 0;
-  user-select: none;
-  opacity: 0.8;
-  min-width: 2ch;
-  text-align: right;
-  padding-right: 0.4em;
 }
 .hstack {
   display: flex;

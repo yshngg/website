@@ -2,6 +2,9 @@
 title = "Linux Cgroups v2"
 date = 2024-06-30
 description = "How Linux control groups manage container resources"
+
+[taxonomies]
+tags = ["Systems", "Containers"]
 +++
 
 Cgroups v2 provides a unified hierarchy for resource management. Key controllers:

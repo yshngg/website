@@ -6,7 +6,7 @@ weight = 10
 author = "Carlos Amedee, Michael Knyszek"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 In 2024 we introduced the world to [more powerful Go execution traces](https://go.dev/blog/execution-traces-2024). In that blog post we gave a sneak peek into some of the new functionality we could unlock with our new execution tracer, including _flight recording_. We're happy to announce that flight recording is now available in Go 1.25, and it's a powerful new tool in the Go diagnostics toolbox.

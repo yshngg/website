@@ -7,7 +7,7 @@ author = "Ian Lewis"
 original_url = "https://www.ianlewis.org/en/almighty-pause-container"
 
 [taxonomies]
-category = ["Containers"]
+tags = ["Containers"]
 +++
 
 When checking out the nodes of your Kubernetes cluster, you may have noticed some containers called "pause" running when you do a docker ps on the node.

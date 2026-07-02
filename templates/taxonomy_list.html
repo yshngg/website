@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 <h1 class="title">{{ taxonomy.name }}</h1>
-<ul>
+<ul class="unstyled vstack">
   {% for term in terms %}
   <li><a href="{{ term.permalink | safe }}">{{ term.name }}</a></li>
   {% endfor %}

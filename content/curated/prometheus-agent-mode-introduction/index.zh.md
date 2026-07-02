@@ -7,7 +7,7 @@ author = "Bartlomiej Plotka"
 original_url = "https://prometheus.io/blog/2021/11/16/agent-mode/"
 
 [taxonomies]
-category = ["Observability"]
+tags = ["Observability"]
 +++
 
 我个人喜欢 Prometheus 项目的原因之一，也是我加入团队的重要原因之一，是该项目对目标的专注度。Prometheus 始终致力于在提供实用、可靠、廉价但极具价值的基于指标的监控方面突破界限。Prometheus 超稳定且强大的 API、查询语言和集成协议（例如 Remote Write 和 [OpenMetrics](https://openmetrics.io/)）使得云原生计算基金会（CNCF）的指标生态系统能够基于这些坚实的基础发展。由此产生了惊人的成果：

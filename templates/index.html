@@ -24,7 +24,7 @@
 <section class="section">
   <h2>{{ trans(key="heading_recent_posts", lang=lang) }}</h2>
   <ul class="unstyled vstack">
-    {% set blog = get_section(path="blog/_index.md") %} {% for post in
+    {% set blog = get_section(path="blog/_index.md", lang=lang) %} {% for post in
     blog.pages | slice(end=3) %}
     <li>
       <a href="{{ post.permalink | safe }}">{{ post.title }}</a>

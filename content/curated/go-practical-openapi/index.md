@@ -7,7 +7,7 @@ author = "Alex Pliutau"
 original_url = "https://packagemain.tech/p/practical-openapi-in-golang"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 From OpenAPI Specification to Go Server.

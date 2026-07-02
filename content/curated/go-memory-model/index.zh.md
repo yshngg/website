@@ -1,14 +1,12 @@
 +++
 title = "Go 内存模型"
 weight = 16
-description = "Go goroutine 内存同步与顺序一致性规范"
-
 [extra]
 author = "The Go Team"
 original_url = "https://go.dev/ref/mem"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 版本：2022 年 6 月 6 日

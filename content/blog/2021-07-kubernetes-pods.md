@@ -2,6 +2,9 @@
 title = "Kubernetes Pod Lifecycle"
 date = 2021-07-22
 description = "Understanding pod phases, conditions, and container states"
+
+[taxonomies]
+tags = ["Kubernetes"]
 +++
 
 Kubernetes pods go through several phases during their lifecycle: Pending, Running, Succeeded, Failed, and Unknown.

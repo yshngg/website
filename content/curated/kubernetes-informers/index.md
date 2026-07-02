@@ -7,7 +7,7 @@ author = "Mario Macías Lloret, Farhan"
 original_url = "https://macias.info/entry/202109081800_k8s_informers.md"
 
 [taxonomies]
-category = ["Kubernetes"]
+tags = ["Kubernetes"]
 +++
 
 This article shows you the tool that the [Kubernetes Go client library](https://pkg.go.dev/k8s.io/client-go/informers) provides to keep an updated in-memory snapshot of your cluster resources.

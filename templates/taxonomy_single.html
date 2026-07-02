@@ -1,8 +1,13 @@
 {% extends "base.html" %} {% block content %}
 <h1 class="title">{{ term.name }}</h1>
-<ul>
+<ul class="unstyled vstack">
   {% for page in term.pages %}
-  <li><a href="{{ page.permalink | safe }}">{{ page.title }}</a></li>
+  <li class="blog-list-item">
+    <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
+    {% if page.description %}
+    <p class="post-desc">{{ page.description }}</p>
+    {% endif %}
+  </li>
   {% endfor %}
 </ul>
 {% endblock content %}

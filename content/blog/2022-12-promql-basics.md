@@ -2,6 +2,9 @@
 title = "PromQL Basics"
 date = 2022-12-05
 description = "Getting started with Prometheus query language"
+
+[taxonomies]
+tags = ["Observability"]
 +++
 
 PromQL is the query language for Prometheus. It lets you select and aggregate time series data in real time.

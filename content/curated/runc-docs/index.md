@@ -3,7 +3,7 @@ title = "runc Documentation"
 weight = 33
 
 [taxonomies]
-category = ["Containers"]
+tags = ["Containers"]
 +++
 
 ## Spec Conformance
@@ -649,10 +649,9 @@ file descriptor is whoever read the file descriptor from the socket.
 
 In order to help users make use of detached new terminal mode, we have provided
 a [Go implementation in the `go-runc` bindings][containerd/go-runc.Socket], as
-well as [a simple client][recvtty].
+well as a simple client recvtty.
 
 [containerd/go-runc.Socket]: https://godoc.org/github.com/containerd/go-runc#Socket
-[recvtty]: /tests/cmd/recvtty
 
 ## Experimental Features
 

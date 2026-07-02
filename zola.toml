@@ -5,13 +5,11 @@ output_dir = "public"
 default_language = "en"
 
 taxonomies = [
-    { name = "category", feed = true },
     { name = "tags", feed = true },
 ]
 
 [languages.zh]
 taxonomies = [
-    { name = "category", feed = true },
     { name = "tags", feed = true },
 ]
 
@@ -45,11 +43,11 @@ heading_featured_articles = "Featured Articles"
 heading_projects = "Projects"
 view_all_blog = "View all blog posts →"
 view_all_curated = "View all curated articles →"
-cat_go = "Go"
-cat_kubernetes = "Kubernetes"
-cat_containers = "Containers"
-cat_systems = "Systems"
-cat_observability = "Observability"
+tag_go = "Go"
+tag_kubernetes = "Kubernetes"
+tag_containers = "Containers"
+tag_systems = "Systems"
+tag_observability = "Observability"
 month_1 = "January"
 month_2 = "February"
 month_3 = "March"
@@ -83,11 +81,11 @@ heading_featured_articles = "精选文章"
 heading_projects = "项目"
 view_all_blog = "查看所有博客文章 →"
 view_all_curated = "查看所有精选文章 →"
-cat_go = "Go"
-cat_kubernetes = "Kubernetes"
-cat_containers = "容器"
-cat_systems = "系统"
-cat_observability = "可观测性"
+tag_go = "Go"
+tag_kubernetes = "Kubernetes"
+tag_containers = "容器"
+tag_systems = "系统"
+tag_observability = "可观测性"
 month_1 = "1月"
 month_2 = "2月"
 month_3 = "3月"
