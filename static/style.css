@@ -23,6 +23,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
 }
 
 h1,
@@ -268,6 +269,9 @@ nav[data-topnav] .nav-inner {
 }
 
 @media (max-width: 640px) {
+  html {
+    scroll-padding-top: 10rem;
+  }
   .container {
     padding-inline-start: 1rem;
   }
