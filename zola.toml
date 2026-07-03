@@ -114,8 +114,6 @@ lang_en = "English"
 lang_zh = "中文"
 
 [extra]
-tagline = "Open Source, Cloud Native"
-
 skills = [
   { category = "Languages", items = ["Go", "Python", "Rust", "Bash"] },
   { category = "Platforms", items = ["Kubernetes", "Docker", "Linux", "Cloud Native"] },
