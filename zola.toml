@@ -121,10 +121,3 @@ skills = [
   { category = "Platforms", items = ["Kubernetes", "Docker", "Linux", "Cloud Native"] },
   { category = "Observability", items = ["Prometheus", "Grafana"] },
 ]
-
-featured_articles = [
-  "curated/go-in-production/index.md",
-  "curated/kubernetes-controllers/index.md",
-  "curated/lxc-vs-docker/index.md",
-  "curated/memory-layout/index.md",
-]

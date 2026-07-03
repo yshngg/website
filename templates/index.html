@@ -44,8 +44,8 @@
 <section class="section">
   <h2>{{ trans(key="heading_featured_articles", lang=lang) }}</h2>
   <ul class="unstyled vstack">
-    {% for path in config.extra.featured_articles %} {% set article =
-    get_page(path=path) %}
+    {% set curated = get_section(path="curated/_index.md", lang=lang) %} {% for
+    article in curated.pages | slice(end=4) %}
     <li>
       <a href="{{ article.permalink | safe }}">{{ article.title }}</a>
       {% if article.extra.author %}
