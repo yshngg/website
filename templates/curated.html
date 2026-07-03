@@ -2,10 +2,9 @@
 <h1 class="title">{{ section.title }}</h1>
 
 {% set all_tags = [] %} {% for page in section.pages %} {% if
-page.taxonomies.tags %} {% for tag in page.taxonomies.tags %} {% if tag
-not in all_tags %} {% set_global all_tags = all_tags |
-concat(with=tag) %} {% endif %} {% endfor %} {% endif %} {% endfor %} {% for
-tag_name in all_tags | sort %}
+page.taxonomies.tags %} {% for tag in page.taxonomies.tags %} {% if tag not in
+all_tags %} {% set_global all_tags = all_tags | concat(with=tag) %} {% endif %}
+{% endfor %} {% endif %} {% endfor %} {% for tag_name in all_tags | sort %}
 <h2>{{ trans(key="tag_" ~ tag_name | lower, lang=lang) }}</h2>
 <ul>
   {% for page in section.pages %} {% if tag_name in page.taxonomies.tags %}

@@ -1,4 +1,9 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block breadcrumb_extra %}{% if lang == "en" %}{%
+set lang_prefix = "" %}{% else %}{% set lang_prefix = "/" ~ lang %}{% endif %}{%
+set tags_url = lang_prefix ~ "/tags/" %}<span>/</span
+><a href="{{ tags_url }}">{{ trans(key="nav_tags", lang=lang) }}</a
+><span>/</span><strong>{{ term.name }}</strong>{% endblock %} {% block content
+%}
 <h1 class="title">{{ term.name }}</h1>
 <ul class="unstyled vstack">
   {% for page in term.pages %}

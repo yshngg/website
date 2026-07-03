@@ -1,6 +1,22 @@
 {% extends "base.html" %} {% block title %}404 - {{ config.title }}{% endblock
-%} {% block content %}
+%} {% block breadcrumb %}
+<div class="hstack">
+  <a id="nav-home" href="{{ get_url(path='@/_index.md', lang=lang) }}"
+    >{{ trans(key="nav_home", lang=lang) }}</a
+  >
+  <span>/</span>
+  <strong>404</strong>
+</div>
+{% endblock %} {% block content %}
 <h1>404 — Page Not Found</h1>
 <p>The page you're looking for doesn't exist or has been moved.</p>
-<a href="{{ get_url(path='@/_index.md', lang=lang) }}">&larr; {{ trans(key="nav_home", lang=lang) }}</a>
+<a id="go-home" href="/">&larr; {{ trans(key="nav_home", lang=lang) }}</a>
+<script>
+  var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+  if (m && m[1] !== "en") {
+    var p = "/" + m[1];
+    document.getElementById("go-home").href = p + "/";
+    document.getElementById("nav-home").href = p + "/";
+  }
+</script>
 {% endblock content %}

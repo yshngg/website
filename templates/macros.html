@@ -6,8 +6,8 @@ default(value=page.content | split(pat=" ") | length) %} {% set minutes = (words
 {% endmacro reading_time %} {% macro post_meta(page) %}
 <div class="post-meta">
   <span><strong>{{ page.date }}</strong></span>
-  {{ self::reading_time(page=page) }} {% if page.taxonomies.tags %} {% for tag in
-  page.taxonomies.tags %}
+  {{ self::reading_time(page=page) }} {% if page.taxonomies.tags %} {% for tag
+  in page.taxonomies.tags %}
   <a
     class="badge-taxonomy"
     href="{{ get_taxonomy_url(kind='tags', name=tag, lang=lang) }}"

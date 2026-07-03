@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block content %}
 <section class="section">
   <h1 class="site-title">{{ section.title }}</h1>
-  <p class="tagline">{{ config.extra.tagline }}</p>
+  <p class="tagline">{{ trans(key="tagline", lang=lang) }}</p>
 </section>
 
 <section class="section-wide">
@@ -13,7 +13,9 @@
   <h2>{{ trans(key="heading_skills", lang=lang) }}</h2>
   {% for group in config.extra.skills %}
   <div class="hstack mb-2">
-    <strong class="skill-label">{{ group.category }}:</strong>
+    <strong class="skill-label"
+      >{{ trans(key="skill_" ~ group.category | lower, lang=lang) }}:</strong
+    >
     {% for skill in group.items %}
     <span class="badge">{{ skill }}</span>
     {% endfor %}
@@ -24,8 +26,8 @@
 <section class="section">
   <h2>{{ trans(key="heading_recent_posts", lang=lang) }}</h2>
   <ul class="unstyled vstack">
-    {% set blog = get_section(path="blog/_index.md", lang=lang) %} {% for post in
-    blog.pages | slice(end=3) %}
+    {% set blog = get_section(path="blog/_index.md", lang=lang) %} {% for post
+    in blog.pages | slice(end=3) %}
     <li>
       <a href="{{ post.permalink | safe }}">{{ post.title }}</a>
       <span class="text-light">&middot; {{ post.date }}</span>

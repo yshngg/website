@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block breadcrumb_extra %}<span>/</span
+><strong>{{ trans(key="nav_tags", lang=lang) }}</strong>{% endblock %} {% block
+content %}
 <h1 class="title">{{ taxonomy.name }}</h1>
 <ul class="unstyled vstack">
   {% for term in terms %}
