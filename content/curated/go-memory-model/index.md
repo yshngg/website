@@ -1,14 +1,12 @@
 +++
 title = "The Go Memory Model"
 weight = 16
-description = "Go goroutine memory synchronization and sequential consistency"
-
 [extra]
 author = "The Go Team"
 original_url = "https://go.dev/ref/mem"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 Version of June 6, 2022

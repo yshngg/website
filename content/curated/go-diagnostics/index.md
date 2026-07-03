@@ -1,14 +1,12 @@
 +++
 title = "Go Diagnostics"
 weight = 15
-description = "Go profiling, tracing, debugging and runtime diagnostics"
-
 [extra]
 author = "The Go Team"
 original_url = "https://go.dev/doc/diagnostics"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 ## Introduction

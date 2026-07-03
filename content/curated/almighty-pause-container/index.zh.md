@@ -7,7 +7,7 @@ author = "Ian Lewis"
 original_url = "https://www.ianlewis.org/en/almighty-pause-container"
 
 [taxonomies]
-category = ["Containers"]
+tags = ["Containers"]
 +++
 
 在查看 Kubernetes 集群节点时，你可能注意到在节点上运行 `docker ps` 时会看到一些名为 `pause` 的容器在运行。

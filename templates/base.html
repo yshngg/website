@@ -43,37 +43,47 @@
   <body>
     <nav data-topnav>
       <div class="nav-inner">
+        {% block breadcrumb %} {% if lang == "en" %}{% set lang_prefix = "" %}{%
+        else %}{% set lang_prefix = "/" ~ lang %}{% endif %} {% set root_url =
+        lang_prefix ~ "/" %} {% set blog_url = lang_prefix ~ "/blog/" %} {% set
+        curated_url = lang_prefix ~ "/curated/" %}
         <div class="hstack">
-          {% if current_path %}
-          {% set is_root = current_path == "/" or current_path == "/zh/" %}
-          {% set in_blog = current_path is starting_with("/blog/") or current_path is starting_with("/zh/blog/") %}
-          {% set in_curated = current_path is starting_with("/curated/") or current_path is starting_with("/zh/curated/") %}
-          {% if is_root %}
-            <strong>{{ trans(key="nav_home", lang=lang) }}</strong>
+          {% if current_path %} {% if current_path == root_url %}
+          <strong id="nav-home">{{ trans(key="nav_home", lang=lang) }}</strong>
           {% else %}
-            <a href="{{ get_url(path='@/_index.md', lang=lang) }}">{{ trans(key="nav_home", lang=lang) }}</a>
-            {% if in_blog %}
-              <span>/</span>
-              {% if current_path == "/blog/" or current_path == "/zh/blog/" %}
-                <strong>{{ trans(key="nav_blog", lang=lang) }}</strong>
-              {% else %}
-                <a href="{{ get_url(path='@/blog/_index.md', lang=lang) }}">{{ trans(key="nav_blog", lang=lang) }}</a>
-                <span>/</span>
-                <strong>{{ page.title }}</strong>
-              {% endif %}
-            {% elif in_curated %}
-              <span>/</span>
-              {% if current_path == "/curated/" or current_path == "/zh/curated/" %}
-                <strong>{{ trans(key="nav_curated", lang=lang) }}</strong>
-              {% else %}
-                <a href="{{ get_url(path='@/curated/_index.md', lang=lang) }}">{{ trans(key="nav_curated", lang=lang) }}</a>
-                <span>/</span>
-                <strong>{{ page.title }}</strong>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-          {% endif %}
+          <a id="nav-home" href="{{ get_url(path='@/_index.md', lang=lang) }}"
+            >{{ trans(key="nav_home", lang=lang) }}</a
+          >
+          {% endif %} {% else %}
+          <a id="nav-home" href="{{ get_url(path='@/_index.md', lang=lang) }}"
+            >{{ trans(key="nav_home", lang=lang) }}</a
+          >
+          {% endif %} {% if current_path and current_path != root_url %} {% set
+          in_blog = current_path is starting_with(blog_url) %} {% set in_curated
+          = current_path is starting_with(curated_url) %} {% if in_blog %}
+          <span>/</span>
+          {% if current_path == blog_url %}
+          <strong>{{ trans(key="nav_blog", lang=lang) }}</strong>
+          {% else %}
+          <a href="{{ get_url(path='@/blog/_index.md', lang=lang) }}"
+            >{{ trans(key="nav_blog", lang=lang) }}</a
+          >
+          <span>/</span>
+          <strong>{{ page.title }}</strong>
+          {% endif %} {% elif in_curated %}
+          <span>/</span>
+          {% if current_path == curated_url %}
+          <strong>{{ trans(key="nav_curated", lang=lang) }}</strong>
+          {% else %}
+          <a href="{{ get_url(path='@/curated/_index.md', lang=lang) }}"
+            >{{ trans(key="nav_curated", lang=lang) }}</a
+          >
+          <span>/</span>
+          <strong>{{ page.title }}</strong>
+          {% endif %} {% else %} {% block breadcrumb_extra %}{% endblock %} {%
+          endif %} {% endif %}
         </div>
+        {% endblock %}
         <div class="hstack justify-end">
           <a href="https://x.com/yshnggdev" target="_blank"
             >{{ trans(key="nav_x", lang=lang) }}</a

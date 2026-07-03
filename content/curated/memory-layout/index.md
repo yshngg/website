@@ -7,7 +7,7 @@ author = "GeeksforGeeks"
 original_url = "https://www.geeksforgeeks.org/c/memory-layout-of-c-program/"
 
 [taxonomies]
-category = ["Systems"]
+tags = ["Systems"]
 +++
 
 ## Practical Examples

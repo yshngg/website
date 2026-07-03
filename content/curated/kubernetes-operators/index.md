@@ -7,7 +7,7 @@ author = "Brandon Philips"
 original_url = "https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html"
 
 [taxonomies]
-category = ["Kubernetes"]
+tags = ["Kubernetes"]
 +++
 
 A Site Reliability Engineer (SRE) is a person that operates an application by writing software. They are an engineer, a developer, who knows how to develop software specifically for a particular application domain. The resulting piece of software has an application's operational domain knowledge programmed into it.

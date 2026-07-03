@@ -2,6 +2,9 @@
 title = "Rust Ownership Basics"
 date = 2024-01-10
 description = "Understanding Rust's ownership model for safe memory management"
+
+[taxonomies]
+tags = ["Systems"]
 +++
 
 Rust's ownership system guarantees memory safety without a garbage collector. Three rules:

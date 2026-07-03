@@ -3,7 +3,7 @@ title = "How to add Kubernetes-powered leader election to your Go apps"
 weight = 22
 
 [taxonomies]
-category = ["Kubernetes"]
+tags = ["Kubernetes"]
 +++
 
 The Kubernetes standard library is full of gems, hidden away in many of the various subpackages that are part of the ecosystem. One such example that I discovered recently [k8s.io/client-go/tools/leaderelection](https://pkg.go.dev/k8s.io/client-go/tools/leaderelection), which can be used to add a leader election protocol to any application running inside a Kubernetes cluster. This article will discuss what leader election is, how it's implemented in this Kubernetes package, and provide an example of how we can use this library in our own applications.

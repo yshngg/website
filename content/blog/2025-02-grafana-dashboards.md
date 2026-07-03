@@ -2,6 +2,9 @@
 title = "Building Effective Grafana Dashboards"
 date = 2025-02-14
 description = "Best practices for observability dashboards"
+
+[taxonomies]
+tags = ["Observability"]
 +++
 
 Good dashboards answer specific questions. Focus on SRE golden signals: latency, traffic, errors, and saturation.

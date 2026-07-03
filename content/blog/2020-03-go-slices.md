@@ -2,6 +2,9 @@
 title = "Understanding Go Slices"
 date = 2020-03-15
 description = "A deep dive into Go slice internals, capacity, and performance"
+
+[taxonomies]
+tags = ["Go"]
 +++
 
 Go slices are a powerful abstraction over arrays. They provide a flexible, dynamic view into array elements.

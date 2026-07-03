@@ -7,7 +7,7 @@ author = "Bartlomiej Plotka"
 original_url = "https://prometheus.io/blog/2021/11/16/agent-mode/"
 
 [taxonomies]
-category = ["Observability"]
+tags = ["Observability"]
 +++
 
 What I personally love in the Prometheus project, and one of the many reasons why I joined the team, was the laser focus on the project's goals. Prometheus was always about pushing boundaries when it comes to providing pragmatic, reliable, cheap, yet invaluable metric-based monitoring. Prometheus' ultra-stable and robust APIs, query language, and integration protocols (e.g. Remote Write and [OpenMetrics](https://openmetrics.io/)) allowed the Cloud Native Computing Foundation (CNCF) metrics ecosystem to grow on those strong foundations. Amazing things happened as a result:

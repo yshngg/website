@@ -6,34 +6,8 @@ weight = 24
 author = "lantaol@google.com"
 
 [taxonomies]
-category = ["Kubernetes"]
+tags = ["Kubernetes"]
 +++
-
-- [Objective](#Objective)
-- [Background](#Background)
-  - [Motivation](#Motivation)
-  - [Requirements](#Requirements)
-- [Overview](#Overview)
-  - [Key Concepts](#Key_Concepts)
-  - [v0 (Kubernetes v1.3)](<#v0_(Kubernetes_v1.3)>)
-  - [Future (Kubernetes v1.4 and beyond)](<#Future_(Kubernetes_v1.4_and_beyond)>)
-  - [OutOfScope](#OutOfScope)
-  - [System Diagram](#System_Diagram)
-- [Detailed Design](#Detailed_Design)
-  - [API](#API)
-    - [Problem Type](#Problem_Type)
-    - [NodeCondition](#NodeCondition)
-    - [Event](#Event)
-  - [Architecture](#Architecture)
-    - [Proposals](#Proposals)
-  - [Deployment](#Deployment)
-    - [Proposals](#Proposals-1)
-  - [Report Pipeline](#Report_Pipeline)
-    - [Problem Daemon \-\> NodeProblemDetector](#Problem_Daemon_->_NodeProblemDetector)
-    - [NodeProblemDetector \-\> APIServer](#NodeProblemDetector_->_APIServer)
-  - [Problem Report Interface](#Problem_Report_Interface)
-  - [LogMonitor](#LogMonitor)
-- [Project Information](#Project_Information)
 
 # Objective
 

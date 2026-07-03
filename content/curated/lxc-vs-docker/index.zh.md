@@ -7,7 +7,7 @@ author = "Jason Perlow"
 original_url = "https://www.docker.com/blog/lxc-vs-docker/"
 
 [taxonomies]
-category = ["Containers"]
+tags = ["Containers"]
 +++
 
 在当今不断演进的软件开发领域，**容器化技术** 已成为提高开发效率并保证环境一致性的关键工具。如今可用的多种容器技术中，**Linux 容器（LXC）** 与 **Docker** 是最受欢迎的两种选择。了解它们之间的差异，对于开发者选择最符合项目需求的工具非常重要。

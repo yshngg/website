@@ -2,6 +2,9 @@
 title = "Docker Multi-Stage Builds"
 date = 2023-04-18
 description = "Optimizing Docker images with multi-stage builds"
+
+[taxonomies]
+tags = ["Containers"]
 +++
 
 Multi-stage builds let you use multiple FROM statements in your Dockerfile, copying artifacts from one stage to another.

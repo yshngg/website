@@ -3,7 +3,7 @@ title = "containerd Design"
 weight = 31
 
 [taxonomies]
-category = ["Containers"]
+tags = ["Containers"]
 +++
 
 ## Architecture

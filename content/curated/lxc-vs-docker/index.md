@@ -7,7 +7,7 @@ author = "Jason Perlow"
 original_url = "https://www.docker.com/blog/lxc-vs-docker/"
 
 [taxonomies]
-category = ["Containers"]
+tags = ["Containers"]
 +++
 
 In today's evolving software development landscape, [containerization technology](https://www.docker.com/resources/what-container/) has emerged as a key tool for developers aiming to enhance efficiency and ensure consistency across environments. Among the various container technologies available today, Linux Containers (LXC) and Docker are two of the most popular choices. Understanding the differences between these technologies is crucial for developers to select the right tool that aligns with their specific project needs.

@@ -6,7 +6,7 @@ weight = 12
 author = "Andrew Gerrand"
 
 [taxonomies]
-category = ["Go"]
+tags = ["Go"]
 +++
 
 ### Names matter

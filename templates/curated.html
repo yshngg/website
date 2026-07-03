@@ -1,11 +1,13 @@
 {% extends "base.html" %} {% block content %}
 <h1 class="title">{{ section.title }}</h1>
 
-{% set categories = ["Go", "Kubernetes", "Containers", "Systems",
-"Observability"] %} {% for cat_name in categories %}
-<h2>{{ trans(key="cat_" ~ cat_name | lower, lang=lang) }}</h2>
+{% set all_tags = [] %} {% for page in section.pages %} {% if
+page.taxonomies.tags %} {% for tag in page.taxonomies.tags %} {% if tag not in
+all_tags %} {% set_global all_tags = all_tags | concat(with=tag) %} {% endif %}
+{% endfor %} {% endif %} {% endfor %} {% for tag_name in all_tags | sort %}
+<h2>{{ trans(key="tag_" ~ tag_name | lower, lang=lang) }}</h2>
 <ul>
-  {% for page in section.pages %} {% if cat_name in page.taxonomies.category %}
+  {% for page in section.pages %} {% if tag_name in page.taxonomies.tags %}
   <li>
     <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
     {% if page.description %} &middot; {{ page.description }}{% endif %}
