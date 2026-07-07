@@ -45,7 +45,7 @@ For all its flaws, `statsd` was a *game changer*, its popularity and ubiquity be
 > - Distributed systems tracing infrastructure
 > - Log aggregation/analytics
 
-"Observability", according to this definition, is a *superset* of "monitoring", providing certain benefits and insights that "monitoring" tools come a cropper at. Before examining what these gains might be and when they are even needed, let's first understand what "monitoring" really is, what its shortcomings are and why "monitoring" alone isn't sufficient for certainuse cases.
+"Observability", according to this definition, is a *superset* of "monitoring", providing certain benefits and insights that "monitoring" tools come a cropper at. Before examining what these gains might be and when they are even needed, let's first understand what "monitoring" really is, what its shortcomings are and why "monitoring" alone isn't sufficient for certain use cases.
 
 ## Monitoring is for symptom based Alerting
 
@@ -53,7 +53,7 @@ The [SRE book](https://landing.google.com/sre/book/index.html) states:
 
 > Your monitoring system should address two questions: what's broken, and why? The "what's broken" indicates the symptom; the "why" indicates a (possibly intermediate) cause."What" versus "why" is one of the most important distinctions in writing good monitoring with maximum signal and minimum noise.
 
-Blackbox monitoring — that is, monitoring a system from the outside by treating it as a blackbox — is something I find very good at answering the *what is broken* andalerting about a problem that's already occurring (and ideally end user-impacting). Whitebox monitoring, on the other hand, is fantastic for the signals we can *anticipate* in advance and be on the lookout for. In other words, whitebox monitoring is for the ***known, hard*** failure modes of a system, the sort that lend themselves well toward exhibiting any deviation in a *dashboardable* manner, as it were.
+Blackbox monitoring — that is, monitoring a system from the outside by treating it as a blackbox — is something I find very good at answering the *what is broken* and alerting about a problem that's already occurring (and ideally end user-impacting). Whitebox monitoring, on the other hand, is fantastic for the signals we can *anticipate* in advance and be on the lookout for. In other words, whitebox monitoring is for the ***known, hard*** failure modes of a system, the sort that lend themselves well toward exhibiting any deviation in a *dashboardable* manner, as it were.
 
 A good example of something that needs "monitoring" would be a storage server running out of disk space or a proxy server running out of file descriptors. An I/O bound service has different failure modes compared to a memory bound one. An AP system has different failure modes compared to a CP system.
 
@@ -65,7 +65,7 @@ The more mature a system, the better understood are its failure modes. Battle ha
 
 As strange as it might sound, I'm beginning to think one of the design goals while building systems should be to make it as *monitorable* as possible — which means minimizing the number of unknown-unknowns. For monitoring to be *effective,* it becomes salient to be able to identify a small set of hard failure modes of a system or a core set of metrics that can indicate the health of the system accurately. Some believe that the ideal number of signals to be "monitored" is anywhere between 3–5, and definitely no more than 7-10. One of the common pain points that keeps cropping up in my conversations with friends is how *noisy* their "monitoring" is. Or as one of my friends put it,
 
-> We have a **ton**of metrics. We try to collect ***everything***but the vast majority of these metrics are never looked at. It leads to a case of severe metric fatigue to the point where some of our engineers now don't see the point of adding new metrics to the mix, because why bother when only a handful are ever really used?
+> We have a **ton** of metrics. We try to collect ***everything*** but the vast majority of these metrics are never looked at. It leads to a case of severe metric fatigue to the point where some of our engineers now don't see the point of adding new metrics to the mix, because why bother when only a handful are ever really used?
 
 This is something the SRE book warns against:
 
@@ -75,7 +75,7 @@ This is something the SRE book warns against:
 > — Data collection, aggregation, and alerting configuration that is rarely exercised (e.g., less than once a quarter for some SRE teams) should be up for removal.
 > — Signals that are collected, but not exposed in any prebaked dashboard nor used by any alert, are candidates for removal.
 
-The corollary of the aforementioned points is that *monitoring* dataneeds to *actionable.* What I've gathered talking to many people is that when not used to directly drive alerts, monitoring data should be optimized for providing a bird's eye view of the *overall health* of a system. In the event of a failure, monitoring data should immediately be able to provide visibility into impact of the failure as well as the effect of any fix deployed. The crucial thing to understand here is that monitoring doesn't guarantee that failure can be completely avoided. Monitoring provides a good *approximation* of the health of a system, but monitoring doesn't *prevent* failure entirely.
+The corollary of the aforementioned points is that *monitoring* data needs to be *actionable.* What I've gathered talking to many people is that when not used to directly drive alerts, monitoring data should be optimized for providing a bird's eye view of the *overall health* of a system. In the event of a failure, monitoring data should immediately be able to provide visibility into impact of the failure as well as the effect of any fix deployed. The crucial thing to understand here is that monitoring doesn't guarantee that failure can be completely avoided. Monitoring provides a good *approximation* of the health of a system, but monitoring doesn't *prevent* failure entirely.
 
 I feel especially poignant writing this because just the previous week we had several hours of degraded performance where I work. It wasn't a void in our monitoring that caused it. It was MySQL exhibiting one of its nastiest failure modes. Boring old MySQL which was chosen a few years ago with eyes wide open for its boringness and its maturity and our prior experience with it. Boring old MySQL which was the right choice when it was introduced into the stack, which isn't the right choice anymore given our evolving needs. Like monitoring, boring technology, in and of itself, isn't a panacea.
 
