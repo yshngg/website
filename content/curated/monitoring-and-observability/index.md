@@ -22,7 +22,7 @@ He was only half joking. I've heard several variations of this zinger, some of t
 
 So then. What is the difference between "monitoring" and "observability", if any? Or is the latter just the latest buzzword on the block, to be flogged and shoved down our throats until it has been milked for all its worth?
 
-## Once upon a time there was “Monitoring”
+## Once upon a time there was Monitoring
 
 "Monitoring" traditionally was a preserve of Operations engineers. The term often invokes not very pleasant memories in minds of many who've been doing it for long enough they can remember the time when Nagios was state-of-the-art. In the eyes of many, "monitoring" harks back to many dysfunctional aspects of the old school way of operating software, not least the unsophistication of tooling available back in the day that ruled the roost so consummately that the term "monitoring" to this day causes some people to think of simple up/down checks.
 
@@ -83,7 +83,7 @@ I feel especially poignant writing this because just the previous week we had se
 
 Monitoring can furnish one with a panoramic view of systems' performance and behavior in the wild. Monitoring can also greatly assist in understanding the shortcomings and the evolving needs of a system by dint of invalidating one's assumptions about the system design choices. Monitoring, as such, is an absolute *requirement* for building, operating and running systems. It, however, does not make our systems completely *impregnable* to failure, and that shouldn't be its *goal* either.
 
-## And then there's “Observability”
+## And then there's Observability
 
 Quoting the SRE book again:
 
