@@ -274,6 +274,38 @@ nav[data-topnav] .nav-inner {
   display: none;
 }
 
+html[data-color-scheme="light"] {
+  color-scheme: light;
+}
+html[data-color-scheme="dark"] {
+  color-scheme: dark;
+}
+
+#theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg);
+  padding: 0.25rem;
+  border-radius: var(--radius);
+  transition: color var(--transition-fast);
+}
+#theme-toggle:hover {
+  color: var(--primary);
+}
+
+#theme-toggle svg {
+  display: none;
+}
+html[data-color-scheme="light"] #theme-toggle .icon-sun,
+html[data-color-scheme="dark"] #theme-toggle .icon-moon,
+html:not([data-color-scheme]) #theme-toggle .icon-auto {
+  display: block;
+}
+
 @media (max-width: 640px) {
   .container {
     padding-inline-start: 1rem;
