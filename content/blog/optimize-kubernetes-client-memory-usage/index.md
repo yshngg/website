@@ -119,9 +119,15 @@ Related reading:
 There are now many ways to reduce Kubernetes client memory usage — configuring ListOptions fields, feature gates, transform functions, and memory limits. The Kubernetes community continues to improve [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) and List/Watch calls.
 
 [^1]: <https://en.wikipedia.org/wiki/Out_of_memory>
+
 [^2]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/cmd/kube-controller-manager/app/controllermanager.go#L531-L551>
+
 [^3]: <https://github.com/kubernetes/kube-state-metrics/blob/v2.19.0/pkg/watch/watch.go#L114-L116>
+
 [^4]: <https://github.com/kubernetes/kubernetes/pull/139308>
+
 [^5]: <https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3157-watch-list>
+
 [^6]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359>
+
 [^7]: <https://go.dev/doc/gc-guide#Memory_limit>

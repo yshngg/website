@@ -122,16 +122,16 @@ kube-state-metrics 中自动检测内存限制的具体实现：https://github.c
 
 现在有很多手段来优化 Kubernetes 客户端的内存用量，包括配置 ListOptions 字段和特性门控等。Kubernetes 社区也在持续不断地优化 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer)， List/Watch 调用。
 
-[^1]: https://en.wikipedia.org/wiki/Out_of_memory
+[^1]: <https://en.wikipedia.org/wiki/Out_of_memory>
 
-[^2]: https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/cmd/kube-controller-manager/app/controllermanager.go#L531-L551
+[^2]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/cmd/kube-controller-manager/app/controllermanager.go#L531-L551>
 
-[^3]: https://github.com/kubernetes/kube-state-metrics/blob/v2.19.0/pkg/watch/watch.go#L114-L116
+[^3]: <https://github.com/kubernetes/kube-state-metrics/blob/v2.19.0/pkg/watch/watch.go#L114-L116>
 
-[^4]: https://github.com/kubernetes/kubernetes/pull/139308
+[^4]: <https://github.com/kubernetes/kubernetes/pull/139308>
 
-[^5]: https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3157-watch-list
+[^5]: <https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3157-watch-list>
 
-[^6]: https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359
+[^6]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359>
 
-[^7]: https://go.dev/doc/gc-guide#Memory_limit
+[^7]: <https://go.dev/doc/gc-guide#Memory_limit>
