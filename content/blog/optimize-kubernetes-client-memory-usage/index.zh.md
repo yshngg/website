@@ -11,31 +11,29 @@ tags = ["Kubernetes"]
 
 ## 背景
 
-在扩展 Kubernetes 集群功能时，有时我们需要用客户端库 [k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) 编码客户端与 Kubernetes API server 进行交流，List/Watch 资源，并做一些事情。比如 [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)，List/Watch Pod/Deployment/Job/Daemonset/Job 等资源，并由资源信息生成和透出一些 Prometheus 指标。再比如 [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) List/Watch ServiceMonitor/PodMonitor 等资源更新 Prometheus 配置文件以采集指标。
+在扩展 Kubernetes 集群功能时，有时我们需要用客户端库 [k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) 编码客户端与 Kubernetes API server 通信，List/Watch 资源，并做一些事情。比如 [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics)，List/Watch Pod/Deployment/Job/Daemonset/Job 等资源，基于资源信息生成 Prometheus 指标，再透出供 Prometheus 应用程序抓取。再比如 [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) List/Watch ServiceMonitor/PodMonitor 等资源更新 [Prometheus 配置文件](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration-file) 以采集指标。
 
-客户端库 [k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) 使用 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) 缓存资源到内存中以减少对 Kubernetes API server 的请求数量，从而减轻 Kubernetes API server 的 CPU/内存压力。问题在于 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) 会先 List 所有的资源，比如所有的 Job 或 所有的 ServiceMonitor。如果集群中有大量资源，就算 Kubernetes API server 及时响应了客户端（如果请求的数据量很大， Kubernetes API server 响应速度很慢，有可能会超时），全部缓存到内存中，也会导致客户端内存用量暴涨，若客户端工作负载的资源 limit 配置不当或所在节点资源不足，有发生 OOM[^1] 的风险。
+客户端库 [k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) 使用 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) 缓存 Kubernetes 集群中资源到内存中以减少对 Kubernetes API server 的请求数量，从而减轻 Kubernetes API server 的 CPU/内存压力。问题在于 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) 会先 List 所有的资源，比如所有的 Job 或 所有的 ServiceMonitor。如果集群中有大量资源，就算 Kubernetes API server 及时响应了客户端（如果请求的数据量很大， Kubernetes API server 响应速度很慢，有可能会超时），全部缓存到内存中，也会导致客户端内存用量暴涨，若客户端工作负载的资源 limit 配置不当或所在节点资源不足，有发生 OOM[^1] 的风险。
 
 ## 如何做
 
-作为客户端开发者，我们应该优化代码，降低内存使用，保障服务稳定运行。我阅读了 Kubernetes 组件源码后总结了下面这几种手段。
+作为客户端开发者，我们应该优化代码，降低内存使用，保障服务稳定运行。阅读了一些 Kubernetes 组件源码后我总结了下面这几种手段。
 
 ### 1. WithTransform
 
-[WithTransform](https://pkg.go.dev/k8s.io/client-go@v0.36.0/informers#WithTransform)
+> 通过 [WithTransform](https://pkg.go.dev/k8s.io/client-go@v0.36.0/informers#WithTransform) 裁剪对象，删除对象中用不上的字段，比如 ManagedFields。
 
 ```go
 func WithTransform(transform cache.TransformFunc) SharedInformerOption
 ```
 
-> 通过 WithTransform 裁剪对象，删除对象中用不上的字段，比如 ManagedFields。
-
 WithTransform 将一个 TransformFunc 配置在图中的 Delta Fifo 队列中，当 Refactor List/Watch 对象 新增/更新/删除时，在添加到 Delta Fifo 队列之前先进行裁剪，不在内存中缓存无用的信息。
 
 ![](client-go-controller-interaction.jpeg)
 
-Image source: https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359
+图片来源：<https://github.com/kubernetes/sample-controller/blob/v0.36.0/docs/images/client-go-controller-interaction.jpeg>
 
-例如：kube-controller-manager 中通过 WithTransform 裁剪 Kubernetes API server 返回的对象中的 ManagedFields 字段[^2]。
+例如：kube-controller-manager 中通过 [WithTransform](https://pkg.go.dev/k8s.io/client-go@v0.36.0/informers#WithTransform) 裁剪 Kubernetes API server 返回的对象中的 ManagedFields 字段[^2]。
 
 ```go
 // Informer transform to trim ManagedFields for memory efficiency.
@@ -50,7 +48,7 @@ trim := func(obj interface{}) (interface{}, error) {
 sharedInformers := informers.NewSharedInformerFactoryWithOptions(client, ResyncPeriod(s)(), informers.WithTransform(trim))
 ```
 
-kube-controller-manager 中的裁剪 .metadata.managedFields 的具体实现：https://github.com/kubernetes/kubernetes/pull/118455
+kube-controller-manager 中的裁剪 .metadata.managedFields 的具体实现：<https://github.com/kubernetes/kubernetes/pull/118455>
 
 ### 2. 设置 ListOptions.ResourceVersion 为 "0"
 
@@ -66,7 +64,7 @@ if i.useAPIServerCache {
 }
 ```
 
-具体实现：https://github.com/kubernetes/kube-state-metrics/pull/1548
+具体实现：<https://github.com/kubernetes/kube-state-metrics/pull/1548>
 
 关于 ResourceVersion 的更多信息请参考：[Resource versions](https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions)。
 
@@ -76,7 +74,7 @@ if i.useAPIServerCache {
 
 ### 4. WatchListClient 特性门控[^5]
 
-通过客户端启用 WatchListClient，流式获取 List 调用的相应，而不是按块获取。Kubernetes v1.32 和 Kubernetes v1.34+ 中默认启用[^6]。
+通过客户端启用 WatchListClient，流式获取 List 调用的响应，而不是按块获取。Kubernetes v1.32 和 Kubernetes v1.34+ 中默认启用[^6]。
 
 ```go
 genericfeatures.WatchList: {
@@ -88,29 +86,29 @@ genericfeatures.WatchList: {
 },
 ```
 
-kube-apiserver 和 kube-controller-manager 中的具体实现：https://github.com/kubernetes/kubernetes/pull/132704
+kube-apiserver 和 kube-controller-manager 中的具体实现：<https://github.com/kubernetes/kubernetes/pull/132704>
 
 ### 5. List 调用指定 ListOptions.Limit
 
 可以通过 Limit 配置 List 调用返回响应的最大数量。但如果客户端启用了 WatchListClient 特性门控，[k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) 中的 [Reflector](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#Reflector) 只会进行 Watch 调用。
 
-kube-state-metrics 中的具体实现：https://github.com/kubernetes/kube-state-metrics/pull/2626
+kube-state-metrics 中的具体实现：<https://github.com/kubernetes/kube-state-metrics/pull/2626>
 
 ### 6. 设置内存软限制[^7]
 
-从 go 语言的角度，可以设置程序的内存软限制，调整 gc 回收内存频率，从而释放内存资源。
+从 go 语言的角度，可以设置程序的内存软限制（Soft Limit），调整 gc 回收内存频率，从而释放内存资源。
 
 三种方式：
 
 - 设置环境变量 `GOMEMLIMIT`
 - 通过 [runtime/debug.SetMemoryLimit](https://pkg.go.dev/runtime/debug#SetMemoryLimit) 在运行时设置
-- 使用 go `github.com/KimMachineGun/automemlimit` 包根据 cgroup 内存限制自动设置 GOMEMLIMIT
+- 使用 `github.com/KimMachineGun/automemlimit` 包根据 cgroup 内存限制自动设置 `GOMEMLIMIT`
 
-kube-state-metrics 中自动检测内存限制的具体实现：https://github.com/kubernetes/kube-state-metrics/pull/2447
+kube-state-metrics 中自动检测内存限制的具体实现：<https://github.com/kubernetes/kube-state-metrics/pull/2447>
 
 ## 社区动作
 
-> Kubernetes 社区一直在进行相关的优化，包括通过从缓存中一致性读提升集群性能，流式 List 响应，服务端分片 List 和 Watch 等。
+> Kubernetes 社区一直在进行相关的优化，包括通过从缓存中一致性读提升集群性能，流式 List 响应，服务端分片 List/Watch 等。
 
 相关博客阅读：
 
@@ -120,7 +118,9 @@ kube-state-metrics 中自动检测内存限制的具体实现：https://github.c
 
 ## 总结
 
-现在有很多手段来优化 Kubernetes 客户端的内存用量，包括配置 ListOptions 字段和特性门控等。Kubernetes 社区也在持续不断地优化 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer)， List/Watch 调用。
+现在有很多手段来优化 Kubernetes 客户端的内存用量，包括配置 ListOptions 字段和特性门控等。Kubernetes 社区也在持续不断地优化 [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) 和 List/Watch 调用。
+
+## 参考
 
 [^1]: <https://en.wikipedia.org/wiki/Out_of_memory>
 

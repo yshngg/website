@@ -21,7 +21,7 @@ As client developers, we should optimize code to reduce memory usage. Here are s
 
 ### 1. WithTransform
 
-[WithTransform](https://pkg.go.dev/k8s.io/client-go@v0.36.0/informers#WithTransform)
+> [WithTransform](https://pkg.go.dev/k8s.io/client-go@v0.36.0/informers#WithTransform) trims objects by removing unused fields, like ManagedFields.
 
 ```go
 func WithTransform(transform cache.TransformFunc) SharedInformerOption
@@ -31,7 +31,7 @@ WithTransform registers a TransformFunc in the Delta FIFO queue. Before objects 
 
 ![client-go-controller-interaction](client-go-controller-interaction.jpeg)
 
-Image source: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359>
+Image source: <https://github.com/kubernetes/sample-controller/blob/v0.36.0/docs/images/client-go-controller-interaction.jpeg>
 
 For example, kube-controller-manager uses WithTransform to strip `.metadata.managedFields` from API server responses[^2]:
 
@@ -118,16 +118,12 @@ Related reading:
 
 There are now many ways to reduce Kubernetes client memory usage — configuring ListOptions fields, feature gates, transform functions, and memory limits. The Kubernetes community continues to improve [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) and List/Watch calls.
 
+## References
+
 [^1]: <https://en.wikipedia.org/wiki/Out_of_memory>
-
 [^2]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/cmd/kube-controller-manager/app/controllermanager.go#L531-L551>
-
 [^3]: <https://github.com/kubernetes/kube-state-metrics/blob/v2.19.0/pkg/watch/watch.go#L114-L116>
-
 [^4]: <https://github.com/kubernetes/kubernetes/pull/139308>
-
 [^5]: <https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3157-watch-list>
-
 [^6]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359>
-
 [^7]: <https://go.dev/doc/gc-guide#Memory_limit>
