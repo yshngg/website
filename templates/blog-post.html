@@ -9,11 +9,18 @@ page.title }}{% endblock %} {% block content %}
 
 {% if page.translations %}
 <p>
-  {% for t in page.translations %} {% if t.lang != lang %}
-  <a href="{{ t.permalink | safe }}"
-    >{{ trans(key="lang_" ~ t.lang, lang=lang) }}</a
-  >
-  {% endif %} {% endfor %}
+  {% set_global sep = "" %}
+  {% for code in config.extra.language_order %}
+    {% if code == lang %}
+      {{ sep }}{{ trans(key="lang_" ~ code, lang=lang) }}{% set_global sep = " | " %}
+    {% else %}
+      {% for t in page.translations %}
+        {% if t.lang == code %}
+          {{ sep }}<a href="{{ t.permalink | safe }}">{{ trans(key="lang_" ~ code, lang=lang) }}</a>{% set_global sep = " | " %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
 </p>
 {% endif %}
 
