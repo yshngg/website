@@ -11,9 +11,9 @@ tags = ["Kubernetes"]
 
 ## Background
 
-When extending Kubernetes cluster functionality, we often use [k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) to interact with the Kubernetes API server, List/Watch resources, and act on them. For example, [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) Lists/Watches Pods, Deployments, Jobs, DaemonSets, etc., and exposes Prometheus metrics from resource data. [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) Lists/Watches ServiceMonitors, PodMonitors, etc., to update Prometheus configurations.
+When extending Kubernetes cluster functionality, we often use [k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) to interact with the Kubernetes API server, List/Watch resources, and act on them. For example, [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) Lists/Watches Pods, Deployments, Jobs, DaemonSets, etc., generates Prometheus metrics from resource data and exposes them for Prometheus to scrape. [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) Lists/Watches ServiceMonitors, PodMonitors, etc., to update the [Prometheus configuration file](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration-file) for scraping metrics.
 
-[k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) uses [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) to cache resources in memory, reducing requests to the API server and easing its CPU/memory pressure. The catch: SharedIndexInformer first Lists **all** resources (e.g., all Jobs or all ServiceMonitors). If the cluster has a large number of resources, caching everything in memory can cause client memory usage to spike, risking OOM[^1] if limits are misconfigured or node resources are tight.
+[k8s.io/client-go](https://pkg.go.dev/k8s.io/client-go) uses [SharedIndexInformer](https://pkg.go.dev/k8s.io/client-go@v0.36.0/tools/cache#SharedIndexInformer) to cache cluster resources in memory, reducing requests to the API server and easing its CPU/memory pressure. The catch: SharedIndexInformer first Lists **all** resources (e.g., all Jobs or all ServiceMonitors). If the cluster has a large number of resources, caching everything in memory can cause client memory usage to spike, risking OOM[^1] if limits are misconfigured or node resources are tight.
 
 ## Mitigation Strategies
 
@@ -27,13 +27,13 @@ As client developers, we should optimize code to reduce memory usage. Here are s
 func WithTransform(transform cache.TransformFunc) SharedInformerOption
 ```
 
-WithTransform registers a TransformFunc in the Delta FIFO queue. Before objects are added to the queue (on List/Watch add/update/delete), they are trimmed — unused fields are stripped out, never cached in memory.
+WithTransform places a TransformFunc in the Delta FIFO queue. Before objects are added to the queue (on List/Watch add/update/delete), they are trimmed — unused fields are stripped out, never cached in memory.
 
 ![client-go-controller-interaction](client-go-controller-interaction.jpeg)
 
 Image source: <https://github.com/kubernetes/sample-controller/blob/v0.36.0/docs/images/client-go-controller-interaction.jpeg>
 
-For example, kube-controller-manager uses WithTransform to strip `.metadata.managedFields` from API server responses[^2]:
+For example, kube-controller-manager uses [WithTransform](https://pkg.go.dev/k8s.io/client-go@v0.36.0/informers#WithTransform) to strip `.metadata.managedFields` from API server responses[^2]:
 
 ```go
 trim := func(obj interface{}) (interface{}, error) {
@@ -100,13 +100,13 @@ Three ways:
 
 - Set the `GOMEMLIMIT` environment variable
 - Use [runtime/debug.SetMemoryLimit](https://pkg.go.dev/runtime/debug#SetMemoryLimit) at runtime
-- Use the `github.com/KimMachineGun/automemlimit` package to auto-detect [cgroup](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) memory limits
+- Use the `github.com/KimMachineGun/automemlimit` package to auto-detect [cgroup](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) memory limits and auto-set `GOMEMLIMIT`
 
 kube-state-metrics auto-detection implementation: <https://github.com/kubernetes/kube-state-metrics/pull/2447>
 
 ## Community Efforts
 
-> The Kubernetes community continues to optimize — including consistent reads from cache, streaming List responses, and server-side sharded List and Watch.
+> The Kubernetes community continues to optimize — including consistent reads from cache, streaming List responses, and server-side sharded List/Watch.
 
 Related reading:
 
@@ -121,9 +121,15 @@ There are now many ways to reduce Kubernetes client memory usage — configuring
 ## References
 
 [^1]: <https://en.wikipedia.org/wiki/Out_of_memory>
+
 [^2]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/cmd/kube-controller-manager/app/controllermanager.go#L531-L551>
+
 [^3]: <https://github.com/kubernetes/kube-state-metrics/blob/v2.19.0/pkg/watch/watch.go#L114-L116>
+
 [^4]: <https://github.com/kubernetes/kubernetes/pull/139308>
+
 [^5]: <https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3157-watch-list>
+
 [^6]: <https://github.com/kubernetes/kubernetes/blob/ecf6decece6a6de25a57aad9ba90b6ce580f6f78/pkg/features/kube_features.go#L2353-L2359>
+
 [^7]: <https://go.dev/doc/gc-guide#Memory_limit>
