@@ -73,7 +73,7 @@ Enables gzip compression for WatchList requests. Enabled by default in Kubernete
 
 ### 4. WatchListClient Feature Gate[^5]
 
-Enables the WatchList client on the client side to stream List responses instead of fetching chunks. Enabled by default in Kubernetes v1.32 and v1.34+[^6].
+Enables the WatchList client on the client side to stream List responses instead of fetching in chunks. Enabled by default in Kubernetes v1.32 and v1.34+[^6].
 
 ```go
 genericfeatures.WatchList: {
