@@ -102,7 +102,7 @@ kube-state-metrics 中的具体实现：<https://github.com/kubernetes/kube-stat
 
 - 设置环境变量 `GOMEMLIMIT`
 - 通过 [runtime/debug.SetMemoryLimit](https://pkg.go.dev/runtime/debug#SetMemoryLimit) 在运行时设置
-- 使用 `github.com/KimMachineGun/automemlimit` 包根据 [cgroup v2](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) 内存限制自动设置 `GOMEMLIMIT`
+- 使用 `github.com/KimMachineGun/automemlimit` 包根据 [cgroup](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) 内存限制自动设置 `GOMEMLIMIT`
 
 kube-state-metrics 中自动检测内存限制的具体实现：<https://github.com/kubernetes/kube-state-metrics/pull/2447>
 

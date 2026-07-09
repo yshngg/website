@@ -100,7 +100,7 @@ Three ways:
 
 - Set the `GOMEMLIMIT` environment variable
 - Use [runtime/debug.SetMemoryLimit](https://pkg.go.dev/runtime/debug#SetMemoryLimit) at runtime
-- Use the `github.com/KimMachineGun/automemlimit` package to auto-detect [cgroup v2](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) memory limits
+- Use the `github.com/KimMachineGun/automemlimit` package to auto-detect [cgroup](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) memory limits
 
 kube-state-metrics auto-detection implementation: <https://github.com/kubernetes/kube-state-metrics/pull/2447>
 
