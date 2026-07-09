@@ -111,9 +111,10 @@ month_10 = "10月"
 month_11 = "11月"
 month_12 = "12月"
 lang_en = "English"
-lang_zh = "中文"
+lang_zh = "简体中文"
 
 [extra]
+language_order = ["en", "zh"]
 skills = [
   { category = "Languages", items = ["Go", "Python", "Rust", "Bash"] },
   { category = "Platforms", items = ["Kubernetes", "Docker", "Linux", "Cloud Native"] },

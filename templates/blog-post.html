@@ -7,15 +7,7 @@ page.title }}{% endblock %} {% block content %}
 
 {{ macros::post_meta(page=page) }}
 
-{% if page.translations %}
-<p>
-  {% for t in page.translations %} {% if t.lang != lang %}
-  <a href="{{ t.permalink | safe }}"
-    >{{ trans(key="lang_" ~ t.lang, lang=lang) }}</a
-  >
-  {% endif %} {% endfor %}
-</p>
-{% endif %}
+{{ macros::language_switcher(page=page) }}
 
 <div class="post-layout">
   <div class="post-toc">{% include "toc.html" %}</div>
