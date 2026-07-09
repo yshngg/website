@@ -15,4 +15,17 @@ default(value=page.content | split(pat=" ") | length) %} {% set minutes = (words
   >
   {% endfor %} {% endif %}
 </div>
-{% endmacro post_meta %}
+{% endmacro post_meta %} {% macro language_switcher(page) %} {% if page.translations %}<p>
+  {% set_global sep = "" %}
+  {% for code in config.extra.language_order %}
+    {% if code == lang %}
+      {{ sep }}{{ trans(key="lang_" ~ code, lang=lang) }}{% set_global sep = " | " %}
+    {% else %}
+      {% for t in page.translations %}
+        {% if t.lang == code %}
+          {{ sep }}<a href="{{ t.permalink | safe }}">{{ trans(key="lang_" ~ code, lang=lang) }}</a>{% set_global sep = " | " %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</p>{% endif %} {% endmacro language_switcher %}

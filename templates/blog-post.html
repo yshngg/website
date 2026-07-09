@@ -7,22 +7,7 @@ page.title }}{% endblock %} {% block content %}
 
 {{ macros::post_meta(page=page) }}
 
-{% if page.translations %}
-<p>
-  {% set_global sep = "" %}
-  {% for code in config.extra.language_order %}
-    {% if code == lang %}
-      {{ sep }}{{ trans(key="lang_" ~ code, lang=lang) }}{% set_global sep = " | " %}
-    {% else %}
-      {% for t in page.translations %}
-        {% if t.lang == code %}
-          {{ sep }}<a href="{{ t.permalink | safe }}">{{ trans(key="lang_" ~ code, lang=lang) }}</a>{% set_global sep = " | " %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-</p>
-{% endif %}
+{{ macros::language_switcher(page=page) }}
 
 <div class="post-layout">
   <div class="post-toc">{% include "toc.html" %}</div>
