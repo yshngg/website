@@ -1,8 +1,14 @@
 #vocab-app {
   margin-block: var(--space-6);
 }
-
-.vocab-toolbar {
+kbd {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  padding: 1px 4px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--accent);
+}.vocab-toolbar {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
