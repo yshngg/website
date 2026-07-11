@@ -213,8 +213,8 @@
     var ipaHTML = '';
     if (pron.uk || pron.us) {
       var parts = [];
-      if (pron.uk) parts.push('/' + pron.uk + '/');
-      if (pron.us) parts.push('/' + pron.us + '/');
+      if (pron.uk) parts.push('uk /' + pron.uk + '/');
+      if (pron.us) parts.push('us /' + pron.us + '/');
       ipaHTML = '<span class="word-ipa">' + parts.join(' ') + '</span>';
     }
 
@@ -323,9 +323,9 @@
 
     $('fc-word').textContent = entry.word;
     var ipaText = '';
-    if (pron.uk) ipaText += '/' + pron.uk + '/';
+    if (pron.uk) ipaText += 'uk /' + pron.uk + '/';
     if (pron.uk && pron.us) ipaText += '  ';
-    if (pron.us) ipaText += '/' + pron.us + '/';
+    if (pron.us) ipaText += 'us /' + pron.us + '/';
     $('fc-ipa').textContent = ipaText;
     $('fc-pos').textContent = firstPOS;
 
