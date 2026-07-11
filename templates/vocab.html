@@ -9,8 +9,8 @@
   <h1>Vocabulary</h1>
   <p class="text-light">{{ vocab | length }} words from Tech English</p>
   <p class="text-light vocab-hint">
-    {{ trans(key="vocab_desc_1", lang=lang) }}
-    <a href="https://dictionary.cambridge.org/" target="_blank">{{ trans(key="vocab_desc_2", lang=lang) }}</a>{{ trans(key="vocab_desc_3", lang=lang) }}
+    Words collected from daily reading — translations, examples, and pronunciation via
+    <a href="https://dictionary.cambridge.org/" target="_blank">Cambridge Dictionary</a>.
     <br/>
     <kbd>p</kbd> play audio &middot; <kbd>←</kbd> <kbd>→</kbd> navigate &middot; <kbd>Space</kbd> flip
   </p>
@@ -69,10 +69,6 @@
 
 <script>
 window.VOCAB_DATA = {{ vocab | json_encode | safe }};
-window.VOCAB_I18N = {
-  uk_pron: "{{ trans(key='vocab_uk_pron', lang=lang) }}",
-  us_pron: "{{ trans(key='vocab_us_pron', lang=lang) }}",
-};
 </script>
 <script src="/vocab.js"></script>
 <link href="/vocab.css" rel="stylesheet" />
