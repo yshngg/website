@@ -326,14 +326,16 @@
 
     $('fc-word').textContent = entry.word;
     var frontMeta = '';
-    if (firstPOS) frontMeta += '<span class="flashcard-pos">' + esc(firstPOS) + '</span> ';
+    if (firstPOS) frontMeta += '<div class="flashcard-pos">' + esc(firstPOS) + '</div>';
     if (pron.uk) {
-      frontMeta += '<span class="flashcard-ipa">UK /' + pron.uk + '/</span>';
+      frontMeta += '<div class="flashcard-ipa">UK /' + pron.uk + '/';
       if (audio.uk) frontMeta += ' <button onclick="window.playAudio(\'' + audio.uk + '\')" class="word-audio-btn">🔊</button>';
+      frontMeta += '</div>';
     }
     if (pron.us) {
-      frontMeta += ' <span class="flashcard-ipa">US /' + pron.us + '/</span>';
+      frontMeta += '<div class="flashcard-ipa">US /' + pron.us + '/';
       if (audio.us) frontMeta += ' <button onclick="window.playAudio(\'' + audio.us + '\')" class="word-audio-btn">🔊</button>';
+      frontMeta += '</div>';
     }
     $('fc-front-meta').innerHTML = frontMeta;
 
