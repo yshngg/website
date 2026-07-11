@@ -204,11 +204,10 @@
 
     var ipaHTML = '';
     if (pron.uk || pron.us) {
-      ipaHTML = '<span class="word-ipa">';
-      if (pron.uk) ipaHTML += 'UK ' + pron.uk;
-      if (pron.uk && pron.us) ipaHTML += ' / ';
-      if (pron.us) ipaHTML += 'US ' + pron.us;
-      ipaHTML += '</span>';
+      var parts = [];
+      if (pron.uk) parts.push('/' + pron.uk + '/');
+      if (pron.us) parts.push('/' + pron.us + '/');
+      ipaHTML = '<span class="word-ipa">' + parts.join(' ') + '</span>';
     }
 
     var audioHTML = '';
@@ -316,9 +315,9 @@
 
     $('fc-word').textContent = entry.word;
     var ipaText = '';
-    if (pron.uk) ipaText += 'UK ' + pron.uk;
-    if (pron.uk && pron.us) ipaText += '  US ' + pron.us;
-    else if (pron.us) ipaText += 'US ' + pron.us;
+    if (pron.uk) ipaText += '/' + pron.uk + '/';
+    if (pron.uk && pron.us) ipaText += '  ';
+    if (pron.us) ipaText += '/' + pron.us + '/';
     $('fc-ipa').textContent = ipaText;
     $('fc-pos').textContent = firstPOS;
 
