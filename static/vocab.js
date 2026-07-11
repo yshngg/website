@@ -71,6 +71,10 @@
     $('fc-next').addEventListener('click', fcNext);
 
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'p' || e.key === 'P') {
+        playCurrentAudio();
+        return;
+      }
       if (mode === 'flashcard') {
         if (e.key === 'ArrowLeft') fcPrev();
         else if (e.key === 'ArrowRight') fcNext();
@@ -382,6 +386,21 @@
     a.download = 'vocabulary.json';
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function playCurrentAudio() {
+    var entry;
+    if (mode === 'flashcard') {
+      entry = fcWords[fcIndex];
+    } else {
+      var firstBtn = qs('.word-audio-btn');
+      if (firstBtn) { firstBtn.click(); return; }
+      return;
+    }
+    if (!entry) return;
+    var audio = (entry.data && entry.data.audio) || {};
+    var url = audio.uk || audio.us;
+    if (url) playAudio(url);
   }
 
   function playAudio(url) {
