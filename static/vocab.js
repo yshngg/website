@@ -3,6 +3,7 @@
   var UK_PRON = 'Listen to the British English pronunciation';
   var US_PRON = 'Listen to the American English pronunciation';
   var perPage = 10;
+  var RANDOM_SIZE = 20;
   var filtered = [];
   var searchQuery = '';
   var page = 1;
@@ -71,6 +72,7 @@
 
     $('fc-prev').addEventListener('click', fcPrev);
     $('fc-next').addEventListener('click', fcNext);
+    if ($('fc-shuffle')) $('fc-shuffle').addEventListener('click', fcShuffle);
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'p' || e.key === 'P') {
@@ -80,6 +82,7 @@
       if (mode === 'flashcard') {
         if (e.key === 'ArrowLeft') fcPrev();
         else if (e.key === 'ArrowRight') fcNext();
+        else if (e.key === 's' || e.key === 'S') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
       } else if (mode === 'browse') {
         if (e.key === 'ArrowLeft') {
@@ -96,6 +99,12 @@
     $('vocab-export').addEventListener('click', exportFiltered);
   }
 
+  function pickRandom() {
+    var pool = searchQuery ? filtered : data;
+    var shuffled = pool.slice().sort(function () { return Math.random() - 0.5; });
+    return shuffled.slice(0, Math.min(RANDOM_SIZE, shuffled.length));
+  }
+
   function switchMode(newMode, restore) {
     mode = newMode;
     qsa('.vocab-mode').forEach(function (el) { el.classList.remove('active'); });
@@ -107,6 +116,7 @@
       $('vocab-flashcard').classList.add('active');
       initFlashcards(restore);
     }
+    $('vocab-app').dataset.mode = mode;
     saveState();
   }
 
@@ -274,15 +284,10 @@
   }
 
   function initFlashcards(restore) {
-    fcWords = searchQuery ? filtered : data;
+    fcWords = pickRandom();
     fcIndex = restore ? Math.min(fcIndex, Math.max(fcWords.length - 1, 0)) : 0;
     fcFlipped = false;
-    if (fcWords.length > 0) {
-      renderFlashcard();
-    } else {
-      $('fc-word').textContent = 'No words found';
-      $('flashcard-counter').textContent = '0 / 0';
-    }
+    renderFlashcard();
     saveState();
   }
 
@@ -368,20 +373,28 @@
     }
   }
 
-  function fcPrev() {
-    if (fcWords.length === 0 || fcIndex <= 0) return;
-    fcIndex--;
+  function renderCurrentCard() {
     fcFlipped = false;
     renderFlashcard();
     saveState();
   }
 
+  function fcPrev() {
+    if (fcWords.length === 0) return;
+    fcIndex = fcIndex <= 0 ? fcWords.length - 1 : fcIndex - 1;
+    renderCurrentCard();
+  }
+
   function fcNext() {
-    if (fcWords.length === 0 || fcIndex >= fcWords.length - 1) return;
-    fcIndex++;
-    fcFlipped = false;
-    renderFlashcard();
-    saveState();
+    if (fcWords.length === 0) return;
+    fcIndex = fcIndex >= fcWords.length - 1 ? 0 : fcIndex + 1;
+    renderCurrentCard();
+  }
+
+  function fcShuffle() {
+    fcWords = pickRandom();
+    fcIndex = 0;
+    renderCurrentCard();
   }
 
   function exportFiltered() {
@@ -426,9 +439,17 @@
     fetch('/vocabulary.jsonl')
       .then(function (r) { return r.text(); })
       .then(function (text) {
-        data = text.trim().split('\n').filter(Boolean).map(function (line) { return JSON.parse(line); });
-        var countEl = $('vocab-count');
-        if (countEl) countEl.textContent = data.length;
+        var seen = {};
+        data = text.trim().split('\n').filter(Boolean).map(function (line) { return JSON.parse(line); })
+          .filter(function (entry) {
+            var w = entry.word.toLowerCase();
+            if (seen[w]) return false;
+            seen[w] = true;
+            return true;
+          })
+          .sort(function (a, b) {
+            return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
+          });
         init();
       });
   }

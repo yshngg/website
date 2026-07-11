@@ -9,6 +9,9 @@
   font-size: var(--text-7);
   margin-block: 0 var(--space-6);
 }
+#vocab-app[data-mode="browse"] #vocab-hint { display: none; }
+#vocab-app[data-mode="browse"] #vocab-search { display: block; }
+#vocab-app[data-mode="flashcard"] #vocab-search { display: none; }
 kbd {
   font-family: var(--font-mono);
   font-size: 0.8em;
@@ -93,7 +96,8 @@ kbd {
   flex-wrap: wrap;
 }
 .vocab-pagination button,
-.flashcard-nav button {
+.flashcard-nav button,
+#fc-shuffle {
   background: none;
   border: none;
   color: var(--primary);
@@ -104,7 +108,8 @@ kbd {
   text-underline-offset: 2px;
 }
 .vocab-pagination button:not(:disabled):hover,
-.flashcard-nav button:hover {
+.flashcard-nav button:hover,
+#fc-shuffle:hover {
   opacity: 0.7;
 }
 .vocab-pagination button:disabled {
@@ -300,7 +305,6 @@ kbd {
   gap: var(--space-4);
   margin-block-start: var(--space-4);
 }
-
 @media (max-width: 600px) {
   .vocab-tabs {
     align-self: stretch;

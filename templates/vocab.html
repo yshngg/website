@@ -5,15 +5,13 @@
 {% block content %}
 <div id="vocab-app">
   <h1>Vocabulary</h1>
-  <p class="text-light"><span id="vocab-count">0</span> words from Tech English</p>
-  <p class="text-light vocab-hint">
+  <p id="vocab-hint" class="text-light vocab-hint">
     Words collected from daily reading — translations, examples, and pronunciation via
     <a href="https://dictionary.cambridge.org/" target="_blank">Cambridge Dictionary</a>.
     <br/>
-    <kbd>p</kbd> play audio &middot; <kbd>←</kbd> <kbd>→</kbd> navigate &middot; <kbd>Space</kbd> flip
+    <kbd>p</kbd> play audio &middot; <kbd>←</kbd> <kbd>→</kbd> navigate &middot; <kbd>Space</kbd> flip &middot; <kbd>s</kbd> shuffle
   </p>
   <div class="vocab-toolbar">
-    <input type="text" id="vocab-search" placeholder="Search words, definitions, translations..." />
     <div class="hstack">
       <div class="vocab-tabs">
         <button class="tab-btn active" data-mode="browse">Browse</button>
@@ -21,6 +19,7 @@
       </div>
       <button class="pos-btn" id="vocab-export">Export ↓</button>
     </div>
+    <input type="text" id="vocab-search" placeholder="Search words, definitions, translations..." />
   </div>
 
   <div id="vocab-content">
@@ -33,6 +32,7 @@
       <div id="flashcard-container">
         <div class="flashcard-toolbar">
           <span id="flashcard-counter">0 / 0</span>
+          <button id="fc-shuffle">Shuffle</button>
         </div>
         <div id="flashcard-card" class="flashcard" tabindex="0" title="Click to flip">
           <div class="flashcard-inner">
