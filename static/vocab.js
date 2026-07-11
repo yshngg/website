@@ -93,7 +93,10 @@
       }
     });
 
-    if ($('flashcard-card')) $('flashcard-card').addEventListener('click', fcFlip);
+    if ($('flashcard-card')) $('flashcard-card').addEventListener('click', function (e) {
+      if (!window.getSelection().isCollapsed) return;
+      fcFlip();
+    });
   }
 
   function pickRandom() {
