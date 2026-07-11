@@ -1,11 +1,10 @@
 (function () {
-  if (!window.VOCAB_DATA) return;
-
-  const data = window.VOCAB_DATA;
+  var dataEl = document.getElementById('vocab-data');
+  if (!dataEl) return;
+  const data = JSON.parse(dataEl.textContent);
   const perPage = 10;
   let filtered = data;
   let searchQuery = '';
-  let posFilter = '';
   let page = 1;
   let mode = 'browse';
 
@@ -40,16 +39,6 @@
       });
     });
 
-    qsa('.pos-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        qsa('.pos-btn').forEach(function (b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        posFilter = this.dataset.pos;
-        page = 1;
-        filterAndRender();
-      });
-    });
-
     $('fc-prev').addEventListener('click', fcPrev);
     $('fc-next').addEventListener('click', fcNext);
 
@@ -78,7 +67,7 @@
       filterAndRender();
     } else if (mode === 'flashcard') {
       $('vocab-flashcard').classList.add('active');
-      initFlashcards(posFilter);
+      initFlashcards();
     }
   }
 
@@ -112,19 +101,6 @@
           }
         }
         if (!found) return false;
-      }
-
-      if (posFilter) {
-        var hasPOS = false;
-        if (entry.data.senses) {
-          for (var i = 0; i < entry.data.senses.length; i++) {
-            if (entry.data.senses[i].pos.toLowerCase() === posFilter.toLowerCase()) {
-              hasPOS = true;
-              break;
-            }
-          }
-        }
-        if (!hasPOS) return false;
       }
 
       return true;

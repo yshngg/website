@@ -46,11 +46,6 @@
   background: var(--primary);
   color: light-dark(#fff, #09090b);
 }
-.vocab-pos-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
 .pos-btn {
   padding: 2px var(--space-3);
   border: 1px solid var(--border);
