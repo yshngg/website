@@ -176,6 +176,12 @@
         playAudio(this.dataset.url);
       });
     });
+    qsa('.word-ipa.clickable').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        playAudio(this.dataset.url);
+      });
+    });
     saveState();
   }
 
@@ -212,13 +218,21 @@
 
     var pronAudioHTML = '';
     if (pron.uk) {
-      pronAudioHTML += '<span class="word-ipa">UK /' + pron.uk + '/</span>';
-      if (audio.uk) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.uk) + '">🔊</button> ';
+      pronAudioHTML += '<span class="word-ipa';
+      if (audio.uk) pronAudioHTML += ' clickable';
+      pronAudioHTML += '"';
+      if (audio.uk) pronAudioHTML += ' title="Click to play" data-url="' + esc(audio.uk) + '"';
+      pronAudioHTML += '>UK /' + pron.uk + '/</span>';
+      if (audio.uk) pronAudioHTML += '<button class="word-audio-btn" title="Click to play" data-url="' + esc(audio.uk) + '">🔊</button> ';
     }
     if (pron.us) {
       if (pron.uk) pronAudioHTML += ' ';
-      pronAudioHTML += '<span class="word-ipa">US /' + pron.us + '/</span>';
-      if (audio.us) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.us) + '">🔊</button> ';
+      pronAudioHTML += '<span class="word-ipa';
+      if (audio.us) pronAudioHTML += ' clickable';
+      pronAudioHTML += '"';
+      if (audio.us) pronAudioHTML += ' title="Click to play" data-url="' + esc(audio.us) + '"';
+      pronAudioHTML += '>US /' + pron.us + '/</span>';
+      if (audio.us) pronAudioHTML += '<button class="word-audio-btn" title="Click to play" data-url="' + esc(audio.us) + '">🔊</button> ';
     }
     // fallback: audio without pronunciation
     if (!pron.uk && !pron.us) {
@@ -328,12 +342,12 @@
     var frontMeta = '';
     if (firstPOS) frontMeta += '<div class="flashcard-pos">' + esc(firstPOS) + '</div>';
     if (pron.uk) {
-      frontMeta += '<div class="flashcard-ipa">UK /' + pron.uk + '/';
+      frontMeta += '<div class="flashcard-ipa"' + (audio.uk ? ' title="Click to play"' : '') + '>UK /' + pron.uk + '/';
       if (audio.uk) frontMeta += ' <button onclick="window.playAudio(\'' + audio.uk + '\')" class="word-audio-btn">🔊</button>';
       frontMeta += '</div>';
     }
     if (pron.us) {
-      frontMeta += '<div class="flashcard-ipa">US /' + pron.us + '/';
+      frontMeta += '<div class="flashcard-ipa"' + (audio.us ? ' title="Click to play"' : '') + '>US /' + pron.us + '/';
       if (audio.us) frontMeta += ' <button onclick="window.playAudio(\'' + audio.us + '\')" class="word-audio-btn">🔊</button>';
       frontMeta += '</div>';
     }
