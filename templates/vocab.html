@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Vocabulary - {{ config.title }}{% endblock %}
+
+{% block content %}
+{% set vocab = load_data(path="data/vocabulary.json") %}
+
+<h1>Vocabulary</h1>
+<p class="text-light">{{ vocab | length }} words from Tech English</p>
+<p class="text-light" style="font-size: var(--text-7); margin-block: 0 var(--space-6);">
+  {{ trans(key="vocab_desc_1", lang=lang) }}
+  <a href="https://dictionary.cambridge.org/" target="_blank">{{ trans(key="vocab_desc_2", lang=lang) }}</a>{{ trans(key="vocab_desc_3", lang=lang) }}
+</p>
+
+<div id="vocab-app" data-total="{{ vocab | length }}">
+  <div class="vocab-toolbar">
+    <input type="text" id="vocab-search" placeholder="Search words, definitions, translations..." />
+    <div class="vocab-tabs">
+      <button class="tab-btn active" data-mode="browse">Browse</button>
+      <button class="tab-btn" data-mode="flashcard">Flashcards</button>
+    </div>
+    <div class="vocab-pos-filters" id="vocab-pos-filters">
+      <button class="pos-btn active" data-pos="">All</button>
+      <button class="pos-btn" data-pos="verb">Verb</button>
+      <button class="pos-btn" data-pos="noun">Noun</button>
+      <button class="pos-btn" data-pos="adjective">Adj</button>
+      <button class="pos-btn" data-pos="adverb">Adv</button>
+      <button class="pos-btn" data-pos="preposition">Prep</button>
+      <button class="pos-btn" data-pos="phrasal verb">Phrasal</button>
+      <button class="pos-btn" data-pos="idiom">Idiom</button>
+      <button class="pos-btn" data-pos="exclamation">Excl</button>
+      <button class="pos-btn" data-pos="conjunction">Conj</button>
+      <button class="pos-btn" data-pos="number">Num</button>
+      <button class="pos-btn" id="vocab-export">Export ↓</button>
+    </div>
+  </div>
+
+  <div id="vocab-content">
+    <div id="vocab-browse" class="vocab-mode active">
+      <div class="vocab-pagination" id="browse-pagination-top"></div>
+      <div id="vocab-list"></div>
+      <div class="vocab-pagination" id="browse-pagination-bottom"></div>
+    </div>
+    <div id="vocab-flashcard" class="vocab-mode">
+      <div id="flashcard-container">
+        <div class="flashcard-toolbar">
+          <span id="flashcard-counter">0 / 0</span>
+          <select id="flashcard-pos-filter">
+            <option value="">All words</option>
+            <option value="verb">Verb</option>
+            <option value="noun">Noun</option>
+            <option value="adjective">Adjective</option>
+            <option value="adverb">Adverb</option>
+          </select>
+        </div>
+        <div id="flashcard-card" class="flashcard" tabindex="0" title="Click to flip">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <div class="flashcard-word" id="fc-word"></div>
+              <div class="flashcard-ipa" id="fc-ipa"></div>
+              <div class="flashcard-pos" id="fc-pos"></div>
+              <div class="fc-audio-front" id="fc-audio-front"></div>
+            </div>
+            <div class="flashcard-back" id="fc-back">
+              <div class="fc-section">
+                <strong>Definition:</strong>
+                <div id="fc-definition"></div>
+              </div>
+              <div class="fc-section">
+                <strong>Translation:</strong>
+                <div id="fc-translation"></div>
+              </div>
+              <div class="fc-section" id="fc-examples-section">
+                <strong>Examples:</strong>
+                <div id="fc-examples"></div>
+              </div>
+              <div class="fc-audio" id="fc-audio"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flashcard-nav">
+          <button id="fc-prev">← Previous</button>
+          <button id="fc-next">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+window.VOCAB_DATA = {{ vocab | json_encode | safe }};
+</script>
+<script src="/vocab.js"></script>
+<link href="/vocab.css" rel="stylesheet" />
+{% endblock %}
