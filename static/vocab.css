@@ -1,5 +1,13 @@
 #vocab-app {
-  margin-block: var(--space-6);
+  max-width: 48rem;
+  margin-inline: auto;
+}
+#vocab-app h1 {
+  margin-block: var(--space-6) var(--space-2);
+}
+.vocab-hint {
+  font-size: var(--text-7);
+  margin-block: 0 var(--space-6);
 }
 kbd {
   font-family: var(--font-mono);
@@ -63,6 +71,15 @@ kbd {
   font-size: 0.8rem;
   transition: all var(--transition-fast);
 }
+.pos-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.flashcard-nav button:disabled {
+  opacity: 0.3;
+  cursor: default;
+  text-decoration: none;
+}
 .vocab-mode {
   display: none;
 }
@@ -112,7 +129,11 @@ kbd {
   transition: box-shadow var(--transition-fast);
 }
 .word-card:hover {
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.word-card:focus-within {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
 }
 .word-card-header {
   display: flex;
@@ -136,8 +157,7 @@ kbd {
   padding: 0 2px;
   transition: background var(--transition-fast);
 }
-.word-ipa:hover,
-.flashcard-ipa:hover {
+.word-ipa:hover {
   background: var(--accent);
   text-decoration: underline;
 }
@@ -250,7 +270,7 @@ kbd {
 }
 #fc-front-meta {
   width: 100%;
-  text-align: left;
+  text-align: center;
 }
 .flashcard-ipa {
   font-family: system-ui, -apple-system, sans-serif;

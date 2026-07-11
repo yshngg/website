@@ -5,16 +5,15 @@
 {% block content %}
 {% set vocab = load_data(path="data/vocabulary.json") %}
 
-<h1>Vocabulary</h1>
-<p class="text-light">{{ vocab | length }} words from Tech English</p>
-<p class="text-light" style="font-size: var(--text-7); margin-block: 0 var(--space-6);">
-  {{ trans(key="vocab_desc_1", lang=lang) }}
-  <a href="https://dictionary.cambridge.org/" target="_blank">{{ trans(key="vocab_desc_2", lang=lang) }}</a>{{ trans(key="vocab_desc_3", lang=lang) }}
-  <br/>
-  <kbd>p</kbd> play audio &middot; <kbd>←</kbd> <kbd>→</kbd> navigate &middot; <kbd>Space</kbd> flip
-</p>
-
 <div id="vocab-app" data-total="{{ vocab | length }}">
+  <h1>Vocabulary</h1>
+  <p class="text-light">{{ vocab | length }} words from Tech English</p>
+  <p class="text-light vocab-hint">
+    {{ trans(key="vocab_desc_1", lang=lang) }}
+    <a href="https://dictionary.cambridge.org/" target="_blank">{{ trans(key="vocab_desc_2", lang=lang) }}</a>{{ trans(key="vocab_desc_3", lang=lang) }}
+    <br/>
+    <kbd>p</kbd> play audio &middot; <kbd>←</kbd> <kbd>→</kbd> navigate &middot; <kbd>Space</kbd> flip
+  </p>
   <div class="vocab-toolbar">
     <input type="text" id="vocab-search" placeholder="Search words, definitions, translations..." />
     <div class="hstack">
@@ -36,13 +35,6 @@
       <div id="flashcard-container">
         <div class="flashcard-toolbar">
           <span id="flashcard-counter">0 / 0</span>
-          <select id="flashcard-pos-filter">
-            <option value="">All words</option>
-            <option value="verb">Verb</option>
-            <option value="noun">Noun</option>
-            <option value="adjective">Adjective</option>
-            <option value="adverb">Adverb</option>
-          </select>
         </div>
         <div id="flashcard-card" class="flashcard" tabindex="0" title="Click to flip">
           <div class="flashcard-inner">
@@ -63,7 +55,6 @@
                 <strong>Examples:</strong>
                 <div id="fc-examples"></div>
               </div>
-              <div class="fc-audio" id="fc-audio"></div>
             </div>
           </div>
         </div>

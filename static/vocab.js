@@ -90,10 +90,6 @@
       }
     });
 
-    $('flashcard-pos-filter').addEventListener('change', function () {
-      initFlashcards(this.value);
-    });
-
     $('flashcard-card').addEventListener('click', fcFlip);
     $('vocab-export').addEventListener('click', exportFiltered);
   }
@@ -107,7 +103,7 @@
       filterAndRender();
     } else if (mode === 'flashcard') {
       $('vocab-flashcard').classList.add('active');
-      initFlashcards(undefined, restore);
+      initFlashcards(restore);
     }
     saveState();
   }
@@ -276,24 +272,15 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  function initFlashcards(pos, restore) {
-    var words = data;
-    if (pos) {
-      words = data.filter(function (entry) {
-        if (!entry.data.senses) return false;
-        for (var i = 0; i < entry.data.senses.length; i++) {
-          if (entry.data.senses[i].pos.toLowerCase() === pos.toLowerCase()) return true;
-        }
-        return false;
-      });
-    }
-    fcWords = words;
-    fcIndex = restore ? Math.min(fcIndex, fcWords.length - 1) : 0;
+  function initFlashcards(restore) {
+    fcWords = searchQuery ? filtered : data;
+    fcIndex = restore ? Math.min(fcIndex, Math.max(fcWords.length - 1, 0)) : 0;
     fcFlipped = false;
     if (fcWords.length > 0) {
       renderFlashcard();
     } else {
       $('fc-word').textContent = 'No words found';
+      $('flashcard-counter').textContent = '0 / 0';
     }
     saveState();
   }
@@ -302,6 +289,11 @@
     var entry = fcWords[fcIndex];
     if (!entry) {
       $('flashcard-counter').textContent = '0 / 0';
+      $('fc-word').textContent = '';
+      $('fc-front-meta').innerHTML = '';
+      $('fc-definition').innerHTML = '';
+      $('fc-translation').innerHTML = '';
+      $('fc-examples').innerHTML = '';
       return;
     }
 
@@ -311,9 +303,7 @@
     var senses = d.senses || [];
 
     var firstPOS = senses.length > 0 ? senses[0].pos : '';
-    var firstDef = senses.length > 0 && senses[0].definitions.length > 0 ? senses[0].definitions[0] : {};
     var allDefs = [];
-    var allExamples = [];
     for (var i = 0; i < senses.length; i++) {
       for (var j = 0; j < senses[i].definitions.length; j++) {
         allDefs.push(senses[i].definitions[j]);
@@ -333,17 +323,19 @@
     var frontMeta = '';
     if (firstPOS) frontMeta += '<div class="flashcard-pos">' + esc(firstPOS) + '</div>';
     if (pron.uk) {
-      frontMeta += '<div class="flashcard-ipa"' + (audio.uk ? ' title="Click to play" onclick="window.playAudio(\'' + audio.uk + '\')"' : '') + '>UK /' + pron.uk + '/';
-      if (audio.uk) frontMeta += ' <button onclick="window.playAudio(\'' + audio.uk + '\')" class="word-audio-btn">🔊</button>';
-      frontMeta += '</div>';
+      frontMeta += '<div class="flashcard-ipa"' + (audio.uk ? ' title="Click to play" data-url="' + esc(audio.uk) + '"' : '') + '>UK /' + pron.uk + '/</div>';
     }
     if (pron.us) {
-      frontMeta += '<div class="flashcard-ipa"' + (audio.us ? ' title="Click to play" onclick="window.playAudio(\'' + audio.us + '\')"' : '') + '>US /' + pron.us + '/';
-      if (audio.us) frontMeta += ' <button onclick="window.playAudio(\'' + audio.us + '\')" class="word-audio-btn">🔊</button>';
-      frontMeta += '</div>';
+      frontMeta += '<div class="flashcard-ipa"' + (audio.us ? ' title="Click to play" data-url="' + esc(audio.us) + '"' : '') + '>US /' + pron.us + '/</div>';
     }
     $('fc-front-meta').innerHTML = frontMeta;
-    $('fc-front-meta').onclick = function (e) { e.stopPropagation(); };
+
+    qsa('.flashcard-ipa[data-url]', $('fc-front-meta')).forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        playAudio(this.dataset.url);
+      });
+    });
 
     var defHTML = '';
     var zhHTML = '';
@@ -363,12 +355,6 @@
       }
     }
     $('fc-examples').innerHTML = exHTML;
-
-    var audioHTML = '';
-    if (audio.uk) audioHTML += '<button onclick="window.playAudio(\'' + audio.uk + '\')">🔊 UK</button>';
-    if (audio.us) audioHTML += '<button onclick="window.playAudio(\'' + audio.us + '\')">🔊 US</button>';
-    $('fc-audio').innerHTML = audioHTML;
-    $('fc-audio').onclick = function (e) { e.stopPropagation(); };
   }
 
   function fcFlip() {
@@ -382,21 +368,19 @@
   }
 
   function fcPrev() {
-    if (fcIndex > 0) {
-      fcIndex--;
-      fcFlipped = false;
-      renderFlashcard();
-      saveState();
-    }
+    if (fcWords.length === 0 || fcIndex <= 0) return;
+    fcIndex--;
+    fcFlipped = false;
+    renderFlashcard();
+    saveState();
   }
 
   function fcNext() {
-    if (fcIndex < fcWords.length - 1) {
-      fcIndex++;
-      fcFlipped = false;
-      renderFlashcard();
-      saveState();
-    }
+    if (fcWords.length === 0 || fcIndex >= fcWords.length - 1) return;
+    fcIndex++;
+    fcFlipped = false;
+    renderFlashcard();
+    saveState();
   }
 
   function exportFiltered() {
@@ -412,6 +396,7 @@
   function playCurrentAudio() {
     var entry;
     if (mode === 'flashcard') {
+      if (fcWords.length === 0) return;
       entry = fcWords[fcIndex];
     } else {
       var firstBtn = qs('.word-ipa.clickable');
