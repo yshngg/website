@@ -52,7 +52,6 @@ kbd {
   color: var(--fg);
   cursor: pointer;
   font-size: 0.875rem;
-  transition: background var(--transition-fast);
 }
 .tab-btn:not(:last-child) {
   border-right: 1px solid var(--border);
@@ -69,7 +68,6 @@ kbd {
   color: var(--fg);
   cursor: pointer;
   font-size: 0.8rem;
-  transition: all var(--transition-fast);
 }
 .pos-btn:focus-visible {
   outline: 2px solid var(--primary);
@@ -104,7 +102,6 @@ kbd {
   padding: 0;
   text-decoration: underline;
   text-underline-offset: 2px;
-  transition: opacity var(--transition-fast);
 }
 .vocab-pagination button:not(:disabled):hover,
 .flashcard-nav button:hover {
@@ -126,7 +123,6 @@ kbd {
   border-radius: var(--radius);
   padding: var(--space-4);
   margin-block-end: var(--space-3);
-  transition: box-shadow var(--transition-fast);
 }
 .word-card:hover {
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -155,7 +151,6 @@ kbd {
   cursor: pointer;
   border-radius: 3px;
   padding: 0 2px;
-  transition: background var(--transition-fast);
 }
 .word-ipa:hover {
   background: var(--accent);
