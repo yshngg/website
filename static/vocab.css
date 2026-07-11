@@ -65,7 +65,8 @@ kbd {
 }
 .vocab-pagination button,
 .flashcard-nav button,
-#fc-shuffle {
+#fc-shuffle,
+#vocab-export {
   background: none;
   border: none;
   color: var(--primary);
@@ -77,7 +78,8 @@ kbd {
 }
 .vocab-pagination button:not(:disabled):hover,
 .flashcard-nav button:hover,
-#fc-shuffle:hover {
+#fc-shuffle:hover,
+#vocab-export:hover {
   opacity: 0.7;
 }
 .vocab-pagination button:disabled {
