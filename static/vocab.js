@@ -2,7 +2,7 @@
   if (!window.VOCAB_DATA) return;
 
   const data = window.VOCAB_DATA;
-  const perPage = 50;
+  const perPage = 10;
   let filtered = data;
   let searchQuery = '';
   let posFilter = '';

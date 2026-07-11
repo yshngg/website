@@ -1,9 +1,7 @@
 #vocab-app {
   margin-block: var(--space-6);
 }
-#vocab-list {
-  max-width: 38rem;
-}
+
 .vocab-toolbar {
   display: flex;
   flex-direction: column;
@@ -81,7 +79,6 @@
   gap: var(--space-3);
   margin-block: var(--space-4);
   flex-wrap: wrap;
-  max-width: 38rem;
 }
 .vocab-pagination button {
   background: none;
@@ -132,8 +129,9 @@
 }
 .word-ipa {
   color: var(--muted);
-  font-family: var(--font-mono);
+  font-family: system-ui, -apple-system, sans-serif;
   font-size: 0.85rem;
+  white-space: nowrap;
 }
 .word-pos {
   font-size: 0.8rem;
@@ -259,7 +257,7 @@
   font-family: "EB Garamond", serif;
 }
 .flashcard-ipa {
-  font-family: var(--font-mono);
+  font-family: system-ui, -apple-system, sans-serif;
   color: var(--muted);
   margin-block-start: var(--space-2);
 }
