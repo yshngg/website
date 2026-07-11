@@ -76,7 +76,9 @@
   </div>
 </div>
 
-<script id="vocab-data" type="application/json">{{ vocab | json_encode | safe }}</script>
+<script>
+window.VOCAB_DATA = {{ vocab | json_encode | safe }};
+</script>
 <script src="/vocab.js"></script>
 <link href="/vocab.css" rel="stylesheet" />
 {% endblock %}

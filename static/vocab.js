@@ -1,7 +1,6 @@
 (function () {
-  var dataEl = document.getElementById('vocab-data');
-  if (!dataEl) return;
-  const data = JSON.parse(dataEl.textContent);
+  if (!window.VOCAB_DATA) return;
+  const data = window.VOCAB_DATA;
   const perPage = 10;
   let filtered = data;
   let searchQuery = '';
