@@ -1,25 +1,24 @@
 (function () {
-  if (!window.VOCAB_DATA) return;
-  const data = window.VOCAB_DATA;
-  const UK_PRON = 'Listen to the British English pronunciation';
-  const US_PRON = 'Listen to the American English pronunciation';
-  const perPage = 10;
-  let filtered = data;
-  let searchQuery = '';
-  let page = 1;
-  let mode = 'browse';
+  var data = null;
+  var UK_PRON = 'Listen to the British English pronunciation';
+  var US_PRON = 'Listen to the American English pronunciation';
+  var perPage = 10;
+  var filtered = [];
+  var searchQuery = '';
+  var page = 1;
+  var mode = 'browse';
 
-  let fcWords = [];
-  let fcIndex = 0;
-  let fcFlipped = false;
+  var fcWords = [];
+  var fcIndex = 0;
+  var fcFlipped = false;
 
-  let currentAudio = null;
+  var currentAudio = null;
 
-  const STORAGE_KEY = 'vocab-state';
+  var STORAGE_KEY = 'vocab-state';
 
-  const $ = (id) => document.getElementById(id);
-  const qs = (s, p) => (p || document).querySelector(s);
-  const qsa = (s, p) => (p || document).querySelectorAll(s);
+  function $(id) { return document.getElementById(id); }
+  function qs(s, p) { return (p || document).querySelector(s); }
+  function qsa(s, p) { return (p || document).querySelectorAll(s); }
 
   function saveState() {
     try {
@@ -44,6 +43,7 @@
   }
 
   function init() {
+    if (!data) return;
     filtered = data;
     loadState();
     if (searchQuery) $('vocab-search').value = searchQuery;
@@ -223,7 +223,6 @@
       if (audio.us) pronAudioHTML += ' title="' + US_PRON + '" data-url="' + esc(audio.us) + '"';
       pronAudioHTML += '>US /' + pron.us + '/</span> ';
     }
-    // fallback: audio without pronunciation
     if (!pron.uk && !pron.us) {
       if (audio.uk) pronAudioHTML += '<span class="word-ipa clickable" title="' + UK_PRON + '" data-url="' + esc(audio.uk) + '">🔊 UK</span> ';
       if (audio.us) pronAudioHTML += '<span class="word-ipa clickable" title="' + US_PRON + '" data-url="' + esc(audio.us) + '">🔊 US</span> ';
@@ -423,9 +422,20 @@
 
   window.playAudio = playAudio;
 
+  function loadData() {
+    fetch('/vocabulary.jsonl')
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        data = text.trim().split('\n').filter(Boolean).map(function (line) { return JSON.parse(line); });
+        var countEl = $('vocab-count');
+        if (countEl) countEl.textContent = data.length;
+        init();
+      });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', loadData);
   } else {
-    init();
+    loadData();
   }
 })();
