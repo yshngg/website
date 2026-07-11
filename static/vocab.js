@@ -1,6 +1,7 @@
 (function () {
   if (!window.VOCAB_DATA) return;
   const data = window.VOCAB_DATA;
+  const VOCAB_I18N = window.VOCAB_I18N || {};
   const perPage = 10;
   let filtered = data;
   let searchQuery = '';
@@ -326,7 +327,7 @@
       frontMeta += '<span class="flashcard-ipa"' + (audio.uk ? ' title="' + VOCAB_I18N.uk_pron + '" data-url="' + esc(audio.uk) + '"' : '') + '>UK /' + pron.uk + '/</span> ';
     }
     if (pron.us) {
-      frontMeta += '<span class="flashcard-ipa"' + (audio.us ? ' title="' + VOCAB_I18N.us_pron + '" data-url="' + esc(audio.us) + '"' : '') + '>US /' + pron.us + '/</span>';
+      frontMeta += '<span class="flashcard-ipa"' + (audio.us ? ' title="' + VOCAB_I18N.us_pron + '" data-url="' + esc(audio.us) + '"' : '') + '>US /' + pron.us + '/</span> ';
     }
     $('fc-front-meta').innerHTML = frontMeta;
 
