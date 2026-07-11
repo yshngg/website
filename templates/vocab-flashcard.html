@@ -13,7 +13,11 @@
   </p>
   <div id="flashcard-container">
     <div class="flashcard-toolbar">
-      <span id="flashcard-counter">0 / 0</span>
+      <div class="hstack">
+        <button id="fc-prev">← Previous</button>
+        <span id="flashcard-counter">0 / 0</span>
+        <button id="fc-next">Next →</button>
+      </div>
       <button id="fc-shuffle">Shuffle</button>
     </div>
     <div id="flashcard-card" class="flashcard" tabindex="0">
@@ -37,10 +41,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="flashcard-nav">
-      <button id="fc-prev">← Previous</button>
-      <button id="fc-next">Next →</button>
     </div>
   </div>
 </div>

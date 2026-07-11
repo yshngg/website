@@ -37,11 +37,6 @@ kbd {
   outline: 2px solid var(--primary);
   outline-offset: -1px;
 }
-.flashcard-nav button:disabled {
-  opacity: 0.3;
-  cursor: default;
-  text-decoration: none;
-}
 .vocab-pagination {
   display: flex;
   align-items: center;
@@ -51,7 +46,8 @@ kbd {
   flex-wrap: wrap;
 }
 .vocab-pagination button,
-.flashcard-nav button,
+#fc-prev,
+#fc-next,
 #fc-shuffle {
   background: none;
   border: none;
@@ -63,7 +59,8 @@ kbd {
   text-underline-offset: 2px;
 }
 .vocab-pagination button:not(:disabled):hover,
-.flashcard-nav button:hover,
+#fc-prev:hover,
+#fc-next:hover,
 #fc-shuffle:hover {
   opacity: 0.7;
 }
@@ -252,14 +249,5 @@ kbd {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.flashcard-nav {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-4);
-  margin-block-start: var(--space-4);
-}
 @media (max-width: 600px) {
-  .flashcard-nav {
-    flex-wrap: wrap;
-  }
-}
+
