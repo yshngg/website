@@ -342,12 +342,12 @@
     var frontMeta = '';
     if (firstPOS) frontMeta += '<div class="flashcard-pos">' + esc(firstPOS) + '</div>';
     if (pron.uk) {
-      frontMeta += '<div class="flashcard-ipa"' + (audio.uk ? ' title="Click to play"' : '') + '>UK /' + pron.uk + '/';
+      frontMeta += '<div class="flashcard-ipa"' + (audio.uk ? ' title="Click to play" onclick="window.playAudio(\'' + audio.uk + '\')"' : '') + '>UK /' + pron.uk + '/';
       if (audio.uk) frontMeta += ' <button onclick="window.playAudio(\'' + audio.uk + '\')" class="word-audio-btn">🔊</button>';
       frontMeta += '</div>';
     }
     if (pron.us) {
-      frontMeta += '<div class="flashcard-ipa"' + (audio.us ? ' title="Click to play"' : '') + '>US /' + pron.us + '/';
+      frontMeta += '<div class="flashcard-ipa"' + (audio.us ? ' title="Click to play" onclick="window.playAudio(\'' + audio.us + '\')"' : '') + '>US /' + pron.us + '/';
       if (audio.us) frontMeta += ' <button onclick="window.playAudio(\'' + audio.us + '\')" class="word-audio-btn">🔊</button>';
       frontMeta += '</div>';
     }
