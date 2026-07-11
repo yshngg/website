@@ -37,53 +37,6 @@ kbd {
   outline: 2px solid var(--primary);
   outline-offset: -1px;
 }
-.vocab-tabs {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  align-self: flex-start;
-}
-.tab-btn {
-  padding: var(--space-2) var(--space-4);
-  border: none;
-  background: var(--bg);
-  color: var(--fg);
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-.tab-btn:not(:last-child) {
-  border-right: 1px solid var(--border);
-}
-.tab-btn.active {
-  background: var(--primary);
-  color: light-dark(#fff, #09090b);
-}
-.pos-btn {
-  padding: 2px var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
-  color: var(--fg);
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-.pos-btn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 1px;
-}
-.flashcard-nav button:disabled {
-  opacity: 0.3;
-  cursor: default;
-  text-decoration: none;
-}
-.vocab-mode {
-  display: none;
-}
-.vocab-mode.active {
-  display: block;
-}
 .vocab-pagination {
   display: flex;
   align-items: center;
@@ -93,7 +46,9 @@ kbd {
   flex-wrap: wrap;
 }
 .vocab-pagination button,
-.flashcard-nav button {
+#fc-prev,
+#fc-next,
+#fc-shuffle {
   background: none;
   border: none;
   color: var(--primary);
@@ -104,7 +59,9 @@ kbd {
   text-underline-offset: 2px;
 }
 .vocab-pagination button:not(:disabled):hover,
-.flashcard-nav button:hover {
+#fc-prev:hover,
+#fc-next:hover,
+#fc-shuffle:hover {
   opacity: 0.7;
 }
 .vocab-pagination button:disabled {
@@ -210,7 +167,7 @@ kbd {
 
 /* Flashcard */
 #flashcard-container {
-  max-width: 600px;
+  width: 100%;
   margin: 0 auto;
 }
 .flashcard-toolbar {
@@ -221,8 +178,6 @@ kbd {
 }
 .flashcard {
   perspective: 1000px;
-  height: 400px;
-  cursor: pointer;
   outline: none;
 }
 .flashcard-inner {
@@ -239,8 +194,6 @@ kbd {
   grid-row: 1;
   grid-column: 1;
   height: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   backface-visibility: hidden;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) * 2);
@@ -294,22 +247,5 @@ kbd {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.flashcard-nav {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-4);
-  margin-block-start: var(--space-4);
-}
-
 @media (max-width: 600px) {
-  .vocab-tabs {
-    align-self: stretch;
-  }
-  .tab-btn {
-    flex: 1;
-    text-align: center;
-  }
-  .flashcard-nav {
-    flex-wrap: wrap;
-  }
-}
+

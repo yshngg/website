@@ -62,10 +62,15 @@
           >
           {% endif %} {% if current_path and current_path != root_url %} {% set
           in_blog = current_path is starting_with(blog_url) %} {% set in_curated
-          = current_path is starting_with(curated_url) %} {% set in_vocab = current_path is starting_with("/vocab/") %} {% if in_vocab %}
-          <span>/</span>
-          <strong>{{ trans(key="nav_vocab", lang=lang) }}</strong>
-          {% elif in_blog %}
+           = current_path is starting_with(curated_url) %} {% set in_vocab = current_path is starting_with("/vocab/") %} {% set in_vocab_flashcard = current_path is starting_with("/vocab/flashcard/") %} {% if in_vocab_flashcard %}
+           <span>/</span>
+           <a href="/vocab/">{{ trans(key="nav_vocab", lang=lang) }}</a>
+           <span>/</span>
+           <strong>Flashcard</strong>
+           {% elif in_vocab %}
+           <span>/</span>
+           <strong>{{ trans(key="nav_vocab", lang=lang) }}</strong>
+           {% elif in_blog %}
           <span>/</span>
           {% if current_path == blog_url %}
           <strong>{{ trans(key="nav_blog", lang=lang) }}</strong>

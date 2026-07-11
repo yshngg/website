@@ -1,32 +1,31 @@
 (function () {
-  if (!window.VOCAB_DATA) return;
-  const data = window.VOCAB_DATA;
-  const UK_PRON = 'Listen to the British English pronunciation';
-  const US_PRON = 'Listen to the American English pronunciation';
-  const perPage = 10;
-  let filtered = data;
-  let searchQuery = '';
-  let page = 1;
-  let mode = 'browse';
+  var data = null;
+  var UK_PRON = 'Listen to the British English pronunciation';
+  var US_PRON = 'Listen to the American English pronunciation';
+  var perPage = 10;
+  var RANDOM_SIZE = 20;
+  var filtered = [];
+  var searchQuery = '';
+  var page = 1;
+  var mode = 'browse';
 
-  let fcWords = [];
-  let fcIndex = 0;
-  let fcFlipped = false;
+  var fcWords = [];
+  var fcIndex = 0;
+  var fcFlipped = false;
 
-  let currentAudio = null;
+  var currentAudio = null;
 
-  const STORAGE_KEY = 'vocab-state';
+  var STORAGE_KEY = 'vocab-state';
 
-  const $ = (id) => document.getElementById(id);
-  const qs = (s, p) => (p || document).querySelector(s);
-  const qsa = (s, p) => (p || document).querySelectorAll(s);
+  function $(id) { return document.getElementById(id); }
+  function qs(s, p) { return (p || document).querySelector(s); }
+  function qsa(s, p) { return (p || document).querySelectorAll(s); }
 
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         page: page,
         fcIndex: fcIndex,
-        mode: mode,
         searchQuery: searchQuery,
       }));
     } catch (_) {}
@@ -39,49 +38,55 @@
       page = saved.page || 1;
       fcIndex = saved.fcIndex || 0;
       searchQuery = saved.searchQuery || '';
-      mode = saved.mode || 'browse';
     } catch (_) {}
   }
 
   function init() {
+    if (!data) return;
+    mode = window.location.pathname.indexOf('/vocab/flashcard/') === 0 ? 'flashcard' : 'browse';
     filtered = data;
     loadState();
-    if (searchQuery) $('vocab-search').value = searchQuery;
-    applyFilter();
-    qsa('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    qs('.tab-btn[data-mode="' + mode + '"]').classList.add('active');
-    switchMode(mode, true);
+    if (mode === 'flashcard') {
+      fcWords = pickRandom();
+      fcIndex = 0;
+      fcFlipped = false;
+      renderFlashcard();
+    } else {
+      if (searchQuery && $('vocab-search')) $('vocab-search').value = searchQuery;
+      applyFilter();
+      renderBrowse();
+    }
     setupEventListeners();
   }
 
   function setupEventListeners() {
-    $('vocab-search').addEventListener('input', function () {
-      searchQuery = this.value.toLowerCase();
-      page = 1;
-      filterAndRender();
-    });
-
-    qsa('.tab-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        qsa('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        switchMode(this.dataset.mode);
+    if ($('vocab-search')) {
+      $('vocab-search').addEventListener('input', function () {
+        searchQuery = this.value.toLowerCase();
+        page = 1;
+        filterAndRender();
       });
-    });
+    }
 
-    $('fc-prev').addEventListener('click', fcPrev);
-    $('fc-next').addEventListener('click', fcNext);
+    if ($('fc-prev')) $('fc-prev').addEventListener('click', fcPrev);
+    if ($('fc-next')) $('fc-next').addEventListener('click', fcNext);
+    if ($('fc-shuffle')) $('fc-shuffle').addEventListener('click', fcShuffle);
 
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'k' || e.key === 'K') {
+        playVariant('uk');
+        return;
+      }
       if (e.key === 'p' || e.key === 'P') {
-        playCurrentAudio();
+        playVariant('us');
         return;
       }
       if (mode === 'flashcard') {
         if (e.key === 'ArrowLeft') fcPrev();
         else if (e.key === 'ArrowRight') fcNext();
+        else if (e.key === 's' || e.key === 'S') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
-      } else if (mode === 'browse') {
+      } else {
         if (e.key === 'ArrowLeft') {
           var prevBtn = qs('.vocab-pagination button[data-page]:not(:disabled):first-child');
           if (prevBtn) prevBtn.click();
@@ -92,22 +97,12 @@
       }
     });
 
-    $('flashcard-card').addEventListener('click', fcFlip);
-    $('vocab-export').addEventListener('click', exportFiltered);
   }
 
-  function switchMode(newMode, restore) {
-    mode = newMode;
-    qsa('.vocab-mode').forEach(function (el) { el.classList.remove('active'); });
-
-    if (mode === 'browse') {
-      $('vocab-browse').classList.add('active');
-      filterAndRender();
-    } else if (mode === 'flashcard') {
-      $('vocab-flashcard').classList.add('active');
-      initFlashcards(restore);
-    }
-    saveState();
+  function pickRandom() {
+    var pool = searchQuery ? filtered : data;
+    var shuffled = pool.slice().sort(function () { return Math.random() - 0.5; });
+    return shuffled.slice(0, Math.min(RANDOM_SIZE, shuffled.length));
   }
 
   function filterAndRender() {
@@ -223,7 +218,6 @@
       if (audio.us) pronAudioHTML += ' title="' + US_PRON + '" data-url="' + esc(audio.us) + '"';
       pronAudioHTML += '>US /' + pron.us + '/</span> ';
     }
-    // fallback: audio without pronunciation
     if (!pron.uk && !pron.us) {
       if (audio.uk) pronAudioHTML += '<span class="word-ipa clickable" title="' + UK_PRON + '" data-url="' + esc(audio.uk) + '">🔊 UK</span> ';
       if (audio.us) pronAudioHTML += '<span class="word-ipa clickable" title="' + US_PRON + '" data-url="' + esc(audio.us) + '">🔊 US</span> ';
@@ -275,15 +269,10 @@
   }
 
   function initFlashcards(restore) {
-    fcWords = searchQuery ? filtered : data;
+    fcWords = pickRandom();
     fcIndex = restore ? Math.min(fcIndex, Math.max(fcWords.length - 1, 0)) : 0;
     fcFlipped = false;
-    if (fcWords.length > 0) {
-      renderFlashcard();
-    } else {
-      $('fc-word').textContent = 'No words found';
-      $('flashcard-counter').textContent = '0 / 0';
-    }
+    renderFlashcard();
     saveState();
   }
 
@@ -369,46 +358,45 @@
     }
   }
 
-  function fcPrev() {
-    if (fcWords.length === 0 || fcIndex <= 0) return;
-    fcIndex--;
+  function renderCurrentCard() {
     fcFlipped = false;
     renderFlashcard();
     saveState();
+  }
+
+  function fcPrev() {
+    if (fcWords.length === 0) return;
+    fcIndex = fcIndex <= 0 ? fcWords.length - 1 : fcIndex - 1;
+    renderCurrentCard();
   }
 
   function fcNext() {
-    if (fcWords.length === 0 || fcIndex >= fcWords.length - 1) return;
-    fcIndex++;
-    fcFlipped = false;
-    renderFlashcard();
-    saveState();
+    if (fcWords.length === 0) return;
+    fcIndex = fcIndex >= fcWords.length - 1 ? 0 : fcIndex + 1;
+    renderCurrentCard();
   }
 
-  function exportFiltered() {
-    var blob = new Blob([JSON.stringify(filtered, null, 2)], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'vocabulary.json';
-    a.click();
-    URL.revokeObjectURL(url);
+  function fcShuffle() {
+    fcWords = pickRandom();
+    fcIndex = 0;
+    renderCurrentCard();
   }
 
-  function playCurrentAudio() {
-    var entry;
+  function playVariant(variant) {
     if (mode === 'flashcard') {
       if (fcWords.length === 0) return;
-      entry = fcWords[fcIndex];
+      var entry = fcWords[fcIndex];
+      var audio = (entry.data && entry.data.audio) || {};
+      var url = audio[variant];
+      if (url) playAudio(url);
     } else {
-      var firstBtn = qs('.word-ipa.clickable');
-      if (firstBtn) { firstBtn.click(); return; }
-      return;
+      var label = variant === 'uk' ? 'UK' : 'US';
+      qsa('.word-ipa.clickable').forEach(function (el) {
+        if (el.textContent.trim().startsWith(label)) {
+          el.click();
+        }
+      });
     }
-    if (!entry) return;
-    var audio = (entry.data && entry.data.audio) || {};
-    var url = audio.uk || audio.us;
-    if (url) playAudio(url);
   }
 
   function playAudio(url) {
@@ -423,9 +411,28 @@
 
   window.playAudio = playAudio;
 
+  function loadData() {
+    fetch('/vocabulary.jsonl')
+      .then(function (r) { return r.text(); })
+      .then(function (text) {
+        var seen = {};
+        data = text.trim().split('\n').filter(Boolean).map(function (line) { return JSON.parse(line); })
+          .filter(function (entry) {
+            var w = entry.word.toLowerCase();
+            if (seen[w]) return false;
+            seen[w] = true;
+            return true;
+          })
+          .sort(function (a, b) {
+            return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
+          });
+        init();
+      });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', loadData);
   } else {
-    init();
+    loadData();
   }
 })();

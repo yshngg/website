@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Flashcard - {{ config.title }}{% endblock %}
+
+{% block content %}
+<div id="vocab-app">
+  <h1>Flashcard</h1>
+  <p class="text-light vocab-hint">
+        <kbd>k</kbd> play UK<br/>
+    <kbd>p</kbd> play US<br/>
+    <kbd>←</kbd> <kbd>→</kbd> navigate<br/>
+    <kbd>Space</kbd> flip<br/>
+    <kbd>s</kbd> shuffle
+  </p>
+  <div id="flashcard-container">
+    <div class="flashcard-toolbar">
+      <button id="fc-shuffle">Shuffle</button>
+      <span id="flashcard-counter">0 / 0</span>
+      <div class="hstack">
+        <button id="fc-prev">← Previous</button>
+        <button id="fc-next">Next →</button>
+      </div>
+    </div>
+    <div id="flashcard-card" class="flashcard" tabindex="0">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="flashcard-word" id="fc-word"></div>
+          <div id="fc-front-meta"></div>
+        </div>
+        <div class="flashcard-back" id="fc-back">
+          <div class="fc-section">
+            <strong>Definition:</strong>
+            <div id="fc-definition"></div>
+          </div>
+          <div class="fc-section">
+            <strong>Translation:</strong>
+            <div id="fc-translation"></div>
+          </div>
+          <div class="fc-section" id="fc-examples-section">
+            <strong>Examples:</strong>
+            <div id="fc-examples"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/vocab.js"></script>
+<link href="/vocab.css" rel="stylesheet" />
+{% endblock %}
