@@ -49,6 +49,7 @@
     qsa('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
     qs('.tab-btn[data-mode="' + mode + '"]').classList.add('active');
     switchMode(mode, true);
+    setupEventListeners();
   }
 
   function setupEventListeners() {
