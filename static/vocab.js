@@ -170,12 +170,6 @@
       });
     });
 
-    qsa('.word-audio-btn').forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        playAudio(this.dataset.url);
-      });
-    });
     qsa('.word-ipa.clickable').forEach(function (el) {
       el.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -222,22 +216,19 @@
       if (audio.uk) pronAudioHTML += ' clickable';
       pronAudioHTML += '"';
       if (audio.uk) pronAudioHTML += ' title="Click to play" data-url="' + esc(audio.uk) + '"';
-      pronAudioHTML += '>UK /' + pron.uk + '/</span>';
-      if (audio.uk) pronAudioHTML += '<button class="word-audio-btn" title="Click to play" data-url="' + esc(audio.uk) + '">🔊</button> ';
+      pronAudioHTML += '>UK /' + pron.uk + '/</span> ';
     }
     if (pron.us) {
-      if (pron.uk) pronAudioHTML += ' ';
       pronAudioHTML += '<span class="word-ipa';
       if (audio.us) pronAudioHTML += ' clickable';
       pronAudioHTML += '"';
       if (audio.us) pronAudioHTML += ' title="Click to play" data-url="' + esc(audio.us) + '"';
-      pronAudioHTML += '>US /' + pron.us + '/</span>';
-      if (audio.us) pronAudioHTML += '<button class="word-audio-btn" title="Click to play" data-url="' + esc(audio.us) + '">🔊</button> ';
+      pronAudioHTML += '>US /' + pron.us + '/</span> ';
     }
     // fallback: audio without pronunciation
     if (!pron.uk && !pron.us) {
-      if (audio.uk) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.uk) + '">🔊 UK</button> ';
-      if (audio.us) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.us) + '">🔊 US</button>';
+      if (audio.uk) pronAudioHTML += '<span class="word-ipa clickable" title="Click to play" data-url="' + esc(audio.uk) + '">🔊 UK</span> ';
+      if (audio.us) pronAudioHTML += '<span class="word-ipa clickable" title="Click to play" data-url="' + esc(audio.us) + '">🔊 US</span> ';
     }
 
     var firstPOS = '';
@@ -423,7 +414,7 @@
     if (mode === 'flashcard') {
       entry = fcWords[fcIndex];
     } else {
-      var firstBtn = qs('.word-audio-btn');
+      var firstBtn = qs('.word-ipa.clickable');
       if (firstBtn) { firstBtn.click(); return; }
       return;
     }
