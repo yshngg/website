@@ -194,8 +194,6 @@ kbd {
   grid-row: 1;
   grid-column: 1;
   height: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   backface-visibility: hidden;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) * 2);
