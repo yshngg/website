@@ -73,8 +73,12 @@
     if ($('fc-shuffle')) $('fc-shuffle').addEventListener('click', fcShuffle);
 
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'k' || e.key === 'K') {
+        playVariant('uk');
+        return;
+      }
       if (e.key === 'p' || e.key === 'P') {
-        playCurrentAudio();
+        playVariant('us');
         return;
       }
       if (mode === 'flashcard') {
@@ -378,20 +382,21 @@
     renderCurrentCard();
   }
 
-  function playCurrentAudio() {
-    var entry;
+  function playVariant(variant) {
     if (mode === 'flashcard') {
       if (fcWords.length === 0) return;
-      entry = fcWords[fcIndex];
+      var entry = fcWords[fcIndex];
+      var audio = (entry.data && entry.data.audio) || {};
+      var url = audio[variant];
+      if (url) playAudio(url);
     } else {
-      var firstBtn = qs('.word-ipa.clickable');
-      if (firstBtn) { firstBtn.click(); return; }
-      return;
+      var label = variant === 'uk' ? 'UK' : 'US';
+      qsa('.word-ipa.clickable').forEach(function (el) {
+        if (el.textContent.trim().startsWith(label)) {
+          el.click();
+        }
+      });
     }
-    if (!entry) return;
-    var audio = (entry.data && entry.data.audio) || {};
-    var url = audio.uk || audio.us;
-    if (url) playAudio(url);
   }
 
   function playAudio(url) {
