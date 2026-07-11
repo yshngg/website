@@ -338,6 +338,7 @@
       frontMeta += '</div>';
     }
     $('fc-front-meta').innerHTML = frontMeta;
+    $('fc-front-meta').onclick = function (e) { e.stopPropagation(); };
 
     var defHTML = '';
     var zhHTML = '';
