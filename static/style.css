@@ -80,6 +80,12 @@ hr {
 footer {
   margin-top: var(--space-14);
 }
+.footer-links {
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-end: var(--space-4);
+  font-size: var(--text-7);
+}
 
 .text-light {
   color: var(--muted);
@@ -126,6 +132,9 @@ footer {
 }
 .justify-end {
   justify-content: flex-end;
+}
+.justify-center {
+  justify-content: center;
 }
 .align-center {
   text-align: center;

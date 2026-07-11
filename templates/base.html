@@ -48,7 +48,7 @@
         {% block breadcrumb %} {% if lang == "en" %}{% set lang_prefix = "" %}{%
         else %}{% set lang_prefix = "/" ~ lang %}{% endif %} {% set root_url =
         lang_prefix ~ "/" %} {% set blog_url = lang_prefix ~ "/blog/" %} {% set
-        curated_url = lang_prefix ~ "/curated/" %}
+        curated_url = lang_prefix ~ "/curated/" %} {% set vocab_url = "/vocab/" %}
         <div class="hstack">
           {% if current_path %} {% if current_path == root_url %}
           <strong id="nav-home">{{ trans(key="nav_home", lang=lang) }}</strong>
@@ -62,7 +62,10 @@
           >
           {% endif %} {% if current_path and current_path != root_url %} {% set
           in_blog = current_path is starting_with(blog_url) %} {% set in_curated
-          = current_path is starting_with(curated_url) %} {% if in_blog %}
+          = current_path is starting_with(curated_url) %} {% set in_vocab = current_path is starting_with("/vocab/") %} {% if in_vocab %}
+          <span>/</span>
+          <strong>{{ trans(key="nav_vocab", lang=lang) }}</strong>
+          {% elif in_blog %}
           <span>/</span>
           {% if current_path == blog_url %}
           <strong>{{ trans(key="nav_blog", lang=lang) }}</strong>
@@ -87,25 +90,11 @@
         </div>
         {% endblock %}
         <div class="hstack justify-end">
-          <a href="https://x.com/yshnggdev" target="_blank"
-            >{{ trans(key="nav_x", lang=lang) }}</a
-          >
-          <span>/</span>
-          <a href="https://www.youtube.com/@yshngg" target="_blank"
-            >{{ trans(key="nav_youtube", lang=lang) }}</a
-          >
-          <span>/</span>
-          <a href="https://github.com/yshngg" target="_blank"
-            >{{ trans(key="nav_github", lang=lang) }}</a
-          >
-          <span>/</span>
-          <a href="mailto:hello@yusheng.dev" target="_blank"
-            >{{ trans(key="nav_email", lang=lang) }}</a
-          >
-          <span>/</span>
           <a href="https://kb.yshngg.dev" target="_blank"
             >{{ trans(key="nav_kb", lang=lang) }}</a
           >
+          <span>/</span>
+          <a href="/vocab/">{{ trans(key="nav_vocab", lang=lang) }}</a>
           <span>/</span>
           <button id="theme-toggle" type="button" aria-label="Switch to dark theme">
             <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -120,6 +109,23 @@
     </main>
     <footer>
       <hr />
+      <div class="hstack justify-center footer-links">
+        <a href="https://x.com/yshnggdev" target="_blank"
+          >{{ trans(key="nav_x", lang=lang) }}</a
+        >
+        <span>/</span>
+        <a href="https://www.youtube.com/@yshngg" target="_blank"
+          >{{ trans(key="nav_youtube", lang=lang) }}</a
+        >
+        <span>/</span>
+        <a href="https://github.com/yshngg" target="_blank"
+          >{{ trans(key="nav_github", lang=lang) }}</a
+        >
+        <span>/</span>
+        <a href="mailto:hello@yusheng.dev" target="_blank"
+          >{{ trans(key="nav_email", lang=lang) }}</a
+        >
+      </div>
       <p class="align-center mb-2">
         &copy; <span id="current-year"></span> Yusheng. All rights reserved.
       </p>
