@@ -210,17 +210,21 @@
     var audio = d.audio || {};
     var senses = d.senses || [];
 
-    var ipaHTML = '';
-    if (pron.uk || pron.us) {
-      var parts = [];
-      if (pron.uk) parts.push('UK /' + pron.uk + '/');
-      if (pron.us) parts.push('US /' + pron.us + '/');
-      ipaHTML = '<span class="word-ipa">' + parts.join(' ') + '</span>';
+    var pronAudioHTML = '';
+    if (pron.uk) {
+      pronAudioHTML += '<span class="word-ipa">UK /' + pron.uk + '/</span>';
+      if (audio.uk) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.uk) + '">🔊</button> ';
     }
-
-    var audioHTML = '';
-    if (audio.uk) audioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.uk) + '">🔊 UK</button> ';
-    if (audio.us) audioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.us) + '">🔊 US</button>';
+    if (pron.us) {
+      if (pron.uk) pronAudioHTML += ' ';
+      pronAudioHTML += '<span class="word-ipa">US /' + pron.us + '/</span>';
+      if (audio.us) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.us) + '">🔊</button> ';
+    }
+    // fallback: audio without pronunciation
+    if (!pron.uk && !pron.us) {
+      if (audio.uk) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.uk) + '">🔊 UK</button> ';
+      if (audio.us) pronAudioHTML += '<button class="word-audio-btn" data-url="' + esc(audio.us) + '">🔊 US</button>';
+    }
 
     var firstPOS = '';
     if (senses.length > 0) {
@@ -255,9 +259,8 @@
     return '<div class="word-card">' +
       '<div class="word-card-header">' +
       '<h3>' + esc(w) + '</h3>' +
-      ipaHTML +
       posTag +
-      audioHTML +
+      pronAudioHTML +
       '</div>' +
       '<div class="word-card-body">' + sensesHTML + '</div>' +
       '</div>';
@@ -322,12 +325,17 @@
     }
 
     $('fc-word').textContent = entry.word;
-    var ipaText = '';
-    if (pron.uk) ipaText += 'UK /' + pron.uk + '/';
-    if (pron.uk && pron.us) ipaText += '  ';
-    if (pron.us) ipaText += 'US /' + pron.us + '/';
-    $('fc-ipa').textContent = ipaText;
-    $('fc-pos').textContent = firstPOS;
+    var frontMeta = '';
+    if (firstPOS) frontMeta += '<span class="flashcard-pos">' + esc(firstPOS) + '</span> ';
+    if (pron.uk) {
+      frontMeta += '<span class="flashcard-ipa">UK /' + pron.uk + '/</span>';
+      if (audio.uk) frontMeta += ' <button onclick="window.playAudio(\'' + audio.uk + '\')" class="word-audio-btn">🔊</button>';
+    }
+    if (pron.us) {
+      frontMeta += ' <span class="flashcard-ipa">US /' + pron.us + '/</span>';
+      if (audio.us) frontMeta += ' <button onclick="window.playAudio(\'' + audio.us + '\')" class="word-audio-btn">🔊</button>';
+    }
+    $('fc-front-meta').innerHTML = frontMeta;
 
     var defHTML = '';
     var zhHTML = '';
@@ -352,9 +360,7 @@
     if (audio.uk) audioHTML += '<button onclick="window.playAudio(\'' + audio.uk + '\')">🔊 UK</button>';
     if (audio.us) audioHTML += '<button onclick="window.playAudio(\'' + audio.us + '\')">🔊 US</button>';
     $('fc-audio').innerHTML = audioHTML;
-    $('fc-audio-front').innerHTML = audioHTML;
     $('fc-audio').onclick = function (e) { e.stopPropagation(); };
-    $('fc-audio-front').onclick = function (e) { e.stopPropagation(); };
   }
 
   function fcFlip() {
