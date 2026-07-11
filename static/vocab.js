@@ -13,14 +13,42 @@
 
   let currentAudio = null;
 
+  const STORAGE_KEY = 'vocab-state';
+
   const $ = (id) => document.getElementById(id);
   const qs = (s, p) => (p || document).querySelector(s);
   const qsa = (s, p) => (p || document).querySelectorAll(s);
 
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        page: page,
+        fcIndex: fcIndex,
+        mode: mode,
+        searchQuery: searchQuery,
+      }));
+    } catch (_) {}
+  }
+
+  function loadState() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (!saved) return;
+      page = saved.page || 1;
+      fcIndex = saved.fcIndex || 0;
+      searchQuery = saved.searchQuery || '';
+      mode = saved.mode || 'browse';
+    } catch (_) {}
+  }
+
   function init() {
     filtered = data;
-    renderBrowse();
-    setupEventListeners();
+    loadState();
+    if (searchQuery) $('vocab-search').value = searchQuery;
+    applyFilter();
+    qsa('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    qs('.tab-btn[data-mode="' + mode + '"]').classList.add('active');
+    switchMode(mode, true);
   }
 
   function setupEventListeners() {
@@ -57,7 +85,7 @@
     $('vocab-export').addEventListener('click', exportFiltered);
   }
 
-  function switchMode(newMode) {
+  function switchMode(newMode, restore) {
     mode = newMode;
     qsa('.vocab-mode').forEach(function (el) { el.classList.remove('active'); });
 
@@ -66,8 +94,9 @@
       filterAndRender();
     } else if (mode === 'flashcard') {
       $('vocab-flashcard').classList.add('active');
-      initFlashcards();
+      initFlashcards(undefined, restore);
     }
+    saveState();
   }
 
   function filterAndRender() {
@@ -134,6 +163,7 @@
         playAudio(this.dataset.url);
       });
     });
+    saveState();
   }
 
   function renderPagination(containerId, currentPage, totalPages) {
@@ -226,7 +256,7 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  function initFlashcards(pos) {
+  function initFlashcards(pos, restore) {
     var words = data;
     if (pos) {
       words = data.filter(function (entry) {
@@ -238,13 +268,14 @@
       });
     }
     fcWords = words;
-    fcIndex = 0;
+    fcIndex = restore ? Math.min(fcIndex, fcWords.length - 1) : 0;
     fcFlipped = false;
     if (fcWords.length > 0) {
       renderFlashcard();
     } else {
       $('fc-word').textContent = 'No words found';
     }
+    saveState();
   }
 
   function renderFlashcard() {
@@ -329,6 +360,7 @@
       fcIndex--;
       fcFlipped = false;
       renderFlashcard();
+      saveState();
     }
   }
 
@@ -337,6 +369,7 @@
       fcIndex++;
       fcFlipped = false;
       renderFlashcard();
+      saveState();
     }
   }
 
