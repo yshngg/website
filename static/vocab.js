@@ -83,6 +83,7 @@
 
     $('flashcard-card').addEventListener('click', fcFlip);
     $('vocab-export').addEventListener('click', exportFiltered);
+    $('vocab-anki').addEventListener('click', exportAnki);
   }
 
   function switchMode(newMode, restore) {
@@ -379,6 +380,43 @@
     var a = document.createElement('a');
     a.href = url;
     a.download = 'vocabulary.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportAnki() {
+    var lines = [];
+    var wordMap = {};
+    data.forEach(function (entry) {
+      if (wordMap[entry.word]) return;
+      wordMap[entry.word] = true;
+      var w = entry.word;
+      var d = entry.data || {};
+      var pron = d.pronunciation || {};
+      var senses = d.senses || [];
+      var ipa = pron.uk || pron.us || '';
+      var pos = senses.length > 0 ? senses[0].pos : '';
+      var firstDef = senses.length > 0 && senses[0].definitions.length > 0 ? senses[0].definitions[0] : {};
+      var zh = firstDef.zh || '';
+      var defEn = firstDef.en || '';
+      var exs = [];
+      senses.forEach(function (sg) {
+        (sg.definitions || []).forEach(function (def) {
+          (def.examples || []).forEach(function (ex) {
+            if (ex.en) exs.push(ex.en.replace(/["']/g, ''));
+          });
+        });
+      });
+      var examples = exs.slice(0, 5).join(' | ');
+      var fields = [w, ipa, pos, zh, defEn, examples].map(function (f) { return f.replace(/\t/g, ' '); }).join('\t');
+      lines.push(fields);
+    });
+    var tsv = lines.join('\n');
+    var blob = new Blob([tsv], { type: 'text/tab-separated-values' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'vocabulary-anki.txt';
     a.click();
     URL.revokeObjectURL(url);
   }
