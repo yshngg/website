@@ -79,6 +79,14 @@
         if (e.key === 'ArrowLeft') fcPrev();
         else if (e.key === 'ArrowRight') fcNext();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
+      } else if (mode === 'browse') {
+        if (e.key === 'ArrowLeft') {
+          var prevBtn = qs('.vocab-pagination button[data-page]:not(:disabled):first-child');
+          if (prevBtn) prevBtn.click();
+        } else if (e.key === 'ArrowRight') {
+          var nextBtn = qs('.vocab-pagination button[data-page]:last-child:not(:disabled)');
+          if (nextBtn) nextBtn.click();
+        }
       }
     });
 
