@@ -37,19 +37,6 @@ kbd {
   outline: 2px solid var(--primary);
   outline-offset: -1px;
 }
-.pos-btn {
-  padding: 2px var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg);
-  color: var(--fg);
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-.pos-btn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 1px;
-}
 .flashcard-nav button:disabled {
   opacity: 0.3;
   cursor: default;
@@ -65,8 +52,7 @@ kbd {
 }
 .vocab-pagination button,
 .flashcard-nav button,
-#fc-shuffle,
-#vocab-export {
+#fc-shuffle {
   background: none;
   border: none;
   color: var(--primary);
@@ -78,8 +64,7 @@ kbd {
 }
 .vocab-pagination button:not(:disabled):hover,
 .flashcard-nav button:hover,
-#fc-shuffle:hover,
-#vocab-export:hover {
+#fc-shuffle:hover {
   opacity: 0.7;
 }
 .vocab-pagination button:disabled {

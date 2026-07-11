@@ -94,7 +94,6 @@
     });
 
     if ($('flashcard-card')) $('flashcard-card').addEventListener('click', fcFlip);
-    if ($('vocab-export')) $('vocab-export').addEventListener('click', exportFiltered);
   }
 
   function pickRandom() {
@@ -378,16 +377,6 @@
     fcWords = pickRandom();
     fcIndex = 0;
     renderCurrentCard();
-  }
-
-  function exportFiltered() {
-    var blob = new Blob([JSON.stringify(filtered, null, 2)], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'vocabulary.json';
-    a.click();
-    URL.revokeObjectURL(url);
   }
 
   function playCurrentAudio() {
