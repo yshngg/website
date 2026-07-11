@@ -134,6 +134,12 @@ kbd {
   font-size: 0.85rem;
   white-space: nowrap;
 }
+.word-ipa.clickable {
+  cursor: pointer;
+}
+.word-ipa.clickable:hover {
+  text-decoration: underline;
+}
 .word-pos {
   font-size: 0.8rem;
   color: var(--muted);
@@ -265,7 +271,6 @@ kbd {
 .flashcard-pos {
   font-size: 0.85rem;
   color: var(--muted);
-  background: var(--accent);
   padding: 2px var(--space-3);
   border-radius: var(--radius);
   margin-block-start: var(--space-2);
