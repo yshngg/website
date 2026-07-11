@@ -211,20 +211,20 @@
       pronAudioHTML += '<span class="word-ipa';
       if (audio.uk) pronAudioHTML += ' clickable';
       pronAudioHTML += '"';
-      if (audio.uk) pronAudioHTML += ' title="Click to play" data-url="' + esc(audio.uk) + '"';
+      if (audio.uk) pronAudioHTML += ' title="' + VOCAB_I18N.uk_pron + '" data-url="' + esc(audio.uk) + '"';
       pronAudioHTML += '>UK /' + pron.uk + '/</span> ';
     }
     if (pron.us) {
       pronAudioHTML += '<span class="word-ipa';
       if (audio.us) pronAudioHTML += ' clickable';
       pronAudioHTML += '"';
-      if (audio.us) pronAudioHTML += ' title="Click to play" data-url="' + esc(audio.us) + '"';
+      if (audio.us) pronAudioHTML += ' title="' + VOCAB_I18N.us_pron + '" data-url="' + esc(audio.us) + '"';
       pronAudioHTML += '>US /' + pron.us + '/</span> ';
     }
     // fallback: audio without pronunciation
     if (!pron.uk && !pron.us) {
-      if (audio.uk) pronAudioHTML += '<span class="word-ipa clickable" title="Click to play" data-url="' + esc(audio.uk) + '">🔊 UK</span> ';
-      if (audio.us) pronAudioHTML += '<span class="word-ipa clickable" title="Click to play" data-url="' + esc(audio.us) + '">🔊 US</span> ';
+      if (audio.uk) pronAudioHTML += '<span class="word-ipa clickable" title="' + VOCAB_I18N.uk_pron + '" data-url="' + esc(audio.uk) + '">🔊 UK</span> ';
+      if (audio.us) pronAudioHTML += '<span class="word-ipa clickable" title="' + VOCAB_I18N.us_pron + '" data-url="' + esc(audio.us) + '">🔊 US</span> ';
     }
 
     var firstPOS = '';
@@ -323,10 +323,10 @@
     var frontMeta = '';
     if (firstPOS) frontMeta += '<div class="flashcard-pos">' + esc(firstPOS) + '</div>';
     if (pron.uk) {
-      frontMeta += '<div class="flashcard-ipa"' + (audio.uk ? ' title="Click to play" data-url="' + esc(audio.uk) + '"' : '') + '>UK /' + pron.uk + '/</div>';
+      frontMeta += '<span class="flashcard-ipa"' + (audio.uk ? ' title="' + VOCAB_I18N.uk_pron + '" data-url="' + esc(audio.uk) + '"' : '') + '>UK /' + pron.uk + '/</span> ';
     }
     if (pron.us) {
-      frontMeta += '<div class="flashcard-ipa"' + (audio.us ? ' title="Click to play" data-url="' + esc(audio.us) + '"' : '') + '>US /' + pron.us + '/</div>';
+      frontMeta += '<span class="flashcard-ipa"' + (audio.us ? ' title="' + VOCAB_I18N.us_pron + '" data-url="' + esc(audio.us) + '"' : '') + '>US /' + pron.us + '/</span>';
     }
     $('fc-front-meta').innerHTML = frontMeta;
 
