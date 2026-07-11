@@ -9,9 +9,6 @@
   font-size: var(--text-7);
   margin-block: 0 var(--space-6);
 }
-#vocab-app[data-mode="browse"] #vocab-hint { display: none; }
-#vocab-app[data-mode="browse"] #vocab-search { display: block; }
-#vocab-app[data-mode="flashcard"] #vocab-search { display: none; }
 kbd {
   font-family: var(--font-mono);
   font-size: 0.8em;
@@ -40,29 +37,6 @@ kbd {
   outline: 2px solid var(--primary);
   outline-offset: -1px;
 }
-.vocab-tabs {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  align-self: flex-start;
-}
-.tab-btn {
-  padding: var(--space-2) var(--space-4);
-  border: none;
-  background: var(--bg);
-  color: var(--fg);
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-.tab-btn:not(:last-child) {
-  border-right: 1px solid var(--border);
-}
-.tab-btn.active {
-  background: var(--primary);
-  color: light-dark(#fff, #09090b);
-}
 .pos-btn {
   padding: 2px var(--space-3);
   border: 1px solid var(--border);
@@ -80,12 +54,6 @@ kbd {
   opacity: 0.3;
   cursor: default;
   text-decoration: none;
-}
-.vocab-mode {
-  display: none;
-}
-.vocab-mode.active {
-  display: block;
 }
 .vocab-pagination {
   display: flex;
@@ -306,13 +274,6 @@ kbd {
   margin-block-start: var(--space-4);
 }
 @media (max-width: 600px) {
-  .vocab-tabs {
-    align-self: stretch;
-  }
-  .tab-btn {
-    flex: 1;
-    text-align: center;
-  }
   .flashcard-nav {
     flex-wrap: wrap;
   }

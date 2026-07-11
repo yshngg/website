@@ -26,7 +26,6 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         page: page,
         fcIndex: fcIndex,
-        mode: mode,
         searchQuery: searchQuery,
       }));
     } catch (_) {}
@@ -39,39 +38,38 @@
       page = saved.page || 1;
       fcIndex = saved.fcIndex || 0;
       searchQuery = saved.searchQuery || '';
-      mode = saved.mode || 'browse';
     } catch (_) {}
   }
 
   function init() {
     if (!data) return;
+    mode = window.location.pathname.indexOf('/vocab/flashcard/') === 0 ? 'flashcard' : 'browse';
     filtered = data;
     loadState();
-    if (searchQuery) $('vocab-search').value = searchQuery;
-    applyFilter();
-    qsa('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-    qs('.tab-btn[data-mode="' + mode + '"]').classList.add('active');
-    switchMode(mode, true);
+    if (mode === 'flashcard') {
+      fcWords = pickRandom();
+      fcIndex = 0;
+      fcFlipped = false;
+      renderFlashcard();
+    } else {
+      if (searchQuery && $('vocab-search')) $('vocab-search').value = searchQuery;
+      applyFilter();
+      renderBrowse();
+    }
     setupEventListeners();
   }
 
   function setupEventListeners() {
-    $('vocab-search').addEventListener('input', function () {
-      searchQuery = this.value.toLowerCase();
-      page = 1;
-      filterAndRender();
-    });
-
-    qsa('.tab-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        qsa('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
-        this.classList.add('active');
-        switchMode(this.dataset.mode);
+    if ($('vocab-search')) {
+      $('vocab-search').addEventListener('input', function () {
+        searchQuery = this.value.toLowerCase();
+        page = 1;
+        filterAndRender();
       });
-    });
+    }
 
-    $('fc-prev').addEventListener('click', fcPrev);
-    $('fc-next').addEventListener('click', fcNext);
+    if ($('fc-prev')) $('fc-prev').addEventListener('click', fcPrev);
+    if ($('fc-next')) $('fc-next').addEventListener('click', fcNext);
     if ($('fc-shuffle')) $('fc-shuffle').addEventListener('click', fcShuffle);
 
     document.addEventListener('keydown', function (e) {
@@ -84,7 +82,7 @@
         else if (e.key === 'ArrowRight') fcNext();
         else if (e.key === 's' || e.key === 'S') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
-      } else if (mode === 'browse') {
+      } else {
         if (e.key === 'ArrowLeft') {
           var prevBtn = qs('.vocab-pagination button[data-page]:not(:disabled):first-child');
           if (prevBtn) prevBtn.click();
@@ -95,29 +93,14 @@
       }
     });
 
-    $('flashcard-card').addEventListener('click', fcFlip);
-    $('vocab-export').addEventListener('click', exportFiltered);
+    if ($('flashcard-card')) $('flashcard-card').addEventListener('click', fcFlip);
+    if ($('vocab-export')) $('vocab-export').addEventListener('click', exportFiltered);
   }
 
   function pickRandom() {
     var pool = searchQuery ? filtered : data;
     var shuffled = pool.slice().sort(function () { return Math.random() - 0.5; });
     return shuffled.slice(0, Math.min(RANDOM_SIZE, shuffled.length));
-  }
-
-  function switchMode(newMode, restore) {
-    mode = newMode;
-    qsa('.vocab-mode').forEach(function (el) { el.classList.remove('active'); });
-
-    if (mode === 'browse') {
-      $('vocab-browse').classList.add('active');
-      filterAndRender();
-    } else if (mode === 'flashcard') {
-      $('vocab-flashcard').classList.add('active');
-      initFlashcards(restore);
-    }
-    $('vocab-app').dataset.mode = mode;
-    saveState();
   }
 
   function filterAndRender() {
