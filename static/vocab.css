@@ -181,7 +181,6 @@ kbd {
 }
 .flashcard {
   perspective: 1000px;
-  height: 400px;
   outline: none;
 }
 .flashcard-inner {
