@@ -185,15 +185,10 @@
   }
 
   function playVariant(variant) {
-    if (mode === 'flashcard') {
-      var url = fcWords[fcIndex] && fcWords[fcIndex].data && fcWords[fcIndex].data.audio && fcWords[fcIndex].data.audio[variant];
-      if (url) playAudio(url);
-    } else {
-      var label = variant === 'uk' ? 'UK' : 'US';
-      qsa('.word-ipa.clickable').forEach(function (el) {
-        if (el.textContent.trim().startsWith(label)) el.click();
-      });
-    }
+    if (mode !== 'flashcard') return;
+    var entry = fcWords[fcIndex];
+    if (!entry || !entry.data) return;
+    playAudio(variant === 'uk' ? entry.data.uk_audio : entry.data.us_audio);
   }
 
   function playAudio(url) {
