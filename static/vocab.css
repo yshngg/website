@@ -41,14 +41,12 @@ kbd {
   opacity: 0.7;
 }
 
-/* Word cards */
 .word-card {
   margin-block-end: var(--space-6);
 }
 details.word-card summary::marker,
 details.word-card summary::-webkit-details-marker {
   display: none;
-  content: '';
 }
 .word-card-header {
   display: flex;
@@ -101,7 +99,7 @@ details.word-card summary::-webkit-details-marker {
   padding-left: 1.5em;
 }
 .def-examples li::before {
-  content: "—";
+  content: "\2014";
   position: absolute;
   left: 0;
   color: var(--muted);
@@ -118,11 +116,6 @@ details.word-card summary::-webkit-details-marker {
   margin-block-end: var(--space-2);
 }
 
-/* Flashcard */
-#flashcard-container {
-  width: 100%;
-  margin: 0 auto;
-}
 .flashcard-toolbar {
   display: flex;
   justify-content: space-between;
@@ -170,7 +163,6 @@ details.word-card summary::-webkit-details-marker {
   font-family: "EB Garamond", serif;
 }
 #fc-front-meta {
-  width: 100%;
   text-align: center;
 }
 .flashcard-ipa {
@@ -190,9 +182,6 @@ details.word-card summary::-webkit-details-marker {
   padding: 2px var(--space-3);
   border-radius: var(--radius);
   margin-block-start: var(--space-2);
-}
-.fc-section {
-  width: 100%;
 }
 .fc-section strong {
   font-size: 0.8rem;
