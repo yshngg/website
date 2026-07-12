@@ -3,15 +3,24 @@
 {% block title %}Flashcard - {{ config.title }}{% endblock %}
 
 {% block content %}
+{% set vocab_section = get_section(path="vocab/_index.md") %}
+<script>
+window.vocabData = [
+{% for p in vocab_section.pages %}
+  {word: {{ p.title | json_encode | safe }}, data: {{ p.extra | json_encode | safe }}}{% if not loop.last %},{% endif %}
+{% endfor %}
+];
+</script>
+
 <div id="vocab-app">
   <h1>Flashcard</h1>
-  <p class="text-light vocab-hint shortcuts">
-    <span><kbd>k</kbd> UK audio</span>
-    <span><kbd>s</kbd> US audio</span>
-    <span><kbd>p</kbd>/<kbd>←</kbd> previous card</span>
-    <span><kbd>n</kbd>/<kbd>→</kbd> next card</span>
-    <span><kbd>Space</kbd> flip card</span>
-    <span><kbd>r</kbd> shuffle deck</span>
+  <p class="text-light mb-6 hstack" style="gap:0.125rem 1.25rem;justify-content:space-around">
+    <span style="white-space:nowrap"><kbd>k</kbd> UK audio</span>
+    <span style="white-space:nowrap"><kbd>s</kbd> US audio</span>
+    <span style="white-space:nowrap"><kbd>p</kbd>/<kbd>←</kbd> previous card</span>
+    <span style="white-space:nowrap"><kbd>n</kbd>/<kbd>→</kbd> next card</span>
+    <span style="white-space:nowrap"><kbd>Space</kbd> flip card</span>
+    <span style="white-space:nowrap"><kbd>r</kbd> shuffle deck</span>
   </p>
   <div id="flashcard-container">
     <div class="flashcard-toolbar">
@@ -28,16 +37,16 @@
           <div class="flashcard-word" id="fc-word"></div>
           <div id="fc-front-meta"></div>
         </div>
-        <div class="flashcard-back" id="fc-back">
-          <div class="fc-section">
+        <div class="flashcard-back">
+          <div>
             <strong>Definition:</strong>
             <div id="fc-definition"></div>
           </div>
-          <div class="fc-section">
+          <div>
             <strong>Translation:</strong>
             <div id="fc-translation"></div>
           </div>
-          <div class="fc-section" id="fc-examples-section">
+          <div>
             <strong>Examples:</strong>
             <div id="fc-examples"></div>
           </div>

@@ -1,26 +1,63 @@
 {% extends "base.html" %}
-
 {% block title %}Vocabulary - {{ config.title }}{% endblock %}
-
 {% block content %}
 <div id="vocab-app">
   <h1>Vocabulary</h1>
-  <p class="text-light vocab-hint">
+  <p class="text-light mb-6">
     Words collected from daily reading — translations, examples, and pronunciation via
     <a href="https://dictionary.cambridge.org/" target="_blank">Cambridge Dictionary</a>.
   </p>
-  <a href="/vocab/flashcard/" class="flashcard-link">Flashcards →</a>
-  <p class="text-light vocab-hint shortcuts">
-    <span><kbd>p</kbd>/<kbd>←</kbd> previous page</span>
-    <span><kbd>n</kbd>/<kbd>→</kbd> next page</span>
-  </p>
-  <div class="vocab-toolbar">
-    <input type="text" id="vocab-search" placeholder="Search words, definitions, translations..." />
+  <div class="vstack mb-6">
+    <div class="hstack">
+      <a href="/vocab/flashcard/">Flashcards →</a>
+    </div>
+    <input type="search" id="vocab-search" placeholder="Search words, definitions, translations..." />
   </div>
 
-  <div class="vocab-pagination" id="browse-pagination-top"></div>
-  <div id="vocab-list"></div>
-  <div class="vocab-pagination" id="browse-pagination-bottom"></div>
+  <div id="vocab-pagination-top" class="hstack" style="gap:var(--space-3);margin-block:var(--space-4);flex-wrap:wrap">
+    {% if paginator.previous %}{% set prev_url = paginator.previous | replace(from=config.base_url, to="") %}<a href="{{ prev_url | safe }}">‹ Prev</a>{% else %}<a class="disabled" aria-disabled="true">‹ Prev</a>{% endif %}
+    <span class="text-light">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
+    {% if paginator.next %}{% set next_url = paginator.next | replace(from=config.base_url, to="") %}<a href="{{ next_url | safe }}">Next ›</a>{% else %}<a class="disabled" aria-disabled="true">Next ›</a>{% endif %}
+  </div>
+
+  <div id="vocab-list" class="content">
+    {% for word in paginator.pages %}
+    <details class="word-card">
+      <summary class="word-card-header">
+        <h3>{{ word.title }}</h3>
+        {% if word.extra.senses %}<span class="badge-taxonomy">{{ word.extra.senses[0].pos }}</span>{% endif %}
+        {% if word.extra.uk_pron %}<span class="word-ipa{% if word.extra.uk_audio %} clickable{% endif %}" data-url="{{ word.extra.uk_audio }}">UK /{{ word.extra.uk_pron }}/</span>{% endif %}
+        {% if word.extra.us_pron %}<span class="word-ipa{% if word.extra.us_audio %} clickable{% endif %}" data-url="{{ word.extra.us_audio }}">US /{{ word.extra.us_pron }}/</span>{% endif %}
+      </summary>
+      <div class="word-card-body">
+        {% for sense in word.extra.senses %}
+        <p class="sense-label">{{ sense.pos }}</p>
+        {% for def in sense.definitions %}
+        <div class="def-block">
+          {% if def.en %}<p class="def-en">{{ def.en }}</p>{% endif %}
+          {% if def.zh %}<p class="def-zh">{{ def.zh }}</p>{% endif %}
+          {% if def.examples %}
+          <ul class="def-examples">
+            {% for ex in def.examples %}
+            <li>{{ ex.en }}{% if ex.zh %}<span class="ex-zh">{{ ex.zh }}</span>{% endif %}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+        {% endfor %}
+      </div>
+    </details>
+    {% endfor %}
+  </div>
+
+  <div id="vocab-pagination-bottom" class="hstack" style="gap:var(--space-3);margin-block:var(--space-4);flex-wrap:wrap">
+    {% if paginator.previous %}{% set prev_url = paginator.previous | replace(from=config.base_url, to="") %}<a href="{{ prev_url | safe }}">‹ Prev</a>{% else %}<a class="disabled" aria-disabled="true">‹ Prev</a>{% endif %}
+    <span class="text-light">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
+    {% if paginator.next %}{% set next_url = paginator.next | replace(from=config.base_url, to="") %}<a href="{{ next_url | safe }}">Next ›</a>{% else %}<a class="disabled" aria-disabled="true">Next ›</a>{% endif %}
+  </div>
+
+  <div id="search-results" class="content" style="display:none"></div>
 </div>
 
 <script src="/vocab.js"></script>

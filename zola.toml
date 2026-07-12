@@ -8,6 +8,11 @@ taxonomies = [
     { name = "tags", feed = true },
 ]
 
+build_search_index = true
+
+[search]
+index_format = "elasticlunr_javascript"
+
 [languages.zh]
 title = "Yusheng - 个人网站"
 description = "Yusheng 的个人网站 - 开源、云原生"
