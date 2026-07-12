@@ -21,14 +21,24 @@
   function attachAudioHandlers() {
     qsa('.word-ipa.clickable').forEach(function (el) {
       el.addEventListener('click', function (e) {
-        e.stopPropagation();
         playAudio(this.dataset.url);
       });
     });
     qsa('.flashcard-ipa[data-url]').forEach(function (el) {
       el.addEventListener('click', function (e) {
-        e.stopPropagation();
         playAudio(this.dataset.url);
+      });
+    });
+  }
+
+  function preventDetailsToggleOnIpa() {
+    qsa('details.word-card').forEach(function (details) {
+      var summary = details.querySelector('summary');
+      if (!summary) return;
+      summary.addEventListener('click', function (e) {
+        if (e.target.closest('.word-ipa')) {
+          e.preventDefault();
+        }
       });
     });
   }
@@ -47,6 +57,7 @@
       setupFlashcardUI();
     } else {
       attachAudioHandlers();
+      preventDetailsToggleOnIpa();
       setupSearch();
     }
     setupKeyboardShortcuts();
@@ -69,6 +80,28 @@
     } catch (_) {}
   }
 
+  function loadSearchDeps(callback) {
+    if (typeof elasticlunr !== 'undefined' && window.searchIndex) {
+      callback();
+      return;
+    }
+    $('search-results').innerHTML = '<p class="text-light">Loading search index...</p>';
+    $('search-results').style.display = '';
+
+    var lunrEl = document.createElement('script');
+    lunrEl.src = '/elasticlunr.min.js';
+    lunrEl.onload = function () {
+      var idxEl = document.createElement('script');
+      idxEl.src = '/search_index.en.js';
+      idxEl.onload = function () {
+        searchIdx = elasticlunr.Index.load(window.searchIndex);
+        callback();
+      };
+      document.body.appendChild(idxEl);
+    };
+    document.body.appendChild(lunrEl);
+  }
+
   function setupSearch() {
     var input = $('vocab-search');
     if (!input) return;
@@ -83,31 +116,30 @@
         return;
       }
 
-      try {
-        if (!searchIdx) {
-          searchIdx = elasticlunr.Index.load(window.searchIndex);
-        }
-        var results = searchIdx.search(q, { expand: true });
-        var html = '';
-        for (var i = 0; i < Math.min(results.length, 50); i++) {
-          var r = results[i];
-          var doc = searchIdx.documentStore.getDoc(r.ref);
-          html += '<a href="' + r.ref + '" class="search-result">' +
-            '<strong>' + (doc.title || r.ref) + '</strong>' +
-            '<span class="text-light">' + (doc.body || '').substring(0, 120) + '</span>' +
-            '</a>';
-        }
-        if (!html) html = '<p class="text-light">No words found.</p>';
+      loadSearchDeps(function () {
+        try {
+          var results = searchIdx.search(q, { expand: true });
+          var html = '';
+          for (var i = 0; i < Math.min(results.length, 50); i++) {
+            var r = results[i];
+            var doc = searchIdx.documentStore.getDoc(r.ref);
+            html += '<a href="' + r.ref + '" class="search-result">' +
+              '<strong>' + (doc.title || r.ref) + '</strong>' +
+              '<span class="text-light">' + (doc.body || '').substring(0, 120) + '</span>' +
+              '</a>';
+          }
+          if (!html) html = '<p class="text-light">No words found.</p>';
 
-        $('vocab-list').style.display = 'none';
-        if ($('vocab-pagination-top')) $('vocab-pagination-top').style.display = 'none';
-        if ($('vocab-pagination-bottom')) $('vocab-pagination-bottom').style.display = 'none';
-        $('search-results').innerHTML = html;
-        $('search-results').style.display = '';
-      } catch (e) {
-        $('search-results').innerHTML = '<p class="text-light">Search unavailable.</p>';
-        $('search-results').style.display = '';
-      }
+          $('vocab-list').style.display = 'none';
+          if ($('vocab-pagination-top')) $('vocab-pagination-top').style.display = 'none';
+          if ($('vocab-pagination-bottom')) $('vocab-pagination-bottom').style.display = 'none';
+          $('search-results').innerHTML = html;
+          $('search-results').style.display = '';
+        } catch (e) {
+          $('search-results').innerHTML = '<p class="text-light">Search unavailable.</p>';
+          $('search-results').style.display = '';
+        }
+      });
     });
   }
 
