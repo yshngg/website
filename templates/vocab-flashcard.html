@@ -5,12 +5,13 @@
 {% block content %}
 <div id="vocab-app">
   <h1>Flashcard</h1>
-  <p class="text-light vocab-hint">
-    <kbd>k</kbd> play UK<br/>
-    <kbd>p</kbd> play US<br/>
-    <kbd>←</kbd> <kbd>→</kbd> navigate<br/>
-    <kbd>Space</kbd> flip<br/>
-    <kbd>s</kbd> shuffle
+  <p class="text-light vocab-hint shortcuts">
+    <span><kbd>k</kbd> UK audio</span>
+    <span><kbd>s</kbd> US audio</span>
+    <span><kbd>p</kbd>/<kbd>←</kbd> previous card</span>
+    <span><kbd>n</kbd>/<kbd>→</kbd> next card</span>
+    <span><kbd>Space</kbd> flip card</span>
+    <span><kbd>r</kbd> shuffle deck</span>
   </p>
   <div id="flashcard-container">
     <div class="flashcard-toolbar">
