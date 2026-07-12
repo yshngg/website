@@ -73,15 +73,9 @@
     if ($('fc-shuffle')) $('fc-shuffle').addEventListener('click', fcShuffle);
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'k' || e.key === 'K') {
-        playVariant('uk');
-        return;
-      }
-      if (e.key === 's' || e.key === 'S') {
-        playVariant('us');
-        return;
-      }
       if (mode === 'flashcard') {
+        if (e.key === 'k' || e.key === 'K') { playVariant('uk'); return; }
+        if (e.key === 's' || e.key === 'S') { playVariant('us'); return; }
         if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') fcPrev();
         else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') fcNext();
         else if (e.key === 'r' || e.key === 'R') fcShuffle();
