@@ -40,6 +40,12 @@ kbd {
 #fc-shuffle:hover {
   opacity: 0.7;
 }
+.hstack a.disabled {
+  color: var(--muted);
+  cursor: default;
+  text-decoration: none;
+  pointer-events: none;
+}
 
 .word-card {
   margin-block-end: var(--space-6);
