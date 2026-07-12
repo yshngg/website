@@ -77,14 +77,11 @@
         playVariant('uk');
         return;
       }
-      if (e.key === 'p' || e.key === 'P') {
-        playVariant('us');
-        return;
-      }
       if (mode === 'flashcard') {
-        if (e.key === 'ArrowLeft') fcPrev();
-        else if (e.key === 'ArrowRight') fcNext();
-        else if (e.key === 's' || e.key === 'S') fcShuffle();
+        if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') fcPrev();
+        else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') fcNext();
+        else if (e.key === 's' || e.key === 'S') playVariant('us');
+        else if (e.key === 'r' || e.key === 'R') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
       } else {
         if (e.key === 'ArrowLeft') {
