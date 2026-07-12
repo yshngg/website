@@ -77,17 +77,20 @@
         playVariant('uk');
         return;
       }
+      if (e.key === 's' || e.key === 'S') {
+        playVariant('us');
+        return;
+      }
       if (mode === 'flashcard') {
         if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') fcPrev();
         else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') fcNext();
-        else if (e.key === 's' || e.key === 'S') playVariant('us');
         else if (e.key === 'r' || e.key === 'R') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
       } else {
-        if (e.key === 'ArrowLeft') {
+        if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') {
           var prevBtn = qs('.vocab-pagination button[data-page]:not(:disabled):first-child');
           if (prevBtn) prevBtn.click();
-        } else if (e.key === 'ArrowRight') {
+        } else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
           var nextBtn = qs('.vocab-pagination button[data-page]:last-child:not(:disabled)');
           if (nextBtn) nextBtn.click();
         }
