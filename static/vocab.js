@@ -131,10 +131,10 @@
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
       } else {
         if (e.key === 'ArrowLeft') {
-          var prevBtn = qs('.vocab-pagination a[href]:first-child');
+          var prevBtn = qs('#vocab-pagination-top a[href]:first-child, #vocab-pagination-bottom a[href]:first-child');
           if (prevBtn) prevBtn.click();
         } else if (e.key === 'ArrowRight') {
-          var nextBtn = qs('.vocab-pagination a[href]:last-child');
+          var nextBtn = qs('#vocab-pagination-top a[href]:last-child, #vocab-pagination-bottom a[href]:last-child');
           if (nextBtn) nextBtn.click();
         }
       }

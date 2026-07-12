@@ -3,39 +3,39 @@
 {% block content %}
 <div id="vocab-app">
   <h1>Vocabulary</h1>
-  <p class="text-light vocab-hint">
+  <p class="text-light mb-6">
     Words collected from daily reading — translations, examples, and pronunciation via
     <a href="https://dictionary.cambridge.org/" target="_blank">Cambridge Dictionary</a>.
   </p>
-  <div class="vocab-toolbar">
+  <div class="vstack mb-6">
     <div class="hstack">
       <a href="/vocab/flashcard/">Flashcards →</a>
     </div>
     <input type="search" id="vocab-search" placeholder="Search words, definitions, translations..." />
   </div>
 
-  <div id="vocab-pagination-top" class="vocab-pagination">
+  <div id="vocab-pagination-top" class="hstack justify-center" style="gap:var(--space-3);margin-block:var(--space-4);flex-wrap:wrap">
     {% if paginator.previous %}<a href="{{ paginator.previous }}">‹ Prev</a>{% endif %}
-    <span>{{ paginator.current_index }} / {{ paginator.number_pagers }} ({{ paginator.paginate_by }} per page)</span>
+    <span class="text-light">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
     {% if paginator.next %}<a href="{{ paginator.next }}">Next ›</a>{% endif %}
   </div>
 
-  <div id="vocab-list">
+  <div id="vocab-list" class="content">
     {% for word in paginator.pages %}
     <details class="word-card">
       <summary class="word-card-header">
         <h3>{{ word.title }}</h3>
-        {% if word.extra.senses %}<span class="word-pos">{{ word.extra.senses[0].pos }}</span>{% endif %}
+        {% if word.extra.senses %}<span class="badge-taxonomy">{{ word.extra.senses[0].pos }}</span>{% endif %}
         {% if word.extra.uk_pron %}<span class="word-ipa{% if word.extra.uk_audio %} clickable{% endif %}" data-url="{{ word.extra.uk_audio }}">UK /{{ word.extra.uk_pron }}/</span>{% endif %}
         {% if word.extra.us_pron %}<span class="word-ipa{% if word.extra.us_audio %} clickable{% endif %}" data-url="{{ word.extra.us_audio }}">US /{{ word.extra.us_pron }}/</span>{% endif %}
       </summary>
       <div class="word-card-body">
         {% for sense in word.extra.senses %}
-        <div class="sense-label">{{ sense.pos }}</div>
+        <p class="sense-label">{{ sense.pos }}</p>
         {% for def in sense.definitions %}
         <div class="def-block">
-          {% if def.en %}<div class="def-en">{{ def.en }}</div>{% endif %}
-          {% if def.zh %}<div class="def-zh">{{ def.zh }}</div>{% endif %}
+          {% if def.en %}<p class="def-en">{{ def.en }}</p>{% endif %}
+          {% if def.zh %}<p class="def-zh">{{ def.zh }}</p>{% endif %}
           {% if def.examples %}
           <ul class="def-examples">
             {% for ex in def.examples %}
@@ -51,13 +51,13 @@
     {% endfor %}
   </div>
 
-  <div id="vocab-pagination-bottom" class="vocab-pagination">
+  <div id="vocab-pagination-bottom" class="hstack justify-center" style="gap:var(--space-3);margin-block:var(--space-4);flex-wrap:wrap">
     {% if paginator.previous %}<a href="{{ paginator.previous }}">‹ Prev</a>{% endif %}
-    <span>{{ paginator.current_index }} / {{ paginator.number_pagers }} ({{ paginator.paginate_by }} per page)</span>
+    <span class="text-light">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
     {% if paginator.next %}<a href="{{ paginator.next }}">Next ›</a>{% endif %}
   </div>
 
-  <div id="search-results" style="display:none"></div>
+  <div id="search-results" class="content" style="display:none"></div>
 </div>
 
 <script src="/elasticlunr.min.js"></script>
