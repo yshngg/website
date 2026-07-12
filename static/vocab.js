@@ -28,7 +28,7 @@
   }
 
   function init() {
-    mode = window.location.pathname.indexOf('/vocab/flashcard/') === 0 ? 'flashcard' : 'browse';
+    mode = window.location.pathname.startsWith('/vocab/flashcard') ? 'flashcard' : 'browse';
     if (mode === 'flashcard') {
       data = window.vocabData;
       if (!data) return;
@@ -98,11 +98,11 @@
 
   function setupKeyboardShortcuts() {
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'k' || e.key === 'K') { playVariant('uk'); return; }
       if (mode === 'flashcard') {
+        if (e.key === 'k' || e.key === 'K') { playVariant('uk'); return; }
+        if (e.key === 's' || e.key === 'S') { playVariant('us'); return; }
         if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') fcPrev();
         else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') fcNext();
-        else if (e.key === 's' || e.key === 'S') playVariant('us');
         else if (e.key === 'r' || e.key === 'R') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
       } else {
