@@ -15,9 +15,9 @@
   </div>
 
   <div id="vocab-pagination-top" class="hstack justify-center" style="gap:var(--space-3);margin-block:var(--space-4);flex-wrap:wrap">
-    {% if paginator.previous %}<a href="{{ paginator.previous }}">‹ Prev</a>{% endif %}
+    {% if paginator.previous %}{% set prev_url = paginator.previous | replace(from=config.base_url, to="") %}<a href="{{ prev_url | safe }}">‹ Prev</a>{% endif %}
     <span class="text-light">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
-    {% if paginator.next %}<a href="{{ paginator.next }}">Next ›</a>{% endif %}
+    {% if paginator.next %}{% set next_url = paginator.next | replace(from=config.base_url, to="") %}<a href="{{ next_url | safe }}">Next ›</a>{% endif %}
   </div>
 
   <div id="vocab-list" class="content">
@@ -52,9 +52,9 @@
   </div>
 
   <div id="vocab-pagination-bottom" class="hstack justify-center" style="gap:var(--space-3);margin-block:var(--space-4);flex-wrap:wrap">
-    {% if paginator.previous %}<a href="{{ paginator.previous }}">‹ Prev</a>{% endif %}
+    {% if paginator.previous %}{% set prev_url = paginator.previous | replace(from=config.base_url, to="") %}<a href="{{ prev_url | safe }}">‹ Prev</a>{% endif %}
     <span class="text-light">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
-    {% if paginator.next %}<a href="{{ paginator.next }}">Next ›</a>{% endif %}
+    {% if paginator.next %}{% set next_url = paginator.next | replace(from=config.base_url, to="") %}<a href="{{ next_url | safe }}">Next ›</a>{% endif %}
   </div>
 
   <div id="search-results" class="content" style="display:none"></div>

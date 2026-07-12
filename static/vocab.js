@@ -147,6 +147,11 @@
     return shuffled.slice(0, Math.min(RANDOM_SIZE, shuffled.length));
   }
 
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   function initFlashcards(restore) {
     fcWords = pickRandom();
     fcIndex = restore ? Math.min(fcIndex, Math.max(fcWords.length - 1, 0)) : 0;
