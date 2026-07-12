@@ -8,6 +8,7 @@
 .vocab-hint {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
   gap: 0.125rem 1.25rem;
   font-size: var(--text-7);
   margin-block: 0 var(--space-6);
