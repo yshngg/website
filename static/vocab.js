@@ -8,6 +8,7 @@
   var searchIdx = null;
 
   function $(id) { return document.getElementById(id); }
+  function qsa(s, p) { return (p || document).querySelectorAll(s); }
 
   function attachAudioHandlers() {
     qsa('.word-ipa.clickable, .flashcard-ipa[data-url]').forEach(function (el) {
