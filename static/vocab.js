@@ -2,11 +2,7 @@
   var data = null;
   var UK_PRON = 'Listen to the British English pronunciation';
   var US_PRON = 'Listen to the American English pronunciation';
-  var perPage = 10;
   var RANDOM_SIZE = 20;
-  var filtered = [];
-  var searchQuery = '';
-  var page = 1;
   var mode = 'browse';
 
   var fcWords = [];
@@ -16,17 +12,51 @@
   var currentAudio = null;
 
   var STORAGE_KEY = 'vocab-state';
+  var searchIdx = null;
 
   function $(id) { return document.getElementById(id); }
   function qs(s, p) { return (p || document).querySelector(s); }
   function qsa(s, p) { return (p || document).querySelectorAll(s); }
 
+  function attachAudioHandlers() {
+    qsa('.word-ipa.clickable').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        playAudio(this.dataset.url);
+      });
+    });
+    qsa('.flashcard-ipa[data-url]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        playAudio(this.dataset.url);
+      });
+    });
+  }
+
+  function init() {
+    mode = window.location.pathname.indexOf('/vocab/flashcard/') === 0 ? 'flashcard' : 'browse';
+
+    if (mode === 'flashcard') {
+      data = window.vocabData || null;
+      if (!data) return;
+      loadState();
+      fcWords = pickRandom();
+      fcIndex = 0;
+      fcFlipped = false;
+      renderFlashcard();
+      setupFlashcardUI();
+    } else {
+      attachAudioHandlers();
+      setupSearch();
+    }
+    setupKeyboardShortcuts();
+  }
+
   function saveState() {
+    if (mode !== 'flashcard') return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        page: page,
         fcIndex: fcIndex,
-        searchQuery: searchQuery,
       }));
     } catch (_) {}
   }
@@ -35,231 +65,86 @@
     try {
       var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (!saved) return;
-      page = saved.page || 1;
       fcIndex = saved.fcIndex || 0;
-      searchQuery = saved.searchQuery || '';
     } catch (_) {}
   }
 
-  function init() {
-    if (!data) return;
-    mode = window.location.pathname.indexOf('/vocab/flashcard/') === 0 ? 'flashcard' : 'browse';
-    filtered = data;
-    loadState();
-    if (mode === 'flashcard') {
-      fcWords = pickRandom();
-      fcIndex = 0;
-      fcFlipped = false;
-      renderFlashcard();
-    } else {
-      if (searchQuery && $('vocab-search')) $('vocab-search').value = searchQuery;
-      applyFilter();
-      renderBrowse();
-    }
-    setupEventListeners();
+  function setupSearch() {
+    var input = $('vocab-search');
+    if (!input) return;
+
+    input.addEventListener('input', function () {
+      var q = this.value.toLowerCase().trim();
+      if (!q) {
+        $('search-results').style.display = 'none';
+        $('vocab-list').style.display = '';
+        if ($('vocab-pagination-top')) $('vocab-pagination-top').style.display = '';
+        if ($('vocab-pagination-bottom')) $('vocab-pagination-bottom').style.display = '';
+        return;
+      }
+
+      try {
+        if (!searchIdx) {
+          searchIdx = elasticlunr.Index.load(window.searchIndex);
+        }
+        var results = searchIdx.search(q, { expand: true });
+        var html = '';
+        for (var i = 0; i < Math.min(results.length, 50); i++) {
+          var r = results[i];
+          var doc = searchIdx.documentStore.getDoc(r.ref);
+          html += '<a href="' + r.ref + '" class="search-result">' +
+            '<strong>' + (doc.title || r.ref) + '</strong>' +
+            '<span class="text-light">' + (doc.body || '').substring(0, 120) + '</span>' +
+            '</a>';
+        }
+        if (!html) html = '<p class="text-light">No words found.</p>';
+
+        $('vocab-list').style.display = 'none';
+        if ($('vocab-pagination-top')) $('vocab-pagination-top').style.display = 'none';
+        if ($('vocab-pagination-bottom')) $('vocab-pagination-bottom').style.display = 'none';
+        $('search-results').innerHTML = html;
+        $('search-results').style.display = '';
+      } catch (e) {
+        $('search-results').innerHTML = '<p class="text-light">Search unavailable.</p>';
+        $('search-results').style.display = '';
+      }
+    });
   }
 
-  function setupEventListeners() {
-    if ($('vocab-search')) {
-      $('vocab-search').addEventListener('input', function () {
-        searchQuery = this.value.toLowerCase();
-        page = 1;
-        filterAndRender();
-      });
-    }
-
+  function setupFlashcardUI() {
     if ($('fc-prev')) $('fc-prev').addEventListener('click', fcPrev);
     if ($('fc-next')) $('fc-next').addEventListener('click', fcNext);
     if ($('fc-shuffle')) $('fc-shuffle').addEventListener('click', fcShuffle);
+  }
 
+  function setupKeyboardShortcuts() {
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'k' || e.key === 'K') {
+        playVariant('uk');
+        return;
+      }
       if (mode === 'flashcard') {
-        if (e.key === 'k' || e.key === 'K') { playVariant('uk'); return; }
-        if (e.key === 's' || e.key === 'S') { playVariant('us'); return; }
         if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') fcPrev();
         else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') fcNext();
+        else if (e.key === 's' || e.key === 'S') playVariant('us');
         else if (e.key === 'r' || e.key === 'R') fcShuffle();
         else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); fcFlip(); }
       } else {
-        if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') {
-          var prevBtn = qs('.vocab-pagination button[data-page]:not(:disabled):first-child');
+        if (e.key === 'ArrowLeft') {
+          var prevBtn = qs('.vocab-pagination a[href]:first-child');
           if (prevBtn) prevBtn.click();
-        } else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
-          var nextBtn = qs('.vocab-pagination button[data-page]:last-child:not(:disabled)');
+        } else if (e.key === 'ArrowRight') {
+          var nextBtn = qs('.vocab-pagination a[href]:last-child');
           if (nextBtn) nextBtn.click();
         }
       }
     });
-
   }
 
   function pickRandom() {
-    var pool = searchQuery ? filtered : data;
+    var pool = data;
     var shuffled = pool.slice().sort(function () { return Math.random() - 0.5; });
     return shuffled.slice(0, Math.min(RANDOM_SIZE, shuffled.length));
-  }
-
-  function filterAndRender() {
-    applyFilter();
-    renderBrowse();
-  }
-
-  function applyFilter() {
-    filtered = data.filter(function (entry) {
-      var w = entry.word.toLowerCase();
-      if (searchQuery && w.indexOf(searchQuery) === -1) {
-        var found = false;
-        if (entry.data.senses) {
-          for (var i = 0; i < entry.data.senses.length && !found; i++) {
-            var sg = entry.data.senses[i];
-            for (var j = 0; j < sg.definitions.length && !found; j++) {
-              var d = sg.definitions[j];
-              if ((d.en && d.en.toLowerCase().indexOf(searchQuery) !== -1) ||
-                (d.zh && d.zh.indexOf(searchQuery) !== -1)) {
-                found = true;
-              }
-              if (!found && d.examples) {
-                for (var k = 0; k < d.examples.length && !found; k++) {
-                  if (d.examples[k].en && d.examples[k].en.toLowerCase().indexOf(searchQuery) !== -1) {
-                    found = true;
-                  }
-                }
-              }
-            }
-          }
-        }
-        if (!found) return false;
-      }
-
-      return true;
-    });
-  }
-
-  function renderBrowse() {
-    var totalPages = Math.ceil(filtered.length / perPage) || 1;
-    if (page > totalPages) page = totalPages;
-
-    var start = (page - 1) * perPage;
-    var pageWords = filtered.slice(start, start + perPage);
-
-    renderPagination('browse-pagination-top', page, totalPages);
-    renderPagination('browse-pagination-bottom', page, totalPages);
-
-    var html = '';
-    for (var i = 0; i < pageWords.length; i++) {
-      html += renderEntry(pageWords[i]);
-    }
-    $('vocab-list').innerHTML = html || '<p class="text-light">No words found.</p>';
-
-    qsa('.word-card-header').forEach(function (h) {
-      h.addEventListener('click', function () {
-        this.closest('.word-card').classList.toggle('expanded');
-      });
-    });
-
-    qsa('.word-ipa.clickable').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        e.stopPropagation();
-        playAudio(this.dataset.url);
-      });
-    });
-    saveState();
-  }
-
-  function renderPagination(containerId, currentPage, totalPages) {
-    var html = '';
-    if (totalPages <= 1) {
-      html = '<span>' + filtered.length + ' words</span>';
-    } else {
-      html += '<button data-page="' + (currentPage - 1) + '"' + (currentPage <= 1 ? ' disabled' : '') + '>‹ Prev</button>';
-      html += '<span>Page ' + currentPage + ' of ' + totalPages + ' (' + filtered.length + ' words)</span>';
-      html += '<button data-page="' + (currentPage + 1) + '"' + (currentPage >= totalPages ? ' disabled' : '') + '>Next ›</button>';
-    }
-    var container = $(containerId);
-    if (container) {
-      container.innerHTML = html;
-      qsa('button[data-page]', container).forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          if (!this.disabled) {
-            page = parseInt(this.dataset.page);
-            renderBrowse();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        });
-      });
-    }
-  }
-
-  function renderEntry(entry) {
-    var w = entry.word;
-    var d = entry.data;
-    var pron = d.pronunciation || {};
-    var audio = d.audio || {};
-    var senses = d.senses || [];
-
-    var pronAudioHTML = '';
-    if (pron.uk) {
-      pronAudioHTML += '<span class="word-ipa';
-      if (audio.uk) pronAudioHTML += ' clickable';
-      pronAudioHTML += '"';
-      if (audio.uk) pronAudioHTML += ' title="' + UK_PRON + '" data-url="' + esc(audio.uk) + '"';
-      pronAudioHTML += '>UK /' + pron.uk + '/</span> ';
-    }
-    if (pron.us) {
-      pronAudioHTML += '<span class="word-ipa';
-      if (audio.us) pronAudioHTML += ' clickable';
-      pronAudioHTML += '"';
-      if (audio.us) pronAudioHTML += ' title="' + US_PRON + '" data-url="' + esc(audio.us) + '"';
-      pronAudioHTML += '>US /' + pron.us + '/</span> ';
-    }
-    if (!pron.uk && !pron.us) {
-      if (audio.uk) pronAudioHTML += '<span class="word-ipa clickable" title="' + UK_PRON + '" data-url="' + esc(audio.uk) + '">🔊 UK</span> ';
-      if (audio.us) pronAudioHTML += '<span class="word-ipa clickable" title="' + US_PRON + '" data-url="' + esc(audio.us) + '">🔊 US</span> ';
-    }
-
-    var firstPOS = '';
-    if (senses.length > 0) {
-      firstPOS = senses[0].pos;
-    }
-
-    var sensesHTML = '';
-    for (var i = 0; i < senses.length; i++) {
-      var sg = senses[i];
-      sensesHTML += '<div class="sense-label">' + esc(sg.pos || '—') + '</div>';
-      for (var j = 0; j < sg.definitions.length; j++) {
-        var def = sg.definitions[j];
-        sensesHTML += '<div class="def-block">';
-        if (def.en) sensesHTML += '<div class="def-en">' + esc(def.en) + '</div>';
-        if (def.zh) sensesHTML += '<div class="def-zh">' + esc(def.zh) + '</div>';
-        if (def.examples && def.examples.length > 0) {
-          sensesHTML += '<ul class="def-examples">';
-          for (var k = 0; k < def.examples.length; k++) {
-            var ex = def.examples[k];
-            sensesHTML += '<li>' + esc(ex.en);
-            if (ex.zh) sensesHTML += '<span class="ex-zh">' + esc(ex.zh) + '</span>';
-            sensesHTML += '</li>';
-          }
-          sensesHTML += '</ul>';
-        }
-        sensesHTML += '</div>';
-      }
-    }
-
-    var posTag = firstPOS ? '<span class="word-pos">' + esc(firstPOS) + '</span>' : '';
-
-    return '<div class="word-card">' +
-      '<div class="word-card-header">' +
-      '<h3>' + esc(w) + '</h3>' +
-      posTag +
-      pronAudioHTML +
-      '</div>' +
-      '<div class="word-card-body">' + sensesHTML + '</div>' +
-      '</div>';
-  }
-
-  function esc(s) {
-    if (!s) return '';
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   function initFlashcards(restore) {
@@ -315,12 +200,7 @@
     }
     $('fc-front-meta').innerHTML = frontMeta;
 
-    qsa('.flashcard-ipa[data-url]', $('fc-front-meta')).forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        e.stopPropagation();
-        playAudio(this.dataset.url);
-      });
-    });
+    attachAudioHandlers();
 
     var defHTML = '';
     var zhHTML = '';
@@ -405,28 +285,9 @@
 
   window.playAudio = playAudio;
 
-  function loadData() {
-    fetch('/vocabulary.jsonl')
-      .then(function (r) { return r.text(); })
-      .then(function (text) {
-        var seen = {};
-        data = text.trim().split('\n').filter(Boolean).map(function (line) { return JSON.parse(line); })
-          .filter(function (entry) {
-            var w = entry.word.toLowerCase();
-            if (seen[w]) return false;
-            seen[w] = true;
-            return true;
-          })
-          .sort(function (a, b) {
-            return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
-          });
-        init();
-      });
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadData);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    loadData();
+    init();
   }
 })();

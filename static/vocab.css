@@ -61,7 +61,7 @@ kbd {
   margin-block: var(--space-4);
   flex-wrap: wrap;
 }
-.vocab-pagination button,
+.vocab-pagination a,
 #fc-prev,
 #fc-next,
 #fc-shuffle {
@@ -74,16 +74,11 @@ kbd {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.vocab-pagination button:not(:disabled):hover,
+.vocab-pagination a:hover,
 #fc-prev:hover,
 #fc-next:hover,
 #fc-shuffle:hover {
   opacity: 0.7;
-}
-.vocab-pagination button:disabled {
-  opacity: 0.3;
-  cursor: default;
-  text-decoration: none;
 }
 .vocab-pagination span {
   color: var(--muted);
@@ -111,6 +106,11 @@ kbd {
   cursor: pointer;
   flex-wrap: wrap;
 }
+details.word-card summary::marker,
+details.word-card summary::-webkit-details-marker {
+  display: none;
+  content: '';
+}
 .word-card-header h3 {
   margin: 0;
   font-family: "EB Garamond", serif;
@@ -137,13 +137,9 @@ kbd {
   border-radius: var(--radius);
 }
 .word-card-body {
-  display: none;
   margin-block-start: var(--space-3);
   padding-block-start: var(--space-3);
   border-top: 1px solid var(--border);
-}
-.word-card.expanded .word-card-body {
-  display: block;
 }
 .def-block {
   margin-block-end: var(--space-3);
@@ -262,6 +258,22 @@ kbd {
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+.search-result {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-block-end: var(--space-2);
+  text-decoration: none;
+  color: inherit;
+}
+.search-result strong {
+  display: block;
+  margin-block-end: 2px;
+}
+.search-result:hover {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 @media (max-width: 600px) {
 

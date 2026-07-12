@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} - {{ config.title }}{% endblock %}
+{% block content %}
+<div id="vocab-app">
+  <p><a href="/vocab/">← Back to Vocabulary</a></p>
+  <details class="word-card" open>
+    <summary class="word-card-header">
+      <h3>{{ page.title }}</h3>
+      {% if page.extra.senses %}<span class="word-pos">{{ page.extra.senses[0].pos }}</span>{% endif %}
+      {% if page.extra.uk_pron %}<span class="word-ipa{% if page.extra.uk_audio %} clickable{% endif %}" data-url="{{ page.extra.uk_audio }}">UK /{{ page.extra.uk_pron }}/</span>{% endif %}
+      {% if page.extra.us_pron %}<span class="word-ipa{% if page.extra.us_audio %} clickable{% endif %}" data-url="{{ page.extra.us_audio }}">US /{{ page.extra.us_pron }}/</span>{% endif %}
+    </summary>
+    <div class="word-card-body">
+      {% for sense in page.extra.senses %}
+      <div class="sense-label">{{ sense.pos }}</div>
+      {% for def in sense.definitions %}
+      <div class="def-block">
+        {% if def.en %}<div class="def-en">{{ def.en }}</div>{% endif %}
+        {% if def.zh %}<div class="def-zh">{{ def.zh }}</div>{% endif %}
+        {% if def.examples %}
+        <ul class="def-examples">
+          {% for ex in def.examples %}
+          <li>{{ ex.en }}{% if ex.zh %}<span class="ex-zh">{{ ex.zh }}</span>{% endif %}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </details>
+</div>
+<script src="/vocab.js"></script>
+<link href="/vocab.css" rel="stylesheet" />
+{% endblock %}
